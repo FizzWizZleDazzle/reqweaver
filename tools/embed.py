@@ -43,10 +43,11 @@ def profile_goals():
 
 def main():
     goals = profile_goals()
-    dest = os.path.join(ROOT, "data", "embeddings")
-    os.makedirs(dest, exist_ok=True)
     pattern = os.path.join(ROOT, "specsheets", "schools", "**", "*.yaml")
     for sheet_path in glob.glob(pattern, recursive=True):
+        name = os.path.basename(sheet_path)
+        if name.startswith("embeddings."):
+            continue
         school = yaml.safe_load(open(sheet_path))
         courses = school.get("courses") or []
         texts = [f"{c.get('name', '')}. {c.get('description', '')}" for c in courses]
@@ -57,10 +58,12 @@ def main():
             "courses": {c["id"]: v for c, v in zip(courses, vecs)},
             "goals": goals,
         }
-        name = os.path.splitext(os.path.basename(sheet_path))[0]
-        with open(os.path.join(dest, name + ".json"), "w") as f:
+        # embeddings live beside their specsheet: embeddings.<school>.json
+        stem = os.path.splitext(name)[0]
+        dest = os.path.join(os.path.dirname(sheet_path), f"embeddings.{stem}.json")
+        with open(dest, "w") as f:
             json.dump(out, f)
-        print(f"{name}: {len(vecs)} courses, {len(goals)} goals")
+        print(f"{stem}: {len(vecs)} courses, {len(goals)} goals")
 
 
 main()

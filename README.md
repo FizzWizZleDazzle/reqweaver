@@ -17,6 +17,14 @@ npm test
 npm run plan -- --school test/fixtures/tiny-school.yaml --profile examples/profile-example.yaml
 ```
 
+For semantic goal matching (a free-text `goal` in the profile steering
+plans toward relevant courses), generate the embedding data once:
+
+```
+npm run embed          # per-course description vectors (compile time)
+npm run export-model   # MiniLM weights for runtime goal encoding
+```
+
 ## What it does
 
 - Plans terms with a beam search over the course prerequisite graph.

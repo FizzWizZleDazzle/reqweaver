@@ -65,7 +65,7 @@ main = ->
   # goal encoded at runtime by the LiveScript MiniLM forward pass (falls
   # back to a precomputed goal vector when the model export is absent)
   embPath = args.embeddings or
-    path.join ROOT, 'data', 'embeddings', path.basename(args.school).replace(/\.ya?ml$/, '') + '.json'
+    path.join (path.dirname args.school), 'embeddings.' + path.basename(args.school).replace(/\.ya?ml$/, '') + '.json'
   if fs.existsSync embPath
     model.embeddings = JSON.parse fs.readFileSync(embPath, 'utf8')
     if profile.goal?
