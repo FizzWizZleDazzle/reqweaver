@@ -1,0 +1,22 @@
+# Engine tuning: search parameters, objective weights, and candidate
+# priority weights. Values here override the engine's built-in defaults
+# (which match this file); tune here, not in code.
+search:
+  beam: 100        # states kept per term
+  topK: 14         # ranked candidates considered per state
+  subsets: 40      # per-term course subsets explored per state
+  keepPlans: 20    # complete plans handed to the scorer
+objective:
+  gradWeight: 20        # per missing graduation credit; must exceed the
+                        # richest course's banked value per half credit
+  eagernessScale: 0.0001
+priority:
+  requirement: 40       # unmet-graduation-requirement bonus; must beat
+                        # any other candidate's full priority
+  continuation: 5       # prereq taken in the immediately preceding term
+  interest: 2           # course carries a profile interest tag
+  usefulBanked: 2       # banked credit reachable within remaining terms
+  unlocks: 0.5          # reachable descendants
+  banked: 4             # the course's own banked-credit estimate
+  rigor: 3              # closeness to the student's rigor target
+  eagerRigor: 2         # rigor affinity inside the eagerness tie-break

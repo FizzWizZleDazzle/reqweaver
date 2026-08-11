@@ -1,0 +1,13 @@
+# Soft-scorer weights: the tuning surface for plan ranking.
+# Positive pulls a plan up, negative pushes it down. Features are in [0, 1].
+version: 1
+weights:
+  rigorMatch: 0.8
+  interestMatch: 0.7
+  bankedTotal: 1.0
+  gatewayFront: 0.6
+  loadVariance: -0.5
+  maxExamBearing: -0.4
+  intensityVariance: -0.3
+  finalYearSlack: 0.2
+  planLength: -0.2
