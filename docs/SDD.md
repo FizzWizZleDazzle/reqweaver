@@ -388,6 +388,17 @@ Schema migrations ship as scripts in this repository and run in CI
 over the whole tree, so a version bump never strands contributor
 files.
 
+Two GitHub workflows keep the repository self-maintaining. `ci`
+builds and tests every push and pull request. `embeddings` fires when
+any specsheet changes, recompiles that catalog's description vectors
+with the open-source encoder on the CPU runner, and commits the
+refreshed `embeddings.<school>.json` back beside the sheet - so a
+contributor adds a school as one YAML file and the semantic layer
+follows automatically. Publishing then needs no separate pipeline:
+Cloudflare Pages connects to the repository and redeploys on every
+push to main, which is what keeps the served data current with
+GitHub.
+
 Semantic assets ship separately from the app bundle. Per-school course
 embeddings (about 1.3 MB each) are static Pages assets beside the
 catalog and load with the school. The MiniLM weight export (86 MB)
