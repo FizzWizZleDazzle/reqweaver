@@ -389,6 +389,12 @@ coupling, and versions the data atomically with the app. The cost is
 freshness on the order of hours, which is acceptable for course
 catalogs.
 
+Until that repository exists, `npm run build:web` stages the
+specsheets, registries, and weights files of this repository under
+`public/data/` with a generated school index, and the client parses the
+YAML. The index is what the app offers in its school picker, so adding
+a sheet under `specsheets/schools/` is enough to make it selectable.
+
 ## 6. Core planning engine
 
 The engine is symbolic and exact about feasibility. It runs in a Web
@@ -612,23 +618,43 @@ feasibility.
 LiveScript modules, compiled to JS at build time:
 
 ```
-src/app.ls              # entry, routing, state wiring
-src/state.ls            # profile + UI state, localStorage persistence
-src/account.ls          # signup/login, session token, plan index sync
-src/data/loader.ls      # index + chunk fetch, local specsheet import
-src/data/validate.ls    # client-side JSON Schema validation
+src/ui/app.ls           # entry, data loading, state wiring
+src/ui/state.ls         # profile + UI state, localStorage, YAML export/import
+src/ui/data.ls          # school index and specsheet fetch
+src/ui/catalog.ls       # read-only views over a specsheet
+src/ui/dom.ls           # element helpers
+src/ui/chip.ls          # course chips, searchable course picker
+src/ui/course.ls        # course detail dialog with profile actions
+src/ui/profile.ls       # profile editor sections
+src/ui/plans.ls         # term grid, requirement checklist, warnings, diffs
+src/ui/solver.ls        # worker client
+src/ui/index.html       # page shell
+src/ui/styles.css       # the whole stylesheet
+src/worker.ls           # Web Worker entry wrapping engine + scoring
 src/engine/dag.ls       # DAG build, coreq collapse, window passes, constraints
 src/engine/search.ls    # beam search, objectives, heuristics
 src/scoring/features.ls # feature extraction
-src/scoring/scorer.ls   # JSON-weight forward pass
-src/ui/*.ls             # plan cards, term grid, requirement checklist
-worker/solver.ls        # Web Worker entry wrapping engine + scoring
+src/scoring/scorer.ls   # weight-file forward pass
+src/tools/webdata.ls    # stages public/, generates the school index
+src/tools/serve.ls      # static server for local testing
 ```
 
+`npm run build:web` compiles the LiveScript, stages the static assets,
+and bundles two files with esbuild: the page and the worker. The engine
+and scoring modules are the same files the command line planner uses.
+
+Two designed modules do not exist yet: the account client and the
+client-side schema validation of an imported specsheet, both of which
+wait on the storage service (section 9).
+
 The solver runs in a Web Worker; messages carry plain
-structured-clone objects. Beam search is anytime, so the worker
-streams improving partial results and the UI stays responsive during
-long solves.
+structured-clone objects. The worker loads the specsheet, the
+registries, and the weights itself, reports the phase it is in, and
+posts the ranked plans back when the search finishes; starting a new
+solve replaces the worker, which is how cancelling works. Beam search
+is anytime, so streaming improving partial results is available to
+take: it needs a callback in the search loop, and until that exists the
+UI shows the phase rather than a partial plan.
 
 The student's profile (grade, completed courses including pre-grade-9
 credit, in-progress courses, pinned assignments, exam scores, summer

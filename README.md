@@ -17,6 +17,15 @@ npm test
 npm run plan -- --school test/fixtures/tiny-school.yaml --profile examples/profile-example.yaml
 ```
 
+For the browser app:
+
+```
+npm run build:web
+npm run serve
+```
+
+Then open http://localhost:8080.
+
 For semantic goal matching (a free-text `goal` in the profile steering
 plans toward relevant courses), generate the embedding data once:
 
@@ -44,11 +53,26 @@ npm run export-model   # MiniLM weights for runtime goal encoding
   (`registry/levels.yaml`); scorer weights are a tuning file
   (`weights/scorer-weights.yaml`).
 
+## The app
+
+The browser app is the planner with a face on it. You pick your school,
+say what you have completed (including credit earned before grade 9),
+what you are taking now, what you have already committed to, and what
+you want; it plans in the background and shows the best plans as a
+grade-by-term grid you can read at a glance. Every course on screen
+opens its catalog entry, so you can check the description and the
+prerequisites behind any placement, and mark it completed, pin it, or
+waive its prerequisites from there. Alongside each plan sit the
+graduation checklist, the banked-credit estimate, and the warnings the
+engine raised for a counselor to confirm. Your profile stays in your
+browser, and exports as the same YAML the command line planner reads.
+
 ## Limitations
 
 - Banked credit is an estimate until major specsheets exist;
   articulation to a specific college major is not wired up yet.
-- The fastest-college-finish objective and the browser frontend are
-  designed but not built.
+- The fastest-college-finish objective is designed but not built.
+- The app plans, and nothing else: saving, sharing, and accounts need
+  the storage service, which is designed but not built.
 
 Design details are in docs/SDD.md.
