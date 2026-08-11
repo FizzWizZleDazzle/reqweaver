@@ -586,6 +586,27 @@ hand-written forward pass is smaller and auditable. If training data
 never accumulates, the linear model stands on its own; the MLP is
 upside, not a dependency.
 
+### 7.3 Semantic goal matching
+
+The one place a pretrained model earns its keep is understanding what
+courses are about. The data pipeline embeds every course's name and
+description once at compile time with an open-source sentence encoder
+(all-MiniLM-L6-v2), shipping one vector per course in an
+`embeddings.<school>.json` file beside the school's specsheet. The student states a free-text goal ("quantum
+theory and theoretical physics research"); the app encodes it with a
+LiveScript implementation of the same encoder's forward pass
+(tokenizer, six transformer layers, mean pooling), whose weights are
+exported to a binary blob and fetched lazily the first time a goal is
+entered. A parity test holds the LiveScript encoder to the reference
+implementation's output.
+
+At plan time everything is cosine similarity: a goal-affinity term in
+candidate priority steers free capacity toward goal-relevant courses
+(a physics AP over a music elective for a physics-bound student), and
+a goal-match scorer feature ranks whole plans. Both are inert when a
+school has no embeddings or a profile no goal, and neither can affect
+feasibility.
+
 ## 8. Frontend application
 
 LiveScript modules, compiled to JS at build time:
@@ -959,6 +980,8 @@ Initial feature set for `scorer-weights.yaml`, all normalized to
     student's rigor target)
 23. Interest match (credit share of courses tagged with the student's
     stated interests)
+24. Goal match (credit-weighted embedding similarity between the
+    student's free-text goal and course descriptions; section 7.3)
 
 Weights ship in `scorer-weights.yaml` with a version field; the file
 is the tuning surface for both the hand-tuned and learned backends.
