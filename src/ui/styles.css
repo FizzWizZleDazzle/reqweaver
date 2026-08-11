@@ -167,6 +167,7 @@ button { font: inherit; cursor: pointer; }
 }
 .yaml { width: 100%; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.8rem; margin-top: 8px; }
 .input { width: 8rem; }
+.goal { width: 100%; }
 .range { width: 100%; accent-color: var(--accent); }
 
 .field { display: flex; flex-direction: column; gap: 4px; margin: 10px 0; }
@@ -302,6 +303,14 @@ button { font: inherit; cursor: pointer; }
 .stat-value { font-size: 1.5rem; font-weight: 600; line-height: 1.2; }
 .stat-label { font-size: 0.8rem; color: var(--muted); }
 .stat-note { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+.steer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: baseline;
+  margin: 0 0 10px;
+}
 
 .diff {
   border-left: 3px solid var(--accent);

@@ -2,9 +2,9 @@
 # requires-python = ">=3.10"
 # dependencies = ["sentence-transformers"]
 # ///
-"""Export all-MiniLM-L6-v2 for the LiveScript in-browser encoder.
+"""Export the sentence encoder for the LiveScript offline fallback.
 
-Writes data/minilm/: model.bin (all tensors, float32 little-endian),
+Writes data/encoder/: model.bin (all tensors, float32 little-endian),
 manifest.json (config + tensor offsets/shapes), vocab.json (WordPiece
 vocabulary by id), and refs.json (reference sentence vectors the
 LiveScript forward pass is parity-tested against).
@@ -19,14 +19,15 @@ import torch
 from sentence_transformers import SentenceTransformer
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "data", "minilm")
+MODEL_NAME = "BAAI/bge-small-en-v1.5"   # must match tools/embed.py
+OUT = os.path.join(ROOT, "data", "encoder")
 os.makedirs(OUT, exist_ok=True)
 
-st = SentenceTransformer("all-MiniLM-L6-v2")
+st = SentenceTransformer(MODEL_NAME)
 bert = st[0].auto_model.eval()
 tokenizer = st[0].tokenizer
 
-manifest = {"config": {"hidden": 384, "layers": 6, "heads": 12,
+manifest = {"config": {"hidden": 384, "layers": 12, "heads": 12, "pooling": "cls",
                        "intermediate": 1536, "ln_eps": 1e-12,
                        "max_tokens": 128},
             "tensors": {}}

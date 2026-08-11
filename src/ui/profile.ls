@@ -202,6 +202,12 @@ create = (ctx) ->
 
   panel.appendChild block 'What you want', null, (body) ->
     tagList = catalog.tags ctx.school
+    goal = el 'input', {
+      class: 'input goal'
+      type: 'text'
+      placeholder: 'quantum theory and theoretical physics research'
+      oninput: (event) !-> state.setField 'goal', event.target.value
+    }
     objective = el 'div', { class: 'choices' }
     interests = el 'div', { class: 'chips tag-chips' }
     rigorNote = el 'p', { class: 'muted small' }
@@ -215,6 +221,9 @@ create = (ctx) ->
     }
     effort = el 'select', { class: 'select', onchange: (event) !-> state.setUi 'beam', Number event.target.value },
       [effortOption item for item in EFFORTS]
+    body.appendChild el 'h3', { text: 'Goal' }
+    body.appendChild el 'p', { class: 'muted small', text: 'A sentence about what you want to study. Courses whose catalog descriptions match it rank higher. Goals precompiled for this school work now; reading any other wording needs the encoder service, which is coming.' }
+    body.appendChild goal
     body.appendChild el 'h3', { text: 'Objective' }
     body.appendChild objective
     body.appendChild el 'h3', { text: 'Rigor' }
@@ -228,6 +237,7 @@ create = (ctx) ->
     body.appendChild el 'p', { class: 'muted small', text: 'A wider beam explores more plans and takes longer.' }
     !->
       p = state.profile!
+      goal.value = (p.goal or '') unless document.activeElement is goal
       fill objective, [objectiveButton item for item in OBJECTIVES]
       fill interests, [tagChip tag for tag in tagList]
       rigor.value = String p.rigor unless document.activeElement is rigor

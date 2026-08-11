@@ -1,5 +1,6 @@
-# all-MiniLM-L6-v2 sentence encoder: a pure LiveScript forward pass over
-# weights exported by tools/export-minilm.py. Runs in the browser (or
+# Sentence encoder (bge-small-en-v1.5): a pure LiveScript forward pass
+# over weights exported by tools/export-encoder.py, for offline use in
+# the same vector space as Workers AI goal encoding. Runs in the browser (or
 # node) with no ML runtime dependency; it only ever encodes short goal
 # strings, so plain typed-array math is fast enough. Output matches the
 # reference implementation (see the parity test) and is L2-normalized,
@@ -180,13 +181,17 @@ encode = (model, text) ->
   for layer from 0 til layers
     x = attention model, x, tokens, layer
     x = feedForward model, x, tokens, layer
-  # mean pooling over tokens, then L2 normalize
+  # pooling per the model's convention (bge: CLS token), then L2 normalize
   pooled = []
-  for i from 0 til hidden
-    s = 0
-    for t from 0 til tokens
-      s += x[t * hidden + i]
-    pooled.push s / tokens
+  if model.config.pooling is 'cls'
+    for i from 0 til hidden
+      pooled.push x[i]
+  else
+    for i from 0 til hidden
+      s = 0
+      for t from 0 til tokens
+        s += x[t * hidden + i]
+      pooled.push s / tokens
   norm = 0
   for v in pooled
     norm += v * v

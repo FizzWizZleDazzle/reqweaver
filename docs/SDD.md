@@ -401,15 +401,12 @@ GitHub.
 
 Semantic assets ship separately from the app bundle. Per-school course
 embeddings (about 1.3 MB each) are static Pages assets beside the
-catalog and load with the school. The MiniLM weight export (86 MB)
-exceeds the Pages per-file limit, so it lives in a Cloudflare R2
-bucket exposed on the site's own domain: R2 egress is free, the blob
-rides the same CDN cache, and a content-hashed filename with an
-immutable cache header means a browser fetches it at most once and
-the edge usually already has it. The app fetches the model lazily,
-only the first time a profile states a free-text goal; everything
-else works without it. At student-scale traffic the whole arrangement
-stays inside Cloudflare's free tiers.
+catalog and load with the school. Free-text goals are encoded by the
+Workers AI endpoint (section 7.3), so no model ships to the browser
+by default; the offline encoder export stays out of the deploy and
+would go to R2 (free egress, immutable content-hashed caching) if the
+offline mode ever ships. At student-scale traffic the whole
+arrangement stays inside the plan's included quotas.
 
 Distribution is a build step, not a runtime fetch. On merge (via
 repository_dispatch) and on a daily cron, the app's build pulls the
@@ -628,15 +625,23 @@ upside, not a dependency.
 
 The one place a pretrained model earns its keep is understanding what
 courses are about. The data pipeline embeds every course's name and
-description once at compile time with an open-source sentence encoder
-(all-MiniLM-L6-v2), shipping one vector per course in an
-`embeddings.<school>.json` file beside the school's specsheet. The student states a free-text goal ("quantum
-theory and theoretical physics research"); the app encodes it with a
-LiveScript implementation of the same encoder's forward pass
-(tokenizer, six transformer layers, mean pooling), whose weights are
-exported to a binary blob and fetched lazily the first time a goal is
-entered. A parity test holds the LiveScript encoder to the reference
-implementation's output.
+description once at compile time with an open sentence encoder
+(bge-small-en-v1.5, MIT-licensed open weights), shipping one vector
+per course in an `embeddings.<school>.json` file beside the school's
+specsheet. The student states a free-text goal ("quantum theory and
+theoretical physics research"); the app encodes it at runtime through
+a small Workers AI endpoint (workers/encode) serving the identical
+model, so goal and course vectors share one space at negligible cost.
+
+The open checkpoint is a deliberate exit: if Workers AI pricing ever
+matters, the same weights redeploy behind the same /encode contract
+on self-hosted hardware (minimal-footprint native service on the
+owner's cluster) and every stored vector stays valid. The repo
+carries two proofs of that portability: the compile-time embedder and
+a LiveScript implementation of the full encoder forward pass
+(WordPiece tokenizer, twelve transformer layers, CLS pooling),
+parity-tested against the reference output and usable as an offline
+fallback.
 
 At plan time everything is cosine similarity: a goal-affinity term in
 candidate priority steers free capacity toward goal-relevant courses

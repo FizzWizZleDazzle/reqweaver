@@ -4,6 +4,7 @@
 # per-cell totals and the plan-to-plan diff.
 
 { el, fill } = require './dom'
+{ reqMatches } = require '../engine/gradreqs'
 catalog = require './catalog'
 
 OBJECTIVE_LABEL =
@@ -69,6 +70,7 @@ create = (ctx) ->
   phaseText = (phase) ->
     switch phase
     | 'loading' => 'Loading the specsheet and the registries.'
+    | 'embeddings' => 'Loading the course vectors for your goal.'
     | 'building' => 'Building the prerequisite graph.'
     | 'searching' => 'Searching term by term. This takes a few seconds.'
     | 'scoring' => 'Ranking the plans that survived.'
@@ -131,13 +133,30 @@ create = (ctx) ->
     parts = []
     parts.push summaryCard result
     parts.push warningCard result.warnings if result.warnings.length
+    parts.push noticeCard result.notice if result.notice
     parts.push staleCard! if stale
+    parts.push goalLine result if result.goalSource?
     parts.push tabs result
     parts.push planCard result, plan
     fill root, parts
 
   staleCard = ->
     el 'div', { class: 'card note', text: 'Your profile changed since this plan was built. Run the planner again to apply it.' }
+
+  noticeCard = (notice) ->
+    el 'div', { class: 'card note', text: notice }
+
+  # Said plainly, because a goal changes what the plans look like: it is a
+  # ranking preference the student cannot see in the grid itself.
+  goalLine = (result) ->
+    how = if result.goalSource is 'precomputed'
+      then 'matched to a goal precompiled for this school'
+      else 'encoded for this plan'
+    el 'p', { class: 'steer' }, [
+      el 'span', { class: 'muted small', text: 'Plans steered toward' }
+      el 'strong', { text: result.goal }
+      el 'span', { class: 'muted small', text: "(#{how})" }
+    ]
 
   warningCard = (warnings) ->
     el 'div', { class: 'card warn' }, [
@@ -238,8 +257,6 @@ create = (ctx) ->
     for grade in (ctx.school.grade_levels or [])
       rows.push gradeRow grade, columns, byKey
     el 'div', { class: 'grid', style: "--terms: #{columns.length}" }, rows
-
-  { reqMatches } = require '../engine/gradreqs'
 
   # Courses satisfying a requirement's predicate (tag, course list, or
   # content group), split into what the plan schedules and what the

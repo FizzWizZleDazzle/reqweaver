@@ -19,7 +19,9 @@ import yaml
 from sentence_transformers import SentenceTransformer
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MODEL_NAME = "all-MiniLM-L6-v2"
+# Must stay in the same vector space as runtime goal encoding, which the
+# site does through Cloudflare Workers AI (@cf/baai/bge-small-en-v1.5).
+MODEL_NAME = "BAAI/bge-small-en-v1.5"
 model = SentenceTransformer(MODEL_NAME)
 
 
