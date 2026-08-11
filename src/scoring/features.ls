@@ -3,7 +3,7 @@
 # never from level, exam, or term names, so they apply to any school.
 # All features are normalized to roughly [0, 1].
 
-{ estBanked, courseIntensity, rigorAffinity } = require '../engine/search'
+{ estBanked, courseIntensity, rigorAffinity, goalAffinity } = require '../engine/search'
 
 variance = (values) ->
   return 0 if values.length is 0
@@ -70,6 +70,21 @@ interestMatch = (model, state) ->
       matched += course.credits or 0 if hit
   if credits > 0 then matched / credits else 0
 
+# Credit-weighted semantic closeness of the plan to the student's stated
+# free-text goal, over precomputed description embeddings. Zero (inert)
+# when the school has no embeddings or the profile no goal.
+goalMatch = (model, state) ->
+  return 0 unless model.goalVec?
+  matched = 0
+  credits = 0
+  for entry in state.plan
+    for id in entry.courses
+      course = model.courses[id]
+      continue unless course?
+      matched += (goalAffinity model, course) * (course.credits or 0)
+      credits += course.credits or 0
+  if credits > 0 then matched / credits else 0
+
 # Credit-weighted average of how closely the plan's courses match the
 # student's rigor target.
 rigorMatch = (model, state) ->
@@ -91,6 +106,7 @@ extract = (model, state) ->
   {
     rigorMatch: rigorMatch model, state
     interestMatch: interestMatch model, state
+    goalMatch: goalMatch model, state
     bankedTotal: state.banked / 30
     gatewayFront: gatewayFront profiles
     loadVariance: variance([p.credits for p in profiles]) / 4

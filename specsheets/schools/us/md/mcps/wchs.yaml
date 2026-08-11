@@ -8,9 +8,15 @@ credit_unit: carnegie
 terms_per_year:
   - { id: fall,   sequence: 1 }
   - { id: spring, sequence: 2 }
-  # Summer offerings vary yearly, so summer is an open term: the planner
-  # may place any course there (two-course cap), flagged to verify.
-  - { id: summer, sequence: 3, optional: true, any_offering: true, max_courses: 2 }
+  # Summer school offers select original-credit courses only. This list
+  # is the typical MCPS offering (health, PE, NSL Government, Algebra 1,
+  # Geometry); verify against the yearly summer catalog.
+  - id: summer
+    sequence: 3
+    optional: true
+    max_courses: 2
+    offerings: [HPE2047A, HPE2047B, HPE2011, HPE2016, SOC2004A, SOC2004B,
+                MAT2000A, MAT2000B, MAT2003A, MAT2003B]
 grade_levels: [9, 10, 11, 12]
 max_courses_per_term: 7
 pre_hs_credit:
@@ -677,6 +683,7 @@ courses:
       any_of: []
 
   - id: SCI2006A
+    content: physics_a
     name: Honors Physics A
     description: >-
       This NGSS aligned course investigates physical laws and theories, relationships of physical phenomena, and the interrelationships of physics to other fields of human endeavor. Topics include traditional physics subjects (Newtonian mechanics: dynamics, momentum, energy; electricity and magnetism; waves) along with related subjects in earth science (plate tectonics; earthquake activity) and astronomy (solar evolution).
@@ -689,6 +696,7 @@ courses:
       all_of: [MAT2003B]
       any_of: []
   - id: SCI2006B
+    content: physics_b
     name: Honors Physics B
     description: >-
       This NGSS aligned course investigates physical laws and theories, relationships of physical phenomena, and the interrelationships of physics to other fields of human endeavor. Topics include traditional physics subjects (Newtonian mechanics: dynamics, momentum, energy; electricity and magnetism; waves) along with related subjects in earth science (plate tectonics; earthquake activity) and astronomy (solar evolution).
@@ -702,6 +710,7 @@ courses:
       any_of: []
 
   - id: SCI2072A
+    content: physics_a
     name: AP Physics 1 A
     description: >-
       This NGSS aligned course is for highly motivated students with an interest in the physical sciences and builds on concepts covered in Physics with greater detail in content and laboratory investigations. Students explore Newtonian mechanics, including rotational dynamics and angular momentum; work, energy, and power; and mechanical waves and sound. Electric circuits will be introduced.
@@ -717,6 +726,7 @@ courses:
     notes: >-
       Algebra 2 A/B is stated as a corequisite.
   - id: SCI2072B
+    content: physics_b
     name: AP Physics 1 B
     description: >-
       This NGSS aligned course is for highly motivated students with an interest in the physical sciences and builds on concepts covered in Physics with greater detail in content and laboratory investigations. Students explore Newtonian mechanics, including rotational dynamics and angular momentum; work, energy, and power; and mechanical waves and sound. Electric circuits will be introduced.

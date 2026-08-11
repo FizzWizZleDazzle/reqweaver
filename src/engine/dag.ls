@@ -15,10 +15,12 @@ unrollTerms = (school, profile) ->
         grade: grade
         term: slot.id
         optional: !!slot.optional
-        # any_offering marks a term (summer school) whose course list
-        # varies year to year: the planner may place any course there,
-        # flagged for verification. max_courses caps that term alone.
+        # A term entry may carry its own course list: `offerings` limits
+        # the term to those ids (summer school's select original-credit
+        # list); `any_offering` opens the term to every course, flagged
+        # for verification. max_courses caps that term alone.
         open: !!slot.any_offering
+        offerings: slot.offerings
         maxCourses: slot.max_courses
       }
   for t, i in terms
@@ -151,6 +153,10 @@ buildModel = (school, profile, levels, exams) ->
     critPath: computeCritPath courses
     forward: forwardEdges courses
     bankedMemo: {}
+    # semantic layer, attached by the caller when precomputed
+    # embeddings exist for this school (see tools/embed.py)
+    embeddings: null
+    goalVec: null
   }
 
 module.exports = { buildModel, prereqsMet, prereqIds, unrollTerms, forwardEdges }

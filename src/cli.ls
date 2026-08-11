@@ -9,6 +9,7 @@ yaml = require 'js-yaml'
 { buildModel } = require './engine/dag'
 { search } = require './engine/search'
 { rank } = require './scoring/scorer'
+minilm = require './scoring/minilm'
 
 ROOT = path.join __dirname, '..'
 
@@ -26,6 +27,16 @@ parseArgs = (argv) ->
 # YAML is the project's file format; js-yaml also accepts JSON as a subset.
 load = (file) ->
   yaml.load fs.readFileSync(file, 'utf8')
+
+# The exported MiniLM encoder (tools/export-minilm.py), when present.
+loadMinilm = ->
+  dir = path.join ROOT, 'data', 'minilm'
+  return null unless fs.existsSync path.join(dir, 'manifest.json')
+  manifest = JSON.parse fs.readFileSync path.join(dir, 'manifest.json'), 'utf8'
+  vocab = JSON.parse fs.readFileSync path.join(dir, 'vocab.json'), 'utf8'
+  buf = fs.readFileSync path.join(dir, 'model.bin')
+  ab = buf.buffer.slice buf.byteOffset, buf.byteOffset + buf.byteLength
+  minilm.loadModel manifest, ab, vocab
 
 printPlan = (model, entry, index) ->
   state = entry.st
@@ -50,6 +61,19 @@ main = ->
   exams = load path.join(ROOT, 'registry', 'exams.yaml')
   weights = load(args.weights or path.join(ROOT, 'weights', 'scorer-weights.yaml'))
   model = buildModel school, profile, levels, exams
+  # semantic layer: precompiled course embeddings for this school, and the
+  # goal encoded at runtime by the LiveScript MiniLM forward pass (falls
+  # back to a precomputed goal vector when the model export is absent)
+  embPath = args.embeddings or
+    path.join ROOT, 'data', 'embeddings', path.basename(args.school).replace(/\.ya?ml$/, '') + '.json'
+  if fs.existsSync embPath
+    model.embeddings = JSON.parse fs.readFileSync(embPath, 'utf8')
+    if profile.goal?
+      encoder = loadMinilm!
+      model.goalVec =
+        if encoder? then minilm.encode encoder, profile.goal
+        else model.embeddings.goals?[profile.goal]
+      console.log "goal '#{profile.goal}': no encoder export and no precomputed vector; run npm run export-model" unless model.goalVec?
   options = { tuning: load(args.tuning or path.join(ROOT, 'weights', 'engine.yaml')) }
   options.beam = parseInt(args.beam, 10) if args.beam
   result = search model, options

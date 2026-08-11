@@ -12,7 +12,7 @@ DEFAULT_TUNING =
   search: { beam: 100, topK: 14, subsets: 40, keepPlans: 20 }
   objective: { gradWeight: 20, eagernessScale: 0.0001 }
   priority: {
-    requirement: 40, continuation: 5, interest: 2,
+    requirement: 40, continuation: 5, interest: 2, goal: 4,
     usefulBanked: 2, unlocks: 0.5, banked: 4, rigor: 3, eagerRigor: 2
   }
 
@@ -38,6 +38,22 @@ estBanked = (course, levels, exams) ->
 courseIntensity = (course, levels) ->
   level = levels[course.level or 'regular'] or {}
   level.intensity or 1
+
+# Cosine over pre-normalized embedding vectors (see tools/embed.py).
+cosine = (a, b) ->
+  return 0 unless a? and b?
+  s = 0
+  for v, i in a
+    s += v * (b[i] or 0)
+  s
+
+# Semantic closeness of a course to the student's stated free-text goal,
+# via precomputed description embeddings. Zero (inert) when the school
+# has no embeddings or the profile no goal.
+goalAffinity = (model, course) ->
+  vec = model.embeddings?.courses?[course.id]
+  return 0 unless model.goalVec? and vec?
+  cosine model.goalVec, vec
 
 # The intensity tier the student is aiming for. rigor is a 0..1 profile
 # preference: 0 prefers regular-track variants, 1 prefers the most intense
@@ -89,6 +105,7 @@ priorityFor = (model, course, unmet, prevTerm, remaining) ->
   for tag in (course.tags or []) when model.interests.has tag
     interestBonus := w.interest
   reqBonus + continuation + interestBonus +
+    w.goal * (goalAffinity model, course) +
     w.usefulBanked * (usefulBanked model, course.id, remaining) +
     w.unlocks * (model.unlocks[course.id] or 0) +
     w.banked * (estBanked course, model.levels, model.exams) +
@@ -108,6 +125,12 @@ duplicatesContent = (course, state) ->
     return true
   false
 
+# A course is available in a term when the term's own offerings list
+# names it, the term is open, or the course's offered_terms match.
+offeredIn = (course, term) ->
+  return course.id in term.offerings if term.offerings?
+  term.open or term.term in (course.offered_terms or [])
+
 # Every course that is legal in this term for this state. Hard rules,
 # with one opening for real-world exceptions: a waiver stands in for a
 # course's prerequisites.
@@ -116,7 +139,7 @@ candidatesFor = (model, state, term) ->
   for id, course of model.courses
     continue if state.done.has id
     continue if duplicatesContent course, state
-    continue unless term.open or term.term in (course.offered_terms or [])
+    continue unless offeredIn course, term
     continue unless term.grade in (course.grade_levels or [])
     continue unless model.waivers.has(id) or prereqsMet course, state.done
     out.push course
@@ -170,7 +193,7 @@ resolvePins = (model, state, term, pinnedIds, warnings) ->
     else if state.done.has id
       warnings.add "pin #{id} in #{key}: already taken, skipped"
     else
-      legal = (term.open or term.term in (course.offered_terms or [])) and
+      legal = (offeredIn course, term) and
               (term.grade in (course.grade_levels or [])) and
               (model.waivers.has(id) or prereqsMet course, state.done)
       unless legal
@@ -401,8 +424,8 @@ search = (model, options) ->
   caps = loadCaps model
   pins = pinsByTerm model.profile
   warnings = new Set!   # deduped; the same pin warning repeats across beam states
-  for term in model.terms when term.open
-    warnings.add "#{term.term} offerings vary year to year; verify any course placed there"
+  for term in model.terms when term.open or term.offerings?
+    warnings.add "#{term.term} offerings change yearly; verify against the school's summer catalog"
   beam = [initialState model]
   for term in model.terms
     pinnedIds = pins["#{term.grade}:#{term.term}"] or []
@@ -414,4 +437,4 @@ search = (model, options) ->
   plans = collectPlans model, beam, params.keepPlans, warnings
   { plans: plans, warnings: Array.from(warnings), objective: objective }
 
-module.exports = { search, estBanked, courseIntensity, targetIntensity, rigorAffinity }
+module.exports = { search, estBanked, courseIntensity, targetIntensity, rigorAffinity, cosine, goalAffinity }
