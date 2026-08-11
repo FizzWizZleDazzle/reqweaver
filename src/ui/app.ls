@@ -77,6 +77,9 @@ build = (root, index, entry, school, levels) !->
     plans.running 'loading'
     solver.run {
       schoolPath: entry.path
+      embeddingsPath: entry.embeddings or null
+      # the goal-encoding service, when the staged index names one
+      encoderUrl: index.encoder or null
       profile: state.profile!
       beam: state.ui!.beam
       top: TOP_PLANS

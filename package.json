@@ -8,7 +8,7 @@
     "test": "npm run build && node lib/test.js",
     "plan": "npm run build && node lib/cli.js",
     "embed": "uv run tools/embed.py",
-    "export-model": "uv run tools/export-minilm.py",
+    "export-model": "uv run tools/export-encoder.py",
     "build:web": "npm run build && node lib/tools/webdata.js && esbuild lib/ui/app.js --bundle --minify --format=iife --target=es2019 --legal-comments=none --outfile=public/app.js && esbuild lib/worker.js --bundle --minify --format=iife --target=es2019 --legal-comments=none --outfile=public/worker.js",
     "serve": "node lib/tools/serve.js"
   },

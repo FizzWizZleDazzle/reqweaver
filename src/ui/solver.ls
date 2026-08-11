@@ -1,11 +1,36 @@
-# Worker client. One solve at a time: starting a new run replaces the
-# worker, which is also how cancelling works, since a beam search in
-# progress does not check for messages.
+# Worker client. The worker outlives a solve, so anything it loaded once
+# (the specsheet, the course vectors, the sentence encoder) is still there
+# for the next run. One solve at a time: starting a run while one is in
+# flight replaces the worker, which is also how cancelling works, since a
+# beam search in progress does not check for messages.
 
 create = (handlers) ->
   worker = null
   current = null
   counter = 0
+
+  receive = (event) !->
+    message = event.data
+    return unless message?
+    return if message.id? and message.id isnt current
+    switch message.type
+    | 'status' => handlers.status? message
+    | 'done'   =>
+      current := null
+      handlers.done? message
+    | 'error'  =>
+      current := null
+      handlers.error? message
+
+  broke = (event) !->
+    current := null
+    handlers.error? { message: event.message or 'the planner worker failed to start' }
+
+  spawn = ->
+    made = new Worker 'worker.js'
+    made.addEventListener 'message', receive
+    made.addEventListener 'error', broke
+    made
 
   stop = !->
     if worker?
@@ -14,27 +39,11 @@ create = (handlers) ->
     current := null
 
   run = (job) !->
-    stop!
+    stop! if current?
+    worker := spawn! unless worker?
     counter += 1
     current := counter
-    id = counter
-    worker := new Worker 'worker.js'
-    worker.addEventListener 'message', (event) !->
-      message = event.data
-      return unless message?
-      return if message.id? and message.id isnt id
-      switch message.type
-      | 'status' => handlers.status? message
-      | 'done'   =>
-        current := null
-        handlers.done? message
-      | 'error'  =>
-        current := null
-        handlers.error? message
-    worker.addEventListener 'error', (event) !->
-      current := null
-      handlers.error? { message: event.message or 'the planner worker failed to start' }
-    worker.postMessage ({ type: 'solve', id: id } <<< job)
+    worker.postMessage ({ type: 'solve', id: counter } <<< job)
 
   cancel = !->
     return unless current?

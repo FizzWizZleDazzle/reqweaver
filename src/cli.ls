@@ -9,7 +9,7 @@ yaml = require 'js-yaml'
 { buildModel } = require './engine/dag'
 { search } = require './engine/search'
 { rank } = require './scoring/scorer'
-minilm = require './scoring/minilm'
+encoder = require './scoring/encoder'
 
 ROOT = path.join __dirname, '..'
 
@@ -28,15 +28,15 @@ parseArgs = (argv) ->
 load = (file) ->
   yaml.load fs.readFileSync(file, 'utf8')
 
-# The exported MiniLM encoder (tools/export-minilm.py), when present.
-loadMinilm = ->
-  dir = path.join ROOT, 'data', 'minilm'
+# The exported sentence encoder (tools/export-encoder.py), when present.
+loadEncoder = ->
+  dir = path.join ROOT, 'data', 'encoder'
   return null unless fs.existsSync path.join(dir, 'manifest.json')
   manifest = JSON.parse fs.readFileSync path.join(dir, 'manifest.json'), 'utf8'
   vocab = JSON.parse fs.readFileSync path.join(dir, 'vocab.json'), 'utf8'
   buf = fs.readFileSync path.join(dir, 'model.bin')
   ab = buf.buffer.slice buf.byteOffset, buf.byteOffset + buf.byteLength
-  minilm.loadModel manifest, ab, vocab
+  encoder.loadModel manifest, ab, vocab
 
 printPlan = (model, entry, index) ->
   state = entry.st
@@ -69,9 +69,9 @@ main = ->
   if fs.existsSync embPath
     model.embeddings = JSON.parse fs.readFileSync(embPath, 'utf8')
     if profile.goal?
-      encoder = loadMinilm!
+      enc = loadEncoder!
       model.goalVec =
-        if encoder? then minilm.encode encoder, profile.goal
+        if enc? then encoder.encode enc, profile.goal
         else model.embeddings.goals?[profile.goal]
       console.log "goal '#{profile.goal}': no encoder export and no precomputed vector; run npm run export-model" unless model.goalVec?
   options = { tuning: load(args.tuning or path.join(ROOT, 'weights', 'engine.yaml')) }

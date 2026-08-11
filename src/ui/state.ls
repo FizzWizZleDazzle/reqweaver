@@ -18,6 +18,7 @@ emptyProfile = ->
     optionalTerms: []
     rigor: 0.5
     interests: []
+    goal: ''
     objective: 'max_credits'
     maxCoursesPerTerm: null
   }
@@ -48,7 +49,7 @@ save = !->
   catch e
     console.warn 'could not save profile:', e
 
-KNOWN = LIST_FIELDS ++ <[ pinned rigor objective maxCoursesPerTerm ]>
+KNOWN = LIST_FIELDS ++ <[ pinned rigor goal objective maxCoursesPerTerm ]>
 
 # Accept anything shaped like a profile and fill in what is missing, so a
 # hand-written or older file still loads. Fields the editor does not know
@@ -69,6 +70,7 @@ normalize = (given) ->
         courses: [String c for c in (entry.courses or [])]
       }
   p.rigor = Number given.rigor if typeof given.rigor is 'number'
+  p.goal = String given.goal if given.goal?
   p.objective = String given.objective if given.objective?
   p.maxCoursesPerTerm = Number given.maxCoursesPerTerm if given.maxCoursesPerTerm?
   p
@@ -187,6 +189,7 @@ toYaml = ->
     interests: p.interests
     objective: p.objective
   }
+  out.goal = p.goal if p.goal and p.goal.length
   out.maxCoursesPerTerm = p.maxCoursesPerTerm if p.maxCoursesPerTerm?
   yaml.dump out, { lineWidth: 72, noRefs: true }
 

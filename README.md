@@ -31,7 +31,7 @@ plans toward relevant courses), generate the embedding data once:
 
 ```
 npm run embed          # per-course description vectors (compile time)
-npm run export-model   # MiniLM weights for runtime goal encoding
+npm run export-model   # encoder weights for the offline fallback
 ```
 
 ## What it does
