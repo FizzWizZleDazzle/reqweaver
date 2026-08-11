@@ -55,7 +55,7 @@ verifyFeasible = (model, state) ->
       assert course?, "unknown course #{id}"
       assert entry.term in course.offered_terms, "#{id} not offered in #{entry.term}"
       assert entry.grade in course.grade_levels, "#{id} outside grade window in grade #{entry.grade}"
-      assert (model.waivers.has(id) or prereqsMet course, done), "#{id} taken before its prereqs"
+      assert (model.waivers.has(id) or prereqsMet course, done, model.contentEquiv), "#{id} taken before its prereqs"
     for id in entry.courses
       done.add id
 
@@ -148,6 +148,31 @@ check 'a waiver stands in for prerequisites', ->
   assert 'GEOA' in best.plan[0].courses, 'waived course not scheduled ahead of its prereq'
   for state in result.plans
     verifyFeasible model, state
+
+check 'course-list requirement predicates pull the sequence, not tag filler', ->
+  seq = cloneSchool!
+  for req in seq.grad_requirements when req.id is 'english'
+    req.satisfied_by = { courses: ['ENG2A', 'ENG2B'] }
+    req.credits = 1.0
+  model = buildModel seq, freshProfile!, levels, exams
+  result = search model, {}
+  best = result.plans[0]
+  ids = planCourseIds best
+  assert best.gradRemaining is 0, "requirements unmet: #{best.gradRemaining}"
+  assert ('ENG2A' in ids and 'ENG2B' in ids), 'course-list requirement not satisfied by the named courses'
+
+check 'content-group requirement predicates accept any variant tier', ->
+  seq = cloneSchool!
+  geoReq = { id: 'geo', label: 'Geometry', credits: 1.0, satisfied_by: { content: ['geo_a', 'geo_b'] } }
+  seq.grad_requirements = [geoReq]
+  model = buildModel seq, freshProfile!, levels, exams
+  result = search model, {}
+  best = result.plans[0]
+  ids = planCourseIds best
+  assert best.gradRemaining is 0, "requirements unmet: #{best.gradRemaining}"
+  tookRegular = 'GEOA' in ids and 'GEOB' in ids
+  tookHonors = 'GEOHA' in ids and 'GEOHB' in ids
+  assert (tookRegular or tookHonors), 'no geometry variant satisfied the content requirement'
 
 check 'nested requires trees evaluate a or (c and (b or d))', ->
   course = { id: 'X', requires: { any: ['A', { all: ['C', { any: ['B', 'D'] }] }] } }
