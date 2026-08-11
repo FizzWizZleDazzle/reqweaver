@@ -4,7 +4,7 @@
 # produce identical plans (stable sorts, lexicographic tiebreaks).
 
 { prereqsMet, prereqIds } = require './dag'
-{ addCourseCredits, initialCoverage, creditsRemaining, unmetTags } = require './gradreqs'
+{ reqMatches, addCourseCredits, initialCoverage, creditsRemaining, unmetReqs } = require './gradreqs'
 
 # Built-in tuning; weights/engine.yaml carries the same values and wins
 # when passed in (search options.tuning). Tune there, not here.
@@ -96,7 +96,7 @@ usefulBanked = (model, id, remaining) ->
 priorityFor = (model, course, unmet, prevTerm, remaining) ->
   w = model.tuning.priority
   reqBonus = 0
-  for tag in (course.tags or []) when unmet.has tag
+  for req in unmet when reqMatches req, course
     reqBonus := w.requirement
   continuation = 0
   for id in (prereqIds course) when prevTerm.has id
@@ -141,7 +141,7 @@ candidatesFor = (model, state, term) ->
     continue if duplicatesContent course, state
     continue unless offeredIn course, term
     continue unless term.grade in (course.grade_levels or [])
-    continue unless model.waivers.has(id) or prereqsMet course, state.done
+    continue unless model.waivers.has(id) or prereqsMet course, state.done, model.contentEquiv
     out.push course
   out
 
@@ -195,7 +195,7 @@ resolvePins = (model, state, term, pinnedIds, warnings) ->
     else
       legal = (offeredIn course, term) and
               (term.grade in (course.grade_levels or [])) and
-              (model.waivers.has(id) or prereqsMet course, state.done)
+              (model.waivers.has(id) or prereqsMet course, state.done, model.contentEquiv)
       unless legal
         warnings.add "pin #{id} in #{key}: overrides a school rule; kept, check with a counselor"
       placed.push course
@@ -280,7 +280,7 @@ successorState = (model, state, term, subset) ->
     contentTaken.add course.content if course.content?
     for e in (course.excludes or [])
       excluded.add e
-    addCourseCredits coverage, course
+    addCourseCredits coverage, course, (model.school.grad_requirements or [])
     banked += estBanked course, model.levels, model.exams
     ids.push course.id
   ids.sort!
@@ -350,15 +350,15 @@ previousTermCourses = (state) ->
 
 # Guarantee scarce requirement windows stay reachable: when the top-K
 # slice is crowded with other requirement-bearing candidates, the best
-# candidate for each unrepresented unmet tag is injected anyway (health
-# is offered in one grade; missing the window fails graduation).
-injectUnmetTags = (ranked, candidates, unmet, pinnedIds) ->
-  represented = new Set!
-  for c in ranked
-    for tag in (c.tags or [])
-      represented.add tag
-  for tag in Array.from(unmet) when not represented.has tag
-    for c in candidates when tag in (c.tags or []) and c.id not in pinnedIds
+# candidate for each unrepresented unmet requirement is injected anyway
+# (health is offered in one grade; missing the window fails graduation).
+injectUnmetReqs = (ranked, candidates, unmet, pinnedIds) ->
+  for req in unmet
+    represented = false
+    for c in ranked when reqMatches req, c
+      represented := true
+    continue if represented
+    for c in candidates when (reqMatches req, c) and c.id not in pinnedIds
       ranked.push c unless c in ranked
       break
   ranked
@@ -366,11 +366,11 @@ injectUnmetTags = (ranked, candidates, unmet, pinnedIds) ->
 expandState = (model, state, term, pinnedIds, caps, params, warnings) ->
   pinned = resolvePins model, state, term, pinnedIds, warnings
   candidates = filterVariants model, candidatesFor(model, state, term)
-  unmet = unmetTags model.school, state.coverage
+  unmet = unmetReqs model.school, state.coverage
   remaining = model.terms.length - term.index
   rankCandidates model, candidates, unmet, previousTermCourses(state), remaining
   ranked = [c for c in candidates.slice(0, params.topK) when c.id not in pinnedIds]
-  injectUnmetTags ranked, candidates, unmet, pinnedIds
+  injectUnmetReqs ranked, candidates, unmet, pinnedIds
   effCaps = caps
   if term.maxCourses?
     limit = if caps.courses? then Math.min(caps.courses, term.maxCourses) else term.maxCourses

@@ -1,47 +1,56 @@
-# Graduation-requirement coverage. Coverage is tracked per tag as earned
-# credits; a requirement is met when its tag has accumulated its credit
-# target. Covering all requirements by the final term is a hard rule:
-# search steers toward it and drops plans that miss it when any plan
-# covers it.
+# Graduation-requirement coverage. Each requirement carries a
+# satisfied_by predicate and its own credit target; coverage is tracked
+# per requirement id. Covering every requirement by the final term is a
+# hard rule: search steers toward it and drops plans that miss it when
+# any plan covers it.
 
-# Credits a course contributes toward each of its tags.
-addCourseCredits = (coverage, course) ->
-  for tag in (course.tags or [])
-    coverage[tag] = (coverage[tag] or 0) + (course.credits or 0)
+# Predicate forms, all data:
+#   satisfied_by: { tag: english }                    any course with the tag
+#   satisfied_by: { courses: [ENG2003A, ENG2003B] }   an explicit id list
+#   satisfied_by: { content: [english9_a, english9_b] }  content groups, so
+#     placement variants (honors / AP / EML tiers) all satisfy the slot
+reqMatches = (req, course) ->
+  sb = req.satisfied_by or {}
+  return sb.tag in (course.tags or []) if sb.tag?
+  return course.id in sb.courses if sb.courses?
+  return course.content? and course.content in sb.content if sb.content?
+  false
+
+# Credits a course contributes toward each matching requirement.
+addCourseCredits = (coverage, course, reqs) ->
+  for req in reqs when reqMatches req, course
+    coverage[req.id] = (coverage[req.id] or 0) + (course.credits or 0)
   coverage
 
 # Coverage the student starts with. Pre-grade-9 courses count only where
 # the school's pre_hs_credit policy grants graduation credit; they satisfy
 # prerequisites regardless (that part is handled in dag.initialDone).
 initialCoverage = (school, profile, courses) ->
+  reqs = school.grad_requirements or []
   coverage = {}
   countable = (profile.completed or []) ++ (profile.inProgress or [])
   if school.pre_hs_credit?.counts_toward_grad
     countable = countable ++ (profile.preHsCompleted or [])
   for id in countable
     course = courses[id]
-    addCourseCredits coverage, course if course?
+    addCourseCredits coverage, course, reqs if course?
   coverage
 
 # Total credits still missing across all requirements.
 creditsRemaining = (school, coverage) ->
   missing = 0
   for req in (school.grad_requirements or [])
-    tag = req.satisfied_by?.tag
-    have = if tag? then (coverage[tag] or 0) else 0
+    have = coverage[req.id] or 0
     have = req.credits if have > req.credits
     missing += req.credits - have
   missing
 
-# Tags that still have an unmet requirement. The search boosts candidate
-# courses carrying one of these tags so electives never crowd out
-# requirement courses.
-unmetTags = (school, coverage) ->
-  tags = new Set!
+# Requirements that still need credit. The search boosts candidates
+# matching one of these so filler never crowds out requirement courses.
+unmetReqs = (school, coverage) ->
+  unmet = []
   for req in (school.grad_requirements or [])
-    tag = req.satisfied_by?.tag
-    continue unless tag?
-    tags.add tag if (coverage[tag] or 0) < req.credits
-  tags
+    unmet.push req if (coverage[req.id] or 0) < req.credits
+  unmet
 
-module.exports = { addCourseCredits, initialCoverage, creditsRemaining, unmetTags }
+module.exports = { reqMatches, addCourseCredits, initialCoverage, creditsRemaining, unmetReqs }

@@ -92,18 +92,38 @@ grad_requirements:
     label: Fine Arts
     credits: 1.0
     satisfied_by: { tag: fine_arts }
-  - id: english
-    label: English
-    credits: 4.0
-    satisfied_by: { tag: english }
+  - id: english9
+    label: English 9
+    credits: 1.0
+    satisfied_by: { content: [english9_a, english9_b] }
     notes: >-
-      The English Language Arts file states no graduation requirement. 4.0 credits is the standard MSDE requirement, recorded here so that plans do not skip English, and should be verified against the school policy.
-  - id: social-studies
-    label: Social Studies
-    credits: 3.0
-    satisfied_by: { tag: social_studies }
+      MCPS requires the English 9-12 sequence, not any four English credits; the content groups let honors and EML placement tiers satisfy each slot. The ELA file states no requirement; verify against school policy.
+  - id: english10
+    label: English 10
+    credits: 1.0
+    satisfied_by: { content: [english10_a, english10_b] }
+  - id: english11
+    label: English 11
+    credits: 1.0
+    satisfied_by: { content: [english11_a, english11_b] }
+  - id: english12
+    label: English 12
+    credits: 1.0
+    satisfied_by: { content: [english12_a, english12_b] }
+  - id: us-history
+    label: U.S. History
+    credits: 1.0
+    satisfied_by: { content: [us_history_a, us_history_b] }
     notes: >-
-      The Social Studies file states no credit total, only that U.S. History, NSL Government, and Modern World History are each required. 3.0 credits is the standard MSDE requirement, recorded here so that plans do not skip social studies, and should be verified against the school policy.
+      The Social Studies file requires U.S. History, NSL Government, and Modern World History specifically; the content groups let the AP variants satisfy each slot.
+  - id: nsl-government
+    label: NSL Government
+    credits: 1.0
+    satisfied_by: { content: [nsl_government_a, nsl_government_b] }
+  - id: modern-world-history
+    label: Modern World History
+    credits: 1.0
+    satisfied_by: { content: [modern_world_history_a, modern_world_history_b] }
   - id: health
     label: Health
     credits: 0.5

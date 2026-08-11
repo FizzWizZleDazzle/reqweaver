@@ -227,8 +227,12 @@ Rules:
 - `level` and `credit_unit` are references into the registries
   (section 4.3). The engine never matches on a level id; it reads the
   attributes the registry attaches to it.
-- Graduation requirement predicates are data: tag matches as shown,
-  explicit course lists, or a minimum level. New predicate kinds
+- Graduation requirement predicates are data, and each requirement
+  tracks its own credits: a tag match as shown, an explicit course
+  list (`satisfied_by: { courses: [...] }`), or content groups
+  (`satisfied_by: { content: [...] }`), which express
+  course-specific sequences like "English 9 through 12" while letting
+  every placement tier of a slot satisfy it. New predicate kinds
   extend the schema, not any school's code path, because no school
   has one.
 - `pre_hs_credit` is the district's policy on courses completed
@@ -252,6 +256,11 @@ Rules:
   year of 2YR Algebra 2 versus the one-year courses), listing ids in
   `excludes` keeps them from ever co-occurring in a plan. The engine
   treats the exclusion as symmetric.
+- Content groups also carry prerequisite standing: a prerequisite
+  naming one variant is satisfied by any completed course in the same
+  group. Catalogs write "Prerequisite: English 11" but the scrape
+  resolves it to a single id; without this rule a student who took AP
+  Language for the English 11 slot could never take English 12.
 - Prerequisites come in two forms. The compact `prereqs` shape
   (all_of plus one-level any_of groups) covers most catalogs. A course
   may instead carry `requires`, a recursive boolean tree for
@@ -378,6 +387,18 @@ geographic path so contributors near a school review changes to it.
 Schema migrations ship as scripts in this repository and run in CI
 over the whole tree, so a version bump never strands contributor
 files.
+
+Semantic assets ship separately from the app bundle. Per-school course
+embeddings (about 1.3 MB each) are static Pages assets beside the
+catalog and load with the school. The MiniLM weight export (86 MB)
+exceeds the Pages per-file limit, so it lives in a Cloudflare R2
+bucket exposed on the site's own domain: R2 egress is free, the blob
+rides the same CDN cache, and a content-hashed filename with an
+immutable cache header means a browser fetches it at most once and
+the edge usually already has it. The app fetches the model lazily,
+only the first time a profile states a free-text goal; everything
+else works without it. At student-scale traffic the whole arrangement
+stays inside Cloudflare's free tiers.
 
 Distribution is a build step, not a runtime fetch. On merge (via
 repository_dispatch) and on a daily cron, the app's build pulls the

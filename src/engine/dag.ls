@@ -33,15 +33,23 @@ unrollTerms = (school, profile) ->
 #   requires: { any: [A, { all: [C, { any: [B, D] }] }] }   # a or (c and (b or d))
 # A string leaf means "that course is done"; {all: [...]} and {any: [...]}
 # nest arbitrarily. When `requires` is present it replaces `prereqs`.
-evalRequires = (node, done) ->
-  return done.has node if typeof node is 'string'
+# A leaf is satisfied by the named course, or by any done course sharing
+# its content group: a catalog line reading "Prerequisite: English 11"
+# resolves to one variant's id, but AP Language is the same slot, so the
+# equivalence map (built in buildModel) makes every variant count.
+evalRequires = (node, done, equiv) ->
+  if typeof node is 'string'
+    return true if done.has node
+    for alt in ((equiv or {})[node] or [])
+      return true if done.has alt
+    return false
   if node.all?
     for child in node.all
-      return false unless evalRequires child, done
+      return false unless evalRequires child, done, equiv
     return true
   if node.any?
     for child in node.any
-      return true if evalRequires child, done
+      return true if evalRequires child, done, equiv
     return false
   true   # an empty node constrains nothing
 
@@ -63,7 +71,18 @@ requirementTree = (course) ->
     parts.push { any: (if Array.isArray group then group else [group]) }
   { all: parts }
 
-prereqsMet = (course, done) -> evalRequires (requirementTree course), done
+prereqsMet = (course, done, equiv) -> evalRequires (requirementTree course), done, equiv
+
+# id -> other course ids sharing its content group.
+contentEquivalents = (courses) ->
+  members = {}
+  for id, course of courses when course.content?
+    (members[course.content] ?= []).push id
+  equiv = {}
+  for group, ids of members
+    for id in ids
+      equiv[id] = [other for other in ids when other isnt id]
+  equiv
 
 # All course ids a course's prerequisites mention, either form.
 prereqIds = (course) -> requiresIds (requirementTree course)
@@ -152,6 +171,7 @@ buildModel = (school, profile, levels, exams) ->
     unlocks: computeUnlocks courses
     critPath: computeCritPath courses
     forward: forwardEdges courses
+    contentEquiv: contentEquivalents courses
     bankedMemo: {}
     # semantic layer, attached by the caller when precomputed
     # embeddings exist for this school (see tools/embed.py)
@@ -159,4 +179,4 @@ buildModel = (school, profile, levels, exams) ->
     goalVec: null
   }
 
-module.exports = { buildModel, prereqsMet, prereqIds, unrollTerms, forwardEdges }
+module.exports = { buildModel, prereqsMet, prereqIds, unrollTerms, forwardEdges, contentEquivalents }

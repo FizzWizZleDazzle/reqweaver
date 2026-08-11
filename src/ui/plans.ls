@@ -239,29 +239,31 @@ create = (ctx) ->
       rows.push gradeRow grade, columns, byKey
     el 'div', { class: 'grid', style: "--terms: #{columns.length}" }, rows
 
-  # Courses carrying a tag, split into what the plan schedules and what the
+  { reqMatches } = require '../engine/gradreqs'
+
+  # Courses satisfying a requirement's predicate (tag, course list, or
+  # content group), split into what the plan schedules and what the
   # profile already held.
-  coursesWithTag = (plan, tag) ->
+  coursesMatching = (plan, req) ->
     planned = []
     for entry in plan.terms
       for id in entry.courses
         course = ctx.catalog.byId[id]
-        planned.push id if course? and tag in (course.tags or [])
+        planned.push id if course? and reqMatches req, course
     history = []
     profile = ctx.profile!
     pool = profile.completed ++ profile.inProgress
     pool = pool ++ profile.preHsCompleted if ctx.school.pre_hs_credit?.counts_toward_grad
     for id in pool
       course = ctx.catalog.byId[id]
-      history.push id if course? and tag in (course.tags or [])
+      history.push id if course? and reqMatches req, course
     { planned: planned, history: history }
 
   requirementRow = (req, plan) ->
-    tag = req.satisfied_by?.tag
-    earned = if tag? then (plan.coverage[tag] or 0) else 0
+    earned = plan.coverage[req.id] or 0
     counted = Math.min earned, req.credits
     ratio = if req.credits > 0 then counted / req.credits else 1
-    covering = if tag? then coursesWithTag plan, tag else { planned: [], history: [] }
+    covering = coursesMatching plan, req
     detail = [
       el 'summary', { text: 'Courses that cover it' }
       el 'div', { class: 'chips' }, [courseChip id for id in covering.planned]
