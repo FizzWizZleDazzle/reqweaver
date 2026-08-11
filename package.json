@@ -1,0 +1,17 @@
+{
+  "name": "reqweaver",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Schedule planner for banking college credit in high school",
+  "scripts": {
+    "build": "lsc -c -o lib src",
+    "test": "npm run build && node lib/test.js",
+    "plan": "npm run build && node lib/cli.js"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "livescript": "^1.6.0"
+  }
+}

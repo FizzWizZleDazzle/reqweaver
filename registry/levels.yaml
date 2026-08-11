@@ -1,0 +1,16 @@
+# Course-level registry: the engine reads these attributes, never level names.
+regular:
+  intensity: 1.0
+honors:
+  intensity: 2.0
+advanced:
+  intensity: 2.5
+ap:
+  intensity: 3.0
+  exam_bearing: true
+ib:
+  intensity: 3.0
+  exam_bearing: true
+college:
+  intensity: 2.5
+  college_credit: true

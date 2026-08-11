@@ -1,0 +1,14 @@
+# Exam registry: conservative college-credit estimates per exam, used for
+# the banked-credit objective until a major specsheet articulates the
+# exact transfer. Values are typical public-university awards; the UI
+# labels everything derived from them as an estimate.
+default: 3
+AP_CALC_AB: 4
+AP_CALC_BC: 8
+AP_BIOLOGY: 4
+AP_CHEMISTRY: 4
+AP_PHYSICS_1: 4
+AP_PHYSICS_2: 4
+AP_PHYSICS_C_MECH: 4
+AP_PHYSICS_C_EM: 4
+AP_CS_A: 4

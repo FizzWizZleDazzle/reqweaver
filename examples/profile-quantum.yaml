@@ -1,0 +1,25 @@
+# Aspiring quantum theorist entering grade 9 at WCHS (MCPS 2026-27 catalog).
+# Middle school credit: Algebra 1, Geometry, Spanish 1-3.
+# No major specsheet exists yet, so "quantum theorist" is approximated by
+# high rigor + maximum banked credit; the physics/math AP chain emerges
+# from those. Montgomery College dual enrollment is not yet scraped, so
+# grades 11-12 cannot continue past the AP ceiling.
+completed: []
+preHsCompleted:
+  - MAT2000A   # Algebra 1 A
+  - MAT2000B   # Algebra 1 B
+  - MAT2003A   # Geometry A
+  - MAT2003B   # Geometry B
+  - WLG2131A   # Spanish 1A
+  - WLG2131B   # Spanish 1B
+  - WLG2132A   # Spanish 2A
+  - WLG2132B   # Spanish 2B
+  - WLG2138A   # Hon Spanish 3A
+  - WLG2138B   # Hon Spanish 3B
+inProgress: []
+pinned: []
+waivers: []
+optionalTerms: ['9:summer', '10:summer', '11:summer']   # summer school to get ahead
+rigor: 0.9
+interests: [math, science, computer_science]
+objective: max_credits

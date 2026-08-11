@@ -1,0 +1,10 @@
+# Example student profile for the standalone planner CLI.
+# Run: npm run plan -- --school test/fixtures/tiny-school.yaml --profile examples/profile-example.yaml
+completed: []               # courses finished in high school
+preHsCompleted: [ALG1A, ALG1B]  # finished before grade 9; grad credit follows school policy
+inProgress: []
+pinned: []                  # overrides: [{ grade: 9, term: fall, courses: [ENG1A] }] is always honored
+waivers: []                 # course ids whose prereqs the school excused (placement test, ...)
+optionalTerms: []           # e.g. ['10:summer'] to opt into summer after grade 10
+rigor: 0.5                  # 0 = gentlest track that meets requirements, 1 = most intense variants
+objective: max_credits      # max_credits | early_grad

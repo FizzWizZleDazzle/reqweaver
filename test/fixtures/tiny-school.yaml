@@ -1,0 +1,216 @@
+specsheet: school
+schema_version: 1
+catalog_year: 2026
+id: test/tiny-hs
+kind: high_school
+name: Tiny Test High School
+credit_unit: carnegie
+terms_per_year:
+  - { id: fall,   sequence: 1 }
+  - { id: spring, sequence: 2 }
+  - { id: summer, sequence: 3, optional: true }
+grade_levels: [9, 10, 11, 12]
+max_courses_per_term: 3
+pre_hs_credit:
+  satisfies_prereqs: true
+  counts_toward_grad: true
+grad_requirements:
+  - id: math
+    label: Mathematics
+    credits: 2.0
+    satisfied_by: { tag: math }
+  - id: english
+    label: English
+    credits: 2.0
+    satisfied_by: { tag: english }
+  - id: art
+    label: Fine Arts
+    credits: 1.0
+    satisfied_by: { tag: fine_arts }
+courses:
+  - id: ALG1A
+    name: Algebra 1 A
+    description: First half of Algebra 1.
+    credits: 0.5
+    tags: [math]
+    level: regular
+    offered_terms: [fall]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [], any_of: [] }
+  - id: ALG1B
+    name: Algebra 1 B
+    description: Second half of Algebra 1.
+    credits: 0.5
+    tags: [math]
+    level: regular
+    offered_terms: [spring]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [ALG1A], any_of: [] }
+  - id: GEOA
+    content: geo_a
+    name: Geometry A
+    description: First half of Geometry.
+    credits: 0.5
+    tags: [math]
+    level: regular
+    offered_terms: [fall]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [ALG1B], any_of: [] }
+  - id: GEOB
+    content: geo_b
+    name: Geometry B
+    description: Second half of Geometry.
+    credits: 0.5
+    tags: [math]
+    level: regular
+    offered_terms: [spring]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [GEOA], any_of: [] }
+  - id: GEOHA
+    content: geo_a
+    name: Honors Geometry A
+    description: First half of honors geometry.
+    credits: 0.5
+    tags: [math]
+    level: honors
+    offered_terms: [fall]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [ALG1B], any_of: [] }
+  - id: GEOHB
+    content: geo_b
+    name: Honors Geometry B
+    description: Second half of honors geometry.
+    credits: 0.5
+    tags: [math]
+    level: honors
+    offered_terms: [spring]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [GEOHA], any_of: [] }
+  - id: APCALCA
+    name: AP Calculus A
+    description: First half of AP Calculus.
+    credits: 0.5
+    tags: [math]
+    level: ap
+    exam: AP_CALC_AB
+    offered_terms: [fall]
+    grade_levels: [10, 11, 12]
+    prereqs: { all_of: [], any_of: [[GEOB, GEOHB]] }
+  - id: APCALCB
+    name: AP Calculus B
+    description: Second half of AP Calculus.
+    credits: 0.5
+    tags: [math]
+    level: ap
+    exam: AP_CALC_AB
+    offered_terms: [spring]
+    grade_levels: [10, 11, 12]
+    prereqs: { all_of: [APCALCA], any_of: [] }
+  - id: ENG1A
+    name: English 1 A
+    description: First half of English 1.
+    credits: 0.5
+    tags: [english]
+    level: regular
+    offered_terms: [fall]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [], any_of: [] }
+  - id: ENG1B
+    name: English 1 B
+    description: Second half of English 1.
+    credits: 0.5
+    tags: [english]
+    level: regular
+    offered_terms: [spring]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [ENG1A], any_of: [] }
+  - id: ENG2A
+    name: English 2 A
+    description: First half of English 2.
+    credits: 0.5
+    tags: [english]
+    level: regular
+    offered_terms: [fall]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [ENG1B], any_of: [] }
+  - id: ENG2B
+    name: English 2 B
+    description: Second half of English 2.
+    credits: 0.5
+    tags: [english]
+    level: regular
+    offered_terms: [spring]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [ENG2A], any_of: [] }
+  - id: ART1A
+    name: Studio Art A
+    description: First half of studio art.
+    credits: 0.5
+    tags: [fine_arts]
+    level: regular
+    offered_terms: [fall]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [], any_of: [] }
+  - id: ART1B
+    name: Studio Art B
+    description: Second half of studio art.
+    credits: 0.5
+    tags: [fine_arts]
+    level: regular
+    offered_terms: [spring]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [ART1A], any_of: [] }
+  - id: ELEC1
+    name: Elective One
+    description: A standalone elective with no prerequisites.
+    credits: 0.5
+    tags: [elective]
+    level: regular
+    offered_terms: [fall, spring]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [], any_of: [] }
+  - id: ELEC2
+    name: Elective Two
+    description: A standalone elective with no prerequisites.
+    credits: 0.5
+    tags: [elective]
+    level: regular
+    offered_terms: [fall, spring]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [], any_of: [] }
+  - id: ELEC3
+    name: Elective Three
+    description: A standalone elective with no prerequisites.
+    credits: 0.5
+    tags: [elective]
+    level: regular
+    offered_terms: [fall, spring]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [], any_of: [] }
+  - id: ELEC4
+    name: Elective Four
+    description: A standalone elective with no prerequisites.
+    credits: 0.5
+    tags: [elective]
+    level: regular
+    offered_terms: [fall, spring]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [], any_of: [] }
+  - id: ELEC5
+    name: Elective Five
+    description: A standalone elective with no prerequisites.
+    credits: 0.5
+    tags: [elective]
+    level: regular
+    offered_terms: [fall, spring]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [], any_of: [] }
+  - id: ELEC6
+    name: Elective Six
+    description: A standalone elective with no prerequisites.
+    credits: 0.5
+    tags: [elective]
+    level: regular
+    offered_terms: [fall, spring]
+    grade_levels: [9, 10, 11, 12]
+    prereqs: { all_of: [], any_of: [] }
