@@ -15,6 +15,7 @@ priority:
                         # any other candidate's full priority
   continuation: 5       # prereq taken in the immediately preceding term
   interest: 2           # course carries a profile interest tag
+  goal: 4               # embedding similarity to the free-text goal
   usefulBanked: 2       # banked credit reachable within remaining terms
   unlocks: 0.5          # reachable descendants
   banked: 4             # the course's own banked-credit estimate

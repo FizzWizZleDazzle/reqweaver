@@ -6,12 +6,17 @@
   "scripts": {
     "build": "lsc -c -o lib src",
     "test": "npm run build && node lib/test.js",
-    "plan": "npm run build && node lib/cli.js"
+    "plan": "npm run build && node lib/cli.js",
+    "embed": "uv run tools/embed.py",
+    "export-model": "uv run tools/export-minilm.py",
+    "build:web": "npm run build && node lib/tools/webdata.js && esbuild lib/ui/app.js --bundle --minify --format=iife --target=es2019 --legal-comments=none --outfile=public/app.js && esbuild lib/worker.js --bundle --minify --format=iife --target=es2019 --legal-comments=none --outfile=public/worker.js",
+    "serve": "node lib/tools/serve.js"
   },
   "dependencies": {
     "js-yaml": "^4.1.0"
   },
   "devDependencies": {
+    "esbuild": "^0.25.0",
     "livescript": "^1.6.0"
   }
 }

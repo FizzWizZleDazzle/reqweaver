@@ -4,6 +4,7 @@ version: 1
 weights:
   rigorMatch: 0.8
   interestMatch: 0.7
+  goalMatch: 0.8
   bankedTotal: 1.0
   gatewayFront: 0.6
   loadVariance: -0.5
