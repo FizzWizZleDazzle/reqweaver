@@ -1,0 +1,31 @@
+name: embeddings
+# Recompiles course-description embeddings whenever a specsheet changes
+# and commits the embeddings.<school>.json files back beside their
+# sheets. Runs the open-source encoder on the CPU runner; a full-catalog
+# school takes well under a minute. The paths filter matches only .yaml,
+# and the commit touches only .json, so the workflow cannot retrigger
+# itself.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'specsheets/**/*.yaml'
+      - 'examples/*.yaml'
+      - 'tools/embed.py'
+permissions:
+  contents: write
+jobs:
+  embed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv run tools/embed.py
+      - name: Commit refreshed embeddings
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add 'specsheets/**/embeddings.*.json'
+          git diff --cached --quiet && echo 'embeddings unchanged' && exit 0
+          git commit -m 'Compile course embeddings'
+          git push
