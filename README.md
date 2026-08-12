@@ -58,7 +58,7 @@ not applied, and saving says the API is not reachable.
   even when it breaks a school rule (the rule becomes a warning), and
   waivers record prerequisites the school has excused.
 - Everything school-specific is data. A school is one YAML file
-  (`specsheets/`); course levels and their attributes are a registry
+  (`specs/`); course levels and their attributes are a registry
   (`registry/levels.yaml`); scorer weights are a tuning file
   (`weights/scorer-weights.yaml`).
 

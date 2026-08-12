@@ -1,7 +1,7 @@
 # Stages the static site: the page, the stylesheet, every school specsheet,
 # its course embeddings, the registries, and the weights files land under
 # public/, with a generated index listing the sheets the app can offer.
-# Adding a school is adding a file under specsheets/schools; this picks it
+# Adding a school or college is adding a file under specs/; this picks it
 # up.
 # Run: node lib/tools/webdata.js   (npm run build:web does it for you)
 
@@ -58,14 +58,14 @@ main = !->
   for name in ['scorer-weights.yaml', 'engine.yaml']
     copy (path.join ROOT, 'weights', name), (path.join OUT, 'data', 'weights', name)
 
-  schoolsDir = path.join ROOT, 'specsheets', 'schools'
+  specsDir = path.join ROOT, 'specs'
   entries = []
   embedded = 0
-  for file in walk schoolsDir
+  for file in walk specsDir
     sheet = yaml.load fs.readFileSync file, 'utf8'
     continue unless sheet? and sheet.id?
-    relative = path.relative schoolsDir, file
-    target = path.join OUT, 'data', 'schools', relative
+    relative = path.relative specsDir, file
+    target = path.join OUT, 'data', 'specs', relative
     copy file, target
     entry = {
       id: sheet.id
@@ -74,13 +74,13 @@ main = !->
       catalogYear: sheet.catalog_year
       schemaVersion: sheet.schema_version
       courses: (sheet.courses or []).length
-      path: "data/schools/#{relative.split(path.sep).join '/'}"
+      path: "data/specs/#{relative.split(path.sep).join '/'}"
     }
     vectors = embeddingsBeside file
     if vectors?
-      relativeVectors = path.relative schoolsDir, vectors
-      copy vectors, (path.join OUT, 'data', 'schools', relativeVectors)
-      entry.embeddings = "data/schools/#{relativeVectors.split(path.sep).join '/'}"
+      relativeVectors = path.relative specsDir, vectors
+      copy vectors, (path.join OUT, 'data', 'specs', relativeVectors)
+      entry.embeddings = "data/specs/#{relativeVectors.split(path.sep).join '/'}"
       embedded += 1
     entries.push entry
   entries.sort (a, b) -> if a.name < b.name then -1 else 1

@@ -9,7 +9,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'specsheets/**/*.yaml'
+      - 'specs/**/*.yaml'
       - 'examples/*.yaml'
       - 'tools/embed.py'
 permissions:
@@ -25,7 +25,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add 'specsheets/**/embeddings.*.json'
+          git add 'specs/**/embeddings.*.json'
           git diff --cached --quiet && echo 'embeddings unchanged' && exit 0
           git commit -m 'Compile course embeddings'
           git push
