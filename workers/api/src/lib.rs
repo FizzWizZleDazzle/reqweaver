@@ -55,6 +55,15 @@ struct EncodeRequest {
     text: String,
 }
 
+// worker 0.8 hands ai.run inputs to serde_wasm_bindgen, which turns a
+// serde_json::Value object into a JS Map that the AI binding rejects
+// ("required properties at '/' are 'text'"); a struct serializes to a
+// plain object.
+#[derive(Serialize)]
+struct EmbedInput {
+    text: Vec<String>,
+}
+
 #[derive(Serialize, Deserialize)]
 struct PlanRecord {
     v: u32,
@@ -111,10 +120,15 @@ async fn handle_encode(mut req: Request, env: &Env) -> Result<Response> {
         .expiration_ttl(120)
         .execute()
         .await?;
-    let ai = env.ai("AI")?;
-    let output: serde_json::Value = ai
-        .run(EMBED_MODEL, serde_json::json!({ "text": [text] }))
-        .await?;
+    let ai = match env.ai("AI") {
+        Ok(a) => a,
+        Err(e) => return json_error(502, &format!("AI binding: {e}")),
+    };
+    let input = EmbedInput { text: vec![text.clone()] };
+    let output: serde_json::Value = match ai.run(EMBED_MODEL, input).await {
+        Ok(o) => o,
+        Err(e) => return json_error(502, &format!("model call failed: {e}")),
+    };
     let raw = output["data"][0]
         .as_array()
         .ok_or_else(|| Error::RustError("unexpected model output".into()))?;
