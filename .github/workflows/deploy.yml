@@ -35,6 +35,20 @@ jobs:
           targets: wasm32-unknown-unknown
       - run: npm ci && npm run build:web
         if: steps.creds.outputs.present == 'true'
-      - run: npx wrangler deploy
+      - uses: actions/cache@v4
+        if: steps.creds.outputs.present == 'true'
+        with:
+          path: |
+            ~/.cache/worker-build
+            ~/.cargo/bin/worker-build
+          key: worker-build-${{ hashFiles('workers/api/Cargo.lock') }}
+      - name: Deploy (retried; the wasm-bindgen download flakes)
         if: steps.creds.outputs.present == 'true'
         working-directory: workers/api
+        run: |
+          for i in 1 2 3; do
+            npx wrangler deploy && exit 0
+            echo "deploy attempt $i failed; retrying" >&2
+            sleep 20
+          done
+          exit 1

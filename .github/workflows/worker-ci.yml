@@ -19,5 +19,19 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown
-      - run: mkdir -p ../../public && npx wrangler deploy --dry-run --outdir dist
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/worker-build
+            ~/.cargo/bin/worker-build
+          key: worker-build-${{ hashFiles('workers/api/Cargo.lock') }}
+      - name: Dry-run build (retried; the wasm-bindgen download flakes)
         working-directory: workers/api
+        run: |
+          mkdir -p ../../public
+          for i in 1 2 3; do
+            npx wrangler deploy --dry-run --outdir dist && exit 0
+            echo "build attempt $i failed; retrying" >&2
+            sleep 20
+          done
+          exit 1

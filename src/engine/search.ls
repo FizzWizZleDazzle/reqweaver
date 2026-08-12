@@ -349,6 +349,12 @@ eligibleFor = (model, term) ->
     continue if model.avoid.has id   # dragged out; pins still override
     continue unless offeredIn course, term
     continue unless term.grade in (course.grade_levels or [])
+    # placement-restricted tiers (ESOL) serve the students placed into
+    # them; they never fill a general student's slot
+    restricted = false
+    for tag in (course.tags or []) when model.placementGroups.has(tag) and not model.placements.has(tag)
+      restricted := true
+    continue if restricted
     pool.push course
   model.termEligible[term.index] = pool
   pool
