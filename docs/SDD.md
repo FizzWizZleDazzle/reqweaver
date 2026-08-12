@@ -601,9 +601,21 @@ Once per student profile:
 All objectives are exact symbolic scores over a complete plan:
 
 - Maximize banked credits: sum of dual-enrollment credits plus exam
-  articulation credits. Exam credit counts only when the major sheet
-  articulates the exam; without a chosen major, a conservative global
-  default table applies and the result is labeled an estimate.
+  articulation credits, plus dedication. Exam credit counts only when
+  the major sheet articulates the exam; without a chosen major, a
+  conservative global default table applies and the result is labeled
+  an estimate. Dedication is the owner-set priority above raw credit:
+  each course that advances a chain the student already stands on
+  earns its credits weighted by how high it sits on its ladder and
+  boosted (never starved) by goal alignment, so three middle-school
+  years of Spanish pull Spanish 4 and 5 into the plan past
+  interchangeable AP electives, and a started AP science sequence
+  runs to its top. Multi-year commitment reads better on an
+  application than farmed credit. A disliked subject charges instead
+  of earning: the profile's dislikes list keeps a subject to the
+  lightest course that still covers its requirement, banks nothing
+  there (the student will not sit that exam), and never fills with
+  it.
 - Maximize major progress: credit-weighted count of named requirement
   slots satisfied, under the consumption rule of section 4.2.
 - Fastest college finish: compute residual major requirements after

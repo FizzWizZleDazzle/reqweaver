@@ -13,6 +13,13 @@ objective:
   gradWeight: 20        # per missing graduation credit; must exceed the
                         # richest course's banked value per half credit
   eagernessScale: 0.0001
+  dedication: 2         # per continuation credit, weighted by how high
+                        # the course stands on its ladder and boosted by
+                        # goal alignment (never starved by it); disliked
+                        # subjects charge instead of earning. Deep
+                        # continuation outweighs what the slot banks as
+                        # an interchangeable elective, because multi-year
+                        # commitment reads better than farmed credit
 priority:
   requirement: 40       # unmet-graduation-requirement bonus; must beat
                         # any other candidate's full priority

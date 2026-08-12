@@ -134,6 +134,29 @@ computeUnlocks = (courses) ->
     counts[id] = reachable(id, new Set!).size
   counts
 
+# Length of the prerequisite chain BEHIND a course: Spanish 4A stands
+# seven half-course levels up its ladder, an elective stands at one.
+# Deep continuation is what dedication rewards.
+computeChainDepth = (courses) ->
+  memo = {}
+  depth = (id, visiting) ->
+    return memo[id] if memo[id]?
+    return 1 if visiting.has id
+    course = courses[id]
+    return 1 unless course?
+    visiting.add id
+    best = 0
+    for pid in prereqIds course when courses[pid]?
+      d = depth pid, visiting
+      best := d if d > best
+    visiting.delete id
+    memo[id] = 1 + best
+    memo[id]
+  depths = {}
+  for id of courses
+    depths[id] = depth id, new Set!
+  depths
+
 # Longest downstream prerequisite chain per course. A long chain means the
 # course must land early or its descendants fall out of the horizon.
 computeCritPath = (courses) ->
@@ -293,8 +316,12 @@ buildModel = (school, profile, levels, exams, colleges) ->
     waivers: new Set(profile.waivers or [])
     avoid: new Set(profile.avoid or [])
     interests: new Set(profile.interests or [])
+    # disliked topics still cover their requirements, but with the
+    # lightest sufficient variant, never as filler
+    dislikes: new Set(profile.dislikes or [])
     unlocks: computeUnlocks courses
     critPath: computeCritPath courses
+    chainDepth: computeChainDepth courses
     forward: forwardEdges courses
     contentEquiv: contentEquiv
     bankedMemo: {}
