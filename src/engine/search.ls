@@ -3,7 +3,7 @@
 # reorders what survives here. Deterministic: identical inputs always
 # produce identical plans (stable sorts, lexicographic tiebreaks).
 
-{ prereqsMet, prereqIds, offeredIn } = require './dag'
+{ prereqsMet, prereqIds, offeredIn, pairSlots } = require './dag'
 { reqMatches, addCourseCredits, initialCoverage, creditsRemaining, unmetReqs } = require './gradreqs'
 
 # Built-in tuning; weights/engine.yaml carries the same values and wins
@@ -147,14 +147,28 @@ duplicatesContent = (course, state) ->
 # course's prerequisites.
 candidatesFor = (model, state, term) ->
   out = []
-  for id, course of model.courses
-    continue if state.done.has id
-    continue if model.avoid.has id   # dragged out; pins still override
-    continue if duplicatesContent course, state
-    continue unless offeredIn course, term
-    continue unless term.grade in (course.grade_levels or [])
-    continue unless model.waivers.has(id) or prereqsMet course, state.done, model.contentEquiv
-    out.push course
+  reachable = new Set(state.done)
+  admit = (doneSet) ->
+    grew = false
+    for id, course of model.courses
+      continue if reachable.has id
+      continue if model.avoid.has id   # dragged out; pins still override
+      continue if duplicatesContent course, state
+      continue unless offeredIn course, term
+      continue unless term.grade in (course.grade_levels or [])
+      continue unless model.waivers.has(id) or prereqsMet course, doneSet, model.contentEquiv
+      out.push course
+      reachable.add id
+      grew := true
+    grew
+  admit state.done
+  # a sequential term runs its sessions consecutively, so a course may
+  # follow its prerequisite inside the term (summer Algebra 1 A then
+  # B); fixpoint because such chains can be longer than two
+  if term.sequential
+    grew = true
+    while grew
+      grew = admit reachable
   out
 
 # Among candidates that conflict (same content group or an excludes
@@ -198,6 +212,11 @@ rankCandidates = (model, candidates, unmet, prevTerm, remaining, doneTags) ->
 resolvePins = (model, state, term, pinnedIds, warnings) ->
   placed = []
   key = "#{term.grade}:#{term.term}"
+  # in a sequential term, one pin may be another's prerequisite
+  doneHere = new Set(state.done)
+  if term.sequential
+    for id in pinnedIds
+      doneHere.add id
   for id in pinnedIds
     course = model.courses[id]
     if not course?
@@ -207,7 +226,7 @@ resolvePins = (model, state, term, pinnedIds, warnings) ->
     else
       legal = (offeredIn course, term) and
               (term.grade in (course.grade_levels or [])) and
-              (model.waivers.has(id) or prereqsMet course, state.done, model.contentEquiv)
+              (model.waivers.has(id) or prereqsMet course, doneHere, model.contentEquiv)
       unless legal
         warnings.add "pin #{id} in #{key}: overrides a school rule; kept, check with a counselor"
       placed.push course
@@ -227,9 +246,30 @@ subsetPeriods = (chosen) ->
     total += course.periods or 1
   total
 
-fitsCaps = (chosen, course, caps) ->
-  return false if caps.courses? and subsetPeriods(chosen) + (course.periods or 1) > caps.courses
+# seq is set for sequential terms: { done, waivers, equiv, pairA }. In
+# those the course cap counts slots where an A/B pair fills one; other
+# terms count class periods.
+fitsCaps = (chosen, course, caps, seq) ->
+  if caps.courses?
+    if seq?
+      ids = [c.id for c in chosen] ++ [course.id]
+      return false if (pairSlots ids, seq.pairA) > caps.courses
+    else
+      return false if subsetPeriods(chosen) + (course.periods or 1) > caps.courses
   return false if caps.credits? and subsetCredits(chosen) + (course.credits or 0) > caps.credits
+  true
+
+# A subset in a sequential term must be internally consistent: every
+# course's prerequisites are met by earlier terms or by the subset
+# itself (the candidate fixpoint admits B on the promise of A; the
+# promise is checked here).
+sequentialOk = (chosen, seq) ->
+  return true unless seq?
+  ids = new Set(seq.done)
+  for c in chosen
+    ids.add c.id
+  for c in chosen
+    return false unless seq.waivers.has(c.id) or prereqsMet c, ids, seq.equiv
   true
 
 # Content exclusion also holds within a single term: two variants of one
@@ -244,14 +284,14 @@ conflictsWithChosen = (course, chosen) ->
 # Feasible subsets of the ranked candidates, pinned courses always
 # included. Include-first DFS so maximal subsets are generated first;
 # bounded at maxN to keep expansion cost fixed.
-enumSubsets = (ranked, caps, pinned, maxN) ->
+enumSubsets = (ranked, caps, pinned, maxN, seq) ->
   results = []
   explore = (i, chosen) ->
     return if results.length >= maxN
     if i >= ranked.length
-      results.push chosen.slice!
+      results.push chosen.slice! if sequentialOk chosen, seq
       return
-    if (fitsCaps chosen, ranked[i], caps) and not conflictsWithChosen ranked[i], chosen
+    if (fitsCaps chosen, ranked[i], caps, seq) and not conflictsWithChosen ranked[i], chosen
       chosen.push ranked[i]
       explore i + 1, chosen
       chosen.pop!
@@ -427,8 +467,11 @@ expandState = (model, state, term, pinnedIds, caps, params, warnings) ->
   if term.maxCourses?
     limit = if caps.courses? then Math.min(caps.courses, term.maxCourses) else term.maxCourses
     effCaps = { courses: limit, credits: caps.credits }
+  seq = null
+  if term.sequential
+    seq = { done: state.done, waivers: model.waivers, equiv: model.contentEquiv, pairA: model.pairA }
   successors = []
-  for subset in enumSubsets ranked, effCaps, pinned, params.subsets
+  for subset in enumSubsets ranked, effCaps, pinned, params.subsets, seq
     successors.push successorState model, state, term, subset
   successors
 

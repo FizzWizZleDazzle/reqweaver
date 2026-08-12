@@ -286,7 +286,11 @@ Rules:
   marking an open term (summer school) whose course list varies year
   to year: the planner may place any course there and warns the
   student to verify the offering. `max_courses` on a term entry caps
-  that term alone.
+  that term alone. `sequential: true` marks a term whose sessions run
+  one after another (MCPS summer school): a course may follow its
+  prerequisite within the term, so both halves of an A/B year course
+  compress into one summer, and the term's course cap counts an A/B
+  pair taken together as a single slot.
 - Engine tuning (search width, objective weights, candidate priority
   weights) ships in `weights/engine.yaml`; the code carries matching
   defaults but the file is the tuning surface.

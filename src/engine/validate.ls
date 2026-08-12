@@ -4,7 +4,7 @@
 # a refusal. Waivers and the pre-HS record apply the same way they do in
 # search; same-term courses never satisfy each other's prerequisites.
 
-{ prereqsMet, offeredIn } = require './dag'
+{ prereqsMet, offeredIn, pairSlots } = require './dag'
 { addCourseCredits, initialCoverage, creditsRemaining } = require './gradreqs'
 
 minDefined = (a, b) ->
@@ -33,8 +33,10 @@ seedTaken = (model) ->
   { done, contentTaken, excluded }
 
 # Rule checks for one course placed in one term. Returns nothing; every
-# violation lands in issues.
-checkPlacement = (model, taken, chosen, entry, term, course, issues) ->
+# violation lands in issues. prereqDone is the taken set plus, in a
+# sequential term, the term's own courses (sessions run consecutively,
+# so B may follow A within the term).
+checkPlacement = (model, taken, chosen, entry, term, course, issues, prereqDone) ->
   id = course.id
   if not term?
     issues.push issue(entry, id, 'term', "#{entry.grade}:#{entry.term} is not in the calendar for this profile")
@@ -43,7 +45,7 @@ checkPlacement = (model, taken, chosen, entry, term, course, issues) ->
       issues.push issue(entry, id, 'offering', "not offered in #{entry.term}")
     unless entry.grade in (course.grade_levels or [])
       issues.push issue(entry, id, 'grade', "not open to grade #{entry.grade}")
-  unless model.waivers.has(id) or prereqsMet course, taken.done, model.contentEquiv
+  unless model.waivers.has(id) or prereqsMet course, prereqDone, model.contentEquiv
     issues.push issue(entry, id, 'prereq', 'prerequisites not met by earlier terms')
   if course.content? and taken.contentTaken.has course.content
     issues.push issue(entry, id, 'conflict', 'repeats content already taken')
@@ -78,6 +80,11 @@ validate = (model, plan) ->
     ia - ib
   for entry in entries
     term = termsByKey["#{entry.grade}:#{entry.term}"]
+    prereqDone = taken.done
+    if term? and term.sequential
+      prereqDone = new Set(taken.done)
+      for id in (entry.courses or []) when model.courses[id]?
+        prereqDone.add id
     chosen = []
     for id in (entry.courses or [])
       course = model.courses[id]
@@ -92,13 +99,15 @@ validate = (model, plan) ->
         continue
       if taken.done.has id
         issues.push issue(entry, id, 'duplicate', 'already taken in an earlier term')
-      checkPlacement model, taken, chosen, entry, term, course, issues
+      checkPlacement model, taken, chosen, entry, term, course, issues, prereqDone
       chosen.push course
     periods = 0
     credits = 0
     for course in chosen
       periods += course.periods or 1
       credits += course.credits or 0
+    if term? and term.sequential
+      periods = pairSlots [c.id for c in chosen], model.pairA
     capHere = capCourses
     if term? and term.maxCourses?
       capHere = minDefined capHere, term.maxCourses

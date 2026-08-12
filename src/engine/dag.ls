@@ -18,10 +18,14 @@ unrollTerms = (school, profile) ->
         # A term entry may carry its own course list: `offerings` limits
         # the term to those ids (summer school's select original-credit
         # list); `any_offering` opens the term to every course, flagged
-        # for verification. max_courses caps that term alone.
+        # for verification. max_courses caps that term alone. A
+        # `sequential` term runs its sessions one after another, so a
+        # course may follow its prerequisite within the term and an A/B
+        # pair fills a single course slot.
         open: !!slot.any_offering
         offerings: slot.offerings
         maxCourses: slot.max_courses
+        sequential: !!slot.sequential
       }
   for t, i in terms
     t.index = i
@@ -164,6 +168,18 @@ derivePairs = (courses) ->
       pairB[a] = id
   { pairA, pairB }
 
+# Course slots a set of ids occupies where both halves of an A/B pair
+# together fill one slot (a sequential summer compresses a year course
+# into one session pair).
+pairSlots = (ids, pairA) ->
+  present = new Set(ids)
+  slots = 0
+  for id in ids
+    a = (pairA or {})[id]
+    continue if a? and present.has a   # the B half rides with its A
+    slots += 1
+  slots
+
 # Courses the student holds before planning starts. preHsCompleted always
 # satisfies prerequisites; whether it also earns graduation credit is the
 # school's pre_hs_credit policy, applied in gradreqs.
@@ -213,4 +229,4 @@ buildModel = (school, profile, levels, exams) ->
     goalVec: null
   }
 
-module.exports = { buildModel, prereqsMet, prereqIds, unrollTerms, forwardEdges, contentEquivalents, offeredIn, derivePairs }
+module.exports = { buildModel, prereqsMet, prereqIds, unrollTerms, forwardEdges, contentEquivalents, offeredIn, derivePairs, pairSlots }
