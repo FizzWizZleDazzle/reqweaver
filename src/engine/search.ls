@@ -138,6 +138,7 @@ candidatesFor = (model, state, term) ->
   out = []
   for id, course of model.courses
     continue if state.done.has id
+    continue if model.avoid.has id   # dragged out; pins still override
     continue if duplicatesContent course, state
     continue unless offeredIn course, term
     continue unless term.grade in (course.grade_levels or [])
