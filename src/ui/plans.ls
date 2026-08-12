@@ -430,10 +430,14 @@ create = (ctx) ->
 
   # --- the term grid ------------------------------------------------------
 
+  # HS credits in a cell: a dual-enrollment course counts its fixed
+  # graduation credit here, not the college credits it banks.
   creditsIn = (ids) ->
     credits = 0
     for id in ids
-      credits += (ctx.catalog.byId[id]?.credits or 0)
+      course = ctx.catalog.byId[id]
+      continue unless course?
+      credits += if course.grad_credits? then course.grad_credits else (course.credits or 0)
     credits
 
   cellTotal = (ids) ->

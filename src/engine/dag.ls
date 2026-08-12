@@ -25,6 +25,7 @@ unrollTerms = (school, profile) ->
         open: !!slot.any_offering
         offerings: slot.offerings
         maxCourses: slot.max_courses
+        maxCredits: slot.max_credits
         sequential: !!slot.sequential
       }
   for t, i in terms
@@ -32,9 +33,13 @@ unrollTerms = (school, profile) ->
   terms
 
 # A course is available in a term when the term's own offerings list
-# names it, the term is open, or the course's offered_terms match.
+# names it, the term is open, or the course's offered_terms match. A
+# term's offerings list is the school's own (summer school's select
+# courses); a partner college's course follows the college calendar
+# instead, so dual enrollment stays open during an allowlisted summer.
 offeredIn = (course, term) ->
-  return course.id in term.offerings if term.offerings?
+  if term.offerings? and not course.college?
+    return course.id in term.offerings
   term.open or term.term in (course.offered_terms or [])
 
 # Prerequisite expressions. The compact form (prereqs.all_of plus
@@ -190,23 +195,80 @@ initialDone = (profile) ->
       done.add id
   done
 
+# Dual enrollment: fold a partner college's approved courses into the
+# course map when the profile opts in. Each merged course banks its own
+# college credits but contributes the partner's fixed graduation credit
+# (MCPS grants 1.0 HS credit per approved course), opens at the
+# partner's minimum grade, and, when the college runs optional terms
+# (summer sessions) and the course is not term-restricted, is offered
+# in those too. School ids win a collision.
+mergeColleges = (school, profile, courses, colleges) ->
+  return unless profile.dualEnrollment
+  for partner in ((school.dual_enrollment or {}).partners or [])
+    sheet = (colleges or {})[partner.college]
+    continue unless sheet?
+    gradCredit = if partner.grad_credit_per_course? then partner.grad_credit_per_course else 1.0
+    minGrade = partner.min_grade_level
+    grades = [g for g in school.grade_levels when not minGrade? or g >= minGrade]
+    regular = [t.id for t in (sheet.terms_per_year or []) when not t.optional]
+    extra = [t.id for t in (sheet.terms_per_year or []) when t.optional]
+    for course in (sheet.courses or [])
+      continue unless course.approved
+      continue if courses[course.id]?
+      clone = {} <<< course
+      clone.college = partner.college
+      clone.grad_credits = gradCredit
+      clone.grade_levels = grades
+      clone.offered_terms = (course.offered_terms or []).slice!
+      restricted = false
+      for t in regular when t not in clone.offered_terms
+        restricted := true
+      unless restricted
+        clone.offered_terms = clone.offered_terms ++ extra
+      courses[course.id] = clone
+
+# A college course carrying exam_equivalent duplicates a school AP
+# course's material: the pair may not both earn credit (mutual
+# excludes, which also lets the variant filter prefer the AP course),
+# and either satisfies a prerequisite naming the other, with a warning
+# downstream because the school may not honor the swap.
+linkExamEquivalents = (courses, equiv) ->
+  byExam = {}
+  for id, course of courses when course.exam? and not course.college?
+    (byExam[course.exam] ?= []).push id
+  for id, course of courses when course.college? and course.exam_equivalent?
+    for exam in course.exam_equivalent
+      for schoolId in (byExam[exam] or [])
+        continue if course.excludes? and schoolId in course.excludes
+        course.excludes = (course.excludes or []) ++ [schoolId]
+        sc = courses[schoolId]
+        courses[schoolId] = {} <<< sc <<< { excludes: (sc.excludes or []) ++ [id] }
+        (equiv[schoolId] ?= []).push id
+        (equiv[id] ?= []).push schoolId
+
 # The model: everything the search needs, computed once per profile.
 # waivers lists courses whose prerequisites the school has excused for
 # this student (placement test, teacher recommendation, ...). exams is
-# the exam registry (per-exam credit estimates).
-buildModel = (school, profile, levels, exams) ->
+# the exam registry (per-exam credit estimates). colleges maps partner
+# sheet ids to loaded college sheets; merging is gated on the
+# profile's dualEnrollment opt-in.
+buildModel = (school, profile, levels, exams, colleges) ->
   courses = {}
   for course in (school.courses or [])
     courses[course.id] = course
+  mergeColleges school, profile, courses, colleges
   done0 = initialDone profile
   done0Tags = new Set!
   for id in Array.from(done0)
     for tag in (courses[id]?.tags or [])
       done0Tags.add tag
   pairs = derivePairs courses
+  contentEquiv = contentEquivalents courses
+  linkExamEquivalents courses, contentEquiv
   {
     pairA: pairs.pairA
     pairB: pairs.pairB
+    colleges: colleges or {}
     school: school
     profile: profile
     levels: levels
@@ -221,7 +283,7 @@ buildModel = (school, profile, levels, exams) ->
     unlocks: computeUnlocks courses
     critPath: computeCritPath courses
     forward: forwardEdges courses
-    contentEquiv: contentEquivalents courses
+    contentEquiv: contentEquiv
     bankedMemo: {}
     # semantic layer, attached by the caller when precomputed
     # embeddings exist for this school (see tools/embed.py)

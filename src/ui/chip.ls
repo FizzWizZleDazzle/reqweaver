@@ -70,6 +70,8 @@ create = (ctx) ->
     classes.push "why-#{opts.why.kind}" if opts.why?
     classes.push 'has-issue' if opts.issue?
     classes.push "half half-#{opts.half}" if opts.half?
+    # a dual-enrollment course, taken at the partner college
+    classes.push 'college' if course?.college?
     node = el 'span', { class: classes.join ' ' }, parts
     draggable node, opts.drag if opts.drag?
     node
