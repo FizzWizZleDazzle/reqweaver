@@ -547,9 +547,14 @@ All objectives are exact symbolic scores over a complete plan:
   respecting the college-side prerequisite DAG. This is a fast lower
   bound, not a full solve; the UI labels it an estimate, and the
   college optimizer (section 14.1) replaces exactly this function.
-- Early graduation: search shortened horizons T' < T, accept only
-  plans that cover graduation requirements, prefer minimal T',
-  tie-break by banked credits.
+- Early graduation: each state records the first term at which every
+  graduation requirement is covered; a covered state stops scheduling
+  (the student has left), so its plan ends at that term. Earlier
+  coverage outranks anything later terms could add, and banked credit
+  breaks ties among equally short paths. With a partner college's
+  summer courses satisfying a course-specific requirement sequence
+  (an MC English course standing in for English 12), coverage by the
+  end of grade 11 emerges where the catalog allows it.
 
 For the two time-oriented objectives, the longest remaining
 prerequisite chain among still-needed courses is an admissible lower
