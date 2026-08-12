@@ -12,6 +12,7 @@ build product, so it is JSON (source data stays YAML).
 Run: npm run embed
 """
 import glob
+import hashlib
 import json
 import os
 
@@ -45,24 +46,39 @@ def profile_goals():
 
 def main():
     goals = profile_goals()
+    goal_key = "\n".join(sorted(goals))
     pattern = os.path.join(ROOT, "specs", "**", "*.yaml")
     for sheet_path in glob.glob(pattern, recursive=True):
         name = os.path.basename(sheet_path)
         if name.startswith("embeddings."):
             continue
-        school = yaml.safe_load(open(sheet_path))
+        # The encoder is not bit-deterministic across runs, so an
+        # unchanged sheet must not be re-embedded or CI commits vector
+        # churn: skip when the stored source hash still matches.
+        sheet_bytes = open(sheet_path, "rb").read()
+        source_hash = hashlib.sha256(
+            sheet_bytes + b"\x00" + goal_key.encode() + b"\x00" + MODEL_NAME.encode()
+        ).hexdigest()
+        stem = os.path.splitext(name)[0]
+        dest = os.path.join(os.path.dirname(sheet_path), f"embeddings.{stem}.json")
+        if os.path.exists(dest):
+            try:
+                if json.load(open(dest)).get("source_hash") == source_hash:
+                    print(f"{stem}: unchanged, skipped")
+                    continue
+            except Exception:
+                pass
+        school = yaml.safe_load(sheet_bytes)
         courses = school.get("courses") or []
         texts = [f"{c.get('name', '')}. {c.get('description', '')}" for c in courses]
         vecs = embed(texts) if texts else []
         out = {
             "model": MODEL_NAME,
+            "source_hash": source_hash,
             "dim": len(vecs[0]) if vecs else 0,
             "courses": {c["id"]: v for c, v in zip(courses, vecs)},
             "goals": goals,
         }
-        # embeddings live beside their specsheet: embeddings.<school>.json
-        stem = os.path.splitext(name)[0]
-        dest = os.path.join(os.path.dirname(sheet_path), f"embeddings.{stem}.json")
         with open(dest, "w") as f:
             json.dump(out, f)
         print(f"{stem}: {len(vecs)} courses, {len(goals)} goals")
