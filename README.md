@@ -34,6 +34,12 @@ npm run embed          # per-course description vectors (compile time)
 npm run export-model   # encoder weights for the offline fallback
 ```
 
+A goal typed in the browser is encoded by the service in
+`workers/encode`. Put its deployed URL in `siteconfig.yaml` as
+`encode_api`; the web build stages that file, and the app reads it at
+startup. Without it, goals a school precompiled still steer plans and
+any other wording is reported as not applied.
+
 ## What it does
 
 - Plans terms with a beam search over the course prerequisite graph.
@@ -62,10 +68,13 @@ you want; it plans in the background and shows the best plans as a
 grade-by-term grid you can read at a glance. Every course on screen
 opens its catalog entry, so you can check the description and the
 prerequisites behind any placement, and mark it completed, pin it, or
-waive its prerequisites from there. Alongside each plan sit the
-graduation checklist, the banked-credit estimate, and the warnings the
-engine raised for a counselor to confirm. Your profile stays in your
-browser, and exports as the same YAML the command line planner reads.
+waive its prerequisites from there. You can also say in a sentence what
+you want to study, and courses whose catalog descriptions match it rank
+higher; the plan says when a goal steered it. Alongside each plan sit
+the graduation checklist, the banked-credit estimate, and the warnings
+the engine raised for a counselor to confirm. Your profile stays in
+your browser, and exports as the same YAML the command line planner
+reads.
 
 ## Limitations
 

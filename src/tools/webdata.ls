@@ -36,6 +36,16 @@ embeddingsBeside = (file) ->
   candidate = path.join (path.dirname file), "embeddings.#{base}.json"
   if fs.existsSync candidate then candidate else null
 
+# siteconfig.yaml carries the settings that differ between deployments,
+# today just the goal-encoding endpoint. It is staged as JSON because the
+# app reads it as compiled output, not as a specsheet.
+siteConfig = ->
+  file = path.join ROOT, 'siteconfig.yaml'
+  loaded = if fs.existsSync file then yaml.load fs.readFileSync(file, 'utf8') else null
+  config = loaded or {}
+  config.encode_api = (config.encode_api or '')
+  config
+
 main = !->
   mkdirp OUT
 
@@ -75,11 +85,15 @@ main = !->
     entries.push entry
   entries.sort (a, b) -> if a.name < b.name then -1 else 1
 
-  # `encoder` is the one place the goal-encoding service URL arrives from,
-  # once there is one. Null means the app can only use goals a school
-  # precomputed, which is the state today.
-  index = { generated: 1, encoder: null, schools: entries }
+  index = { generated: 1, schools: entries }
   fs.writeFileSync (path.join OUT, 'data', 'index.json'), JSON.stringify(index, null, 2) + '\n'
+
+  config = siteConfig!
+  fs.writeFileSync (path.join OUT, 'data', 'siteconfig.json'), JSON.stringify(config, null, 2) + '\n'
+
   console.log "staged #{entries.length} school sheets (#{embedded} with course vectors) into public/data"
+  console.log if config.encode_api
+    then "goal encoding through #{config.encode_api}"
+    else 'no encode_api in siteconfig.yaml; only precompiled goals steer plans'
 
 main!

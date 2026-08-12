@@ -16,6 +16,10 @@ fetchJson = (url) -> fetchText(url).then (text) -> JSON.parse text
 
 loadIndex = -> fetchJson 'data/index.json'
 
+# Deployment settings staged from siteconfig.yaml. A build without one is
+# not an error: every setting in it is optional.
+loadSiteConfig = -> fetchJson('data/siteconfig.json').catch -> {}
+
 loadSchool = (entry) -> fetchYaml entry.path
 
 loadLevels = -> fetchYaml 'data/registry/levels.yaml'
@@ -23,4 +27,7 @@ loadLevels = -> fetchYaml 'data/registry/levels.yaml'
 # Where a claim in the UI comes from, for the provenance links.
 sourceUrl = (entry) -> entry.path
 
-module.exports = { fetchText, fetchYaml, fetchJson, loadIndex, loadSchool, loadLevels, sourceUrl }
+module.exports = {
+  fetchText, fetchYaml, fetchJson, loadIndex, loadSiteConfig, loadSchool,
+  loadLevels, sourceUrl
+}

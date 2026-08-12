@@ -222,7 +222,7 @@ create = (ctx) ->
     effort = el 'select', { class: 'select', onchange: (event) !-> state.setUi 'beam', Number event.target.value },
       [effortOption item for item in EFFORTS]
     body.appendChild el 'h3', { text: 'Goal' }
-    body.appendChild el 'p', { class: 'muted small', text: 'A sentence about what you want to study. Courses whose catalog descriptions match it rank higher. Goals precompiled for this school work now; reading any other wording needs the encoder service, which is coming.' }
+    body.appendChild el 'p', { class: 'muted small', text: 'A sentence about what you want to study. Courses whose catalog descriptions match it rank higher. Wording a school precompiled always works; anything else is read by the encoding service, and the plan says when it could not be.' }
     body.appendChild goal
     body.appendChild el 'h3', { text: 'Objective' }
     body.appendChild objective

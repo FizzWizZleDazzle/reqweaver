@@ -13,7 +13,7 @@ EXAMS = 'data/registry/exams.yaml'
 SCORER = 'data/weights/scorer-weights.yaml'
 TUNING = 'data/weights/engine.yaml'
 
-NO_GOAL_VECTOR = 'Only goals precompiled for this school steer plans today; encoding a free-text goal needs the encoder service, which is coming. The plans below ignore this goal.'
+NO_ENCODER = 'This build has no goal encoding service configured, and this school precompiled no vector for that wording, so the plans below are not steered toward your goal.'
 
 # Fetched files never change during a session, so cache the promises. The
 # worker outlives a solve, so an encoder loaded for one run is still in
@@ -39,16 +39,59 @@ fetchJson = (url) ->
 
 post = (message) !-> self.postMessage message
 
+# Goal vectors, by exact goal text, for the life of the worker: re-solving
+# after a profile edit does not re-encode a goal that has not changed.
+goalCache = {}
+
+# A vector is only usable if it is the right width and can be scaled to
+# unit length, since cosine against the course vectors assumes both. The
+# course vectors ship normalized; a service response is normalized here
+# again rather than trusted.
+usableVector = (given, dim) ->
+  return null unless Array.isArray(given) and given.length
+  return null if dim? and given.length isnt dim
+  norm = 0
+  for v in given
+    return null unless typeof v is 'number' and isFinite v
+    norm += v * v
+  norm = Math.sqrt norm
+  return null unless norm > 0
+  [v / norm for v in given]
+
 # Turn a free-text goal into a vector in the space the school's course
-# vectors live in. Today the only source is the school's own precompiled
-# goals; anything else resolves null and the solve runs without steering.
-# The encoder service, when there is one, arrives as `encoderUrl` from the
-# staged index (tools/webdata.ls) and is the only thing this function needs
-# to gain.
-encodeGoal = (text, embeddings, encoderUrl) ->
-  precomputed = embeddings?.goals?[text]
-  return Promise.resolve { vector: precomputed, source: 'precomputed' } if precomputed?
-  Promise.resolve { vector: null, source: null }
+# vectors live in: a goal the school precompiled first, otherwise the
+# encoding service when the build configures one. Anything else resolves
+# to no vector and the solve runs unsteered.
+encodeGoal = (text, embeddings, api) ->
+  return Promise.resolve goalCache[text] if goalCache[text]?
+  dim = embeddings?.dim
+  precomputed = usableVector embeddings?.goals?[text], dim
+  if precomputed?
+    goalCache[text] = { vector: precomputed, source: 'precomputed' }
+    return Promise.resolve goalCache[text]
+  unless api? and api.length
+    return Promise.resolve { vector: null, reason: 'unconfigured' }
+  post { type: 'status', phase: 'encoding' }
+  answer = fetch api, {
+    method: 'POST'
+    headers: { 'content-type': 'application/json' }
+    body: JSON.stringify { text: text }
+  }
+  body = answer.then (response) ->
+    throw new Error "the goal service answered #{response.status}" unless response.ok
+    response.json!
+  encoded = body.then (result) ->
+    vector = usableVector result?.vector, dim
+    return { vector: null, reason: 'unusable' } unless vector?
+    goalCache[text] = { vector: vector, source: 'encoded' }
+    goalCache[text]
+  encoded.catch -> { vector: null, reason: 'unreachable' }
+
+noticeFor = (reason) ->
+  switch reason
+  | 'unconfigured' => NO_ENCODER
+  | 'unusable' => 'The goal service answered with something this build cannot use, so the plans below are not steered toward your goal.'
+  | otherwise => 'The goal service did not answer, so the plans below are not steered toward your goal.'
 
 # Attach the semantic layer the engine reads: the school's precomputed
 # course vectors plus a vector for the student's goal. Everything here is
@@ -59,12 +102,12 @@ applyGoal = (model, job) ->
   post { type: 'status', phase: 'embeddings' }
   fetchJson(job.embeddingsPath).then (embeddings) ->
     model.embeddings = embeddings
-    encodeGoal(goal, embeddings, job.encoderUrl).then (encoded) ->
+    encodeGoal(goal, embeddings, job.encodeApi).then (encoded) ->
       if encoded.vector?
         model.goalVec = encoded.vector
         { goal: goal, source: encoded.source }
       else
-        { goal: goal, source: null, notice: NO_GOAL_VECTOR }
+        { goal: goal, source: null, notice: noticeFor encoded.reason }
 
 # A plan state carries Sets and back-references; the UI needs the term
 # assignments, the banked-credit estimate, the coverage totals, and the
