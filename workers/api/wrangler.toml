@@ -44,20 +44,18 @@ id = "a600911aba3842f4acb91505232805b6"
 # of production.
 [env.production]
 name = "reqweaver-prod"
+# The apex serves the API same-origin next to the Pages site: Workers
+# routes run in front of Pages on the same zone, so /api/* invokes the
+# worker exactly once and every other path is Pages static, which
+# invokes nothing.
+routes = [
+  { pattern = "reqweaver.com/api/*", zone_name = "reqweaver.com" }
+]
 
 [env.production.assets]
 directory = "../../public"
 not_found_handling = "single-page-application"
 run_worker_first = ["/api/*", "/encode"]
-
-# Once reqweaver.com is a zone on this account, uncomment so the apex
-# serves the API same-origin next to the Pages site (Workers routes run
-# in front of Pages on the same zone), and rebuild the Pages deploy
-# without SITE_API_BASE:
-# [env.production]
-# routes = [
-#   { pattern = "reqweaver.com/api/*", zone_name = "reqweaver.com" }
-# ]
 
 [env.production.ai]
 binding = "AI"
