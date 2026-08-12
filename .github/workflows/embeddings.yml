@@ -1,10 +1,11 @@
 name: embeddings
 # Recompiles course-description embeddings whenever a specsheet changes
 # and commits the embeddings.<school>.json files back beside their
-# sheets. Runs the open-source encoder on the CPU runner; a full-catalog
-# school takes well under a minute. The paths filter matches only .yaml,
-# and the commit touches only .json, so the workflow cannot retrigger
-# itself.
+# sheets. Pushes over the embeddings-bot deploy key, which carries the
+# protect-main bypass (main takes no other direct pushes). Runs the
+# open-source encoder on the CPU runner; a full-catalog school takes
+# well under a minute. The paths filter matches only .yaml, and the
+# commit touches only .json, so the workflow cannot retrigger itself.
 on:
   push:
     branches: [main]
@@ -19,6 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.EMBEDDINGS_DEPLOY_KEY }}
       - uses: astral-sh/setup-uv@v5
       - run: uv run tools/embed.py
       - name: Commit refreshed embeddings
