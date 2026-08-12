@@ -81,18 +81,23 @@ Non-goals for v1:
 
 ## 3. System architecture
 
-Three parts:
+Three parts, shipped as one Cloudflare Worker deploy plus a data
+repository:
 
-1. A static frontend on Cloudflare Pages, written in LiveScript. All
-   planning computation runs in the browser; the app is fully
-   functional without the backend except for saving and sharing.
-2. One Cloudflare Worker (workers/api), written in Rust and compiled
-   to WASM to keep billed CPU time minimal, serving goal encoding
-   (Workers AI), saved-plan storage, and read-only sharing, backed by
-   Workers KV. Accounts add D1 tables later (section 9); the future
-   AI advisor (section 14.2) adds a proxy route here.
+1. The static frontend, written in LiveScript, served as Worker
+   static assets: asset requests are free and unmetered, and the
+   worker script never runs for them. All planning computation runs
+   in the browser; the app is fully functional without the API except
+   for free-text goal encoding, saving, and sharing.
+2. The API half of the same worker (workers/api), written in Rust and
+   compiled to WASM to keep billed CPU time minimal, runs only for
+   the routes named in run_worker_first: goal encoding (Workers AI),
+   saved-plan storage, and read-only sharing, backed by Workers KV.
+   Sharing one origin with the assets removes production CORS.
+   Accounts add D1 tables later (section 9); the future AI advisor
+   (section 14.2) adds a proxy route here.
 3. A public community data repository of YAML specsheets, compiled to
-   JSON at build time and served as static Pages assets.
+   JSON at build time and staged into the deployed assets.
 
 ```
   specsheets repo (GitHub) --merge--> build step --JSON--> Cloudflare Pages
@@ -395,9 +400,10 @@ any specsheet changes, recompiles that catalog's description vectors
 with the open-source encoder on the CPU runner, and commits the
 refreshed `embeddings.<school>.json` back beside the sheet - so a
 contributor adds a school as one YAML file and the semantic layer
-follows automatically. Publishing then needs no separate pipeline:
-Cloudflare Pages connects to the repository and redeploys on every
-push to main, which is what keeps the served data current with
+follows automatically. Publishing is a third workflow: `deploy`
+builds the site and pushes the combined Worker (free static assets
+plus the Rust API) on every push to main once a Cloudflare API token
+secret exists, which is what keeps the served data current with
 GitHub.
 
 Semantic assets ship separately from the app bundle. Per-school course
