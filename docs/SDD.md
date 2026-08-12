@@ -100,18 +100,15 @@ repository:
    JSON at build time and staged into the deployed assets.
 
 ```
-  specsheets repo (GitHub) --merge--> build step --JSON--> Cloudflare Pages
-                                                               |
-                                              static app + data chunks
-                                                               |
-                                                           browser
-                                              (DAG build, search, scoring)
-                                                               |
-                                                    save / load / share
-                                                               |
-                                                     Cloudflare Worker
-                                                               |
-                                                      Workers KV + D1
+  specsheets repo (GitHub) --push--> workflows: embed, test, deploy
+                                                     |
+                                        one Cloudflare Worker deploy
+                                       /                          \
+                          static assets (free)            Rust API (/api, /encode)
+                          app + data chunks                  |            |
+                                   |                    Workers KV   Workers AI
+                                browser
+                     (DAG build, search, scoring)
 ```
 
 The frontend-only compute model is a deliberate choice: the solver's
@@ -681,9 +678,13 @@ src/ui/chip.ls          # course chips, searchable course picker
 src/ui/course.ls        # course detail dialog with profile actions
 src/ui/profile.ls       # profile editor sections
 src/ui/plans.ls         # term grid, requirement checklist, warnings, diffs
+src/ui/why.ls           # necessity markers and reason wording
+src/ui/pairs.ls         # A/B halves, derived from the catalog
+src/ui/drag.ls          # what is being dragged, for the drop targets
 src/ui/solver.ls        # worker client
 src/ui/index.html       # page shell
 src/ui/styles.css       # the whole stylesheet
+src/standing.ls         # standing read off a plan; used by app and worker
 src/worker.ls           # Web Worker entry wrapping engine + scoring
 src/engine/dag.ls       # DAG build, coreq collapse, window passes, constraints
 src/engine/search.ls    # beam search, objectives, heuristics
@@ -714,16 +715,52 @@ is anytime, so streaming improving partial results is available to
 take: it needs a callback in the search loop, and until that exists the
 UI shows the phase rather than a partial plan.
 
+Each returned plan carries its explanation: the worker runs the
+engine's `explain` per plan and ships the reasons and the necessity
+score with the assignments. A chip in the grid shows the strongest
+reason as a colored dot with the full wording in its tooltip, and the
+word itself where the screen is wide; a course the engine scored as
+filler is drawn to invite replacement. The course dialog spells every
+reason out in a sentence. Advisory hints follow the plans in a second
+message, because measuring them means re-solving nearby profiles; they
+render as advice, apart from the warnings the engine raised.
+
+The grid is also where a plan is edited. Dragging a course off it, or
+pressing the x on its chip, adds it to the profile's avoid list and
+re-solves, so the engine plans around it; dragging a course from the
+picker onto a term pins it there. "Rebuild around this plan" turns
+every assignment in the plan on screen into a pin, so the next edit
+moves one course and leaves the rest still. Where a catalog splits a
+year-long course into A and B halves (the second names the first as a
+direct prerequisite and the names differ only in the trailing letter,
+both read from the catalog), the two render as one linked unit across
+neighboring terms and move together: dragging out either half excludes
+both, and pinning one places both.
+
+A "you are here" marker names the grade and term the student is in
+now. Terms before it in the plan on screen count as completed and the
+marker term as in progress; the worker derives those lists from the
+plan and the marker, adds them to the profile's own, and searches only
+the terms after the marker, so nothing is scheduled into a term that
+has already happened. The grid greys the terms behind the marker.
+Export flattens the same split into plain completed and in-progress
+lists, because the command line planner knows nothing about a marker
+and both must read the same profile.
+
 The student's profile (grade, completed courses including pre-grade-9
-credit, in-progress courses, pinned assignments, exam scores, summer
-opt-ins, load preference, objective) persists to localStorage on
-every change. The
+credit, in-progress courses, pinned assignments, courses to avoid, exam
+scores, summer opt-ins, the marker, load preference, objective)
+persists to localStorage on every change. The
 app is usable with no network after first load, except save/share.
 
 Every rendered claim carries provenance: a credit total, a satisfied
 requirement, or an availability restriction links to the specsheet
 entry that justifies it. With crowdsourced data, showing the source is
-what makes the output trustworthy and makes errors reportable.
+what makes the output trustworthy and makes errors reportable. The
+graduation checklist keeps that within a glance: one row per
+requirement carrying the label, a progress bar, and the earned and
+needed credits, with the covering courses, the school's note, and the
+specsheet link behind an expand.
 
 ## 9. Persistence and sharing
 
