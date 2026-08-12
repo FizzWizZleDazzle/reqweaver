@@ -1,9 +1,0 @@
-# Deploy: npx wrangler deploy -c workers/encode/wrangler.toml
-# (needs a wrangler login on the Workers Paid account). Put the deployed
-# URL in siteconfig.yaml as encode_api so the app picks it up.
-name = "reqweaver-encode"
-main = "index.js"
-compatibility_date = "2026-08-01"
-
-[ai]
-binding = "AI"

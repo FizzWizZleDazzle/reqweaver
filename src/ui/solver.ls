@@ -7,15 +7,22 @@
 create = (handlers) ->
   worker = null
   current = null
+  finished = null
   counter = 0
 
+  # Hints arrive after the plans, so they are matched against the solve
+  # that just finished as well as the one in flight.
   receive = (event) !->
     message = event.data
     return unless message?
+    if message.type is 'hints'
+      return unless message.id is finished or message.id is current
+      return handlers.hints? message
     return if message.id? and message.id isnt current
     switch message.type
     | 'status' => handlers.status? message
     | 'done'   =>
+      finished := current
       current := null
       handlers.done? message
     | 'error'  =>
@@ -37,6 +44,7 @@ create = (handlers) ->
       worker.terminate!
       worker := null
     current := null
+    finished := null
 
   run = (job) !->
     stop! if current?

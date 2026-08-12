@@ -5,8 +5,11 @@
 
 yaml = require 'js-yaml'
 { buildModel } = require './engine/dag'
-{ search } = require './engine/search'
+{ search, estBanked } = require './engine/search'
+{ explain } = require './engine/explain'
+{ hints } = require './engine/hints'
 { rank } = require './scoring/scorer'
+standing = require './standing'
 
 LEVELS = 'data/registry/levels.yaml'
 EXAMS = 'data/registry/exams.yaml'
@@ -110,9 +113,10 @@ applyGoal = (model, job) ->
         { goal: goal, source: null, notice: noticeFor encoded.reason }
 
 # A plan state carries Sets and back-references; the UI needs the term
-# assignments, the banked-credit estimate, the coverage totals, and the
-# scores. Everything posted is a plain structured-clone value.
-serialize = (entry) ->
+# assignments, the banked-credit estimate, the coverage totals, the
+# scores, and why each course earned its slot. Everything posted is a
+# plain structured-clone value.
+serialize = (model, entry) ->
   {
     terms: entry.st.plan
     banked: entry.st.banked
@@ -122,7 +126,44 @@ serialize = (entry) ->
     objectiveScore: entry.st.g
     soft: entry.soft
     features: {} <<< entry.features
+    why: explain model, entry.st
   }
+
+# The grid on screen is standing, not a proposal, up to the marker: the
+# courses in the terms behind it are held, and the search starts after
+# them. The profile is copied rather than edited so nothing derived is
+# ever written back to the student's file.
+applyStanding = (school, job) ->
+  profile = job.profile or {}
+  derived = standing.derive school, profile, (job.standingPlan or []), profile.now
+  return { profile: profile, past: [], cut: -1 } if derived.cut < 0
+  next = {} <<< profile
+  next.completed = derived.completed
+  next.inProgress = derived.inProgress
+  { profile: next, past: derived.past, cut: derived.cut }
+
+bankedIn = (model, entries) ->
+  total = 0
+  for entry in entries
+    for id in entry.courses
+      course = model.courses[id]
+      total += (estBanked course, model.levels, model.exams) if course?
+  total
+
+# Hints re-solve nearby profiles from scratch, so their probe must see
+# the same horizon the plan covers: with a marker set, grades already
+# finished are dropped from the school the probe builds on.
+probeModel = (model, cut) ->
+  return model if cut < 0
+  school = {} <<< model.school
+  school.grade_levels = standing.remainingGrades model.school, model.profile.now
+  {} <<< model <<< { school: school }
+
+advise = (model, result, options, cut, id) !->
+  try
+    post { type: 'hints', id: id, hints: hints (probeModel model, cut), result, options }
+  catch e
+    post { type: 'hints', id: id, hints: [] }
 
 solve = (job) !->
   started = Date.now!
@@ -137,7 +178,9 @@ solve = (job) !->
   run = Promise.all(files).then (parts) ->
     [school, levels, exams, weights, tuning] = parts
     post { type: 'status', phase: 'building' }
-    model = buildModel school, job.profile, levels, exams
+    held = applyStanding school, job
+    model = buildModel school, held.profile, levels, exams
+    model.terms = standing.trimTerms school, model.terms, held.cut
     applyGoal(model, job).then (semantic) ->
       post { type: 'status', phase: 'searching', terms: model.terms.length }
       options = { tuning: tuning }
@@ -152,12 +195,15 @@ solve = (job) !->
         objective: result.objective
         warnings: result.warnings
         planCount: result.plans.length
-        plans: [serialize entry for entry in ranked.slice 0, top]
+        plans: [serialize model, entry for entry in ranked.slice 0, top]
+        past: held.past
+        bankedPast: bankedIn model, held.past
         goal: semantic.goal
         goalSource: semantic.source or null
         notice: semantic.notice or null
         elapsedMs: Date.now! - started
       }
+      advise model, result, options, held.cut, job.id
   run.catch (error) !->
     post { type: 'error', id: job.id, message: String(error?.message or error) }
 

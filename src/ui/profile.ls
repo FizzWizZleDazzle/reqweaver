@@ -6,6 +6,7 @@
 { el, fill } = require './dom'
 catalog = require './catalog'
 state = require './state'
+fromPlan = require '../standing'
 
 OBJECTIVES = [
   { id: 'max_credits', label: 'Bank the most college credit' }
@@ -71,6 +72,35 @@ create = (ctx) ->
         picker.refresh!
 
   panel = el 'div', { class: 'panel' }
+
+  # --- where you are now ---------------------------------------------------
+
+  # The marker reads standing off the plan on screen: everything in the
+  # terms behind it is held, so a plan can be built once and then walked
+  # forward year by year without retyping what is finished.
+  panel.appendChild block 'Where you are now',
+    'Terms before this point in the plan on screen count as finished, and the term you name counts as in progress. Leave it unset until you have a plan you believe.',
+    (body) ->
+      slots = catalog.termSlots ctx.school
+      options = [el 'option', { value: '', text: 'Not set' }]
+      for slot in slots
+        options.push el 'option', { value: slot.key, text: slot.label }
+      select = el 'select', { class: 'select', 'aria-label': 'Where you are now' }, options
+      select.addEventListener 'change', !->
+        unless select.value
+          return state.setNow null, null
+        parts = select.value.split ':'
+        state.setNow (Number parts[0]), parts[1]
+      note = el 'p', { class: 'muted small' }
+      body.appendChild select
+      body.appendChild note
+      !->
+        marker = state.now!
+        wanted = if marker? then "#{marker.grade}:#{marker.term}" else ''
+        select.value = wanted
+        note.textContent = if marker?
+          then "Grade #{marker.grade} #{marker.term} is in progress; the planner starts after it."
+          else 'The planner fills every term in the plan.'
 
   panel.appendChild standing 'completed', 'Completed courses',
     'Courses you finished in grade 9 or later. They satisfy prerequisites and count toward graduation.'
@@ -140,6 +170,7 @@ create = (ctx) ->
       picker = chips.picker {
         placeholder: 'Search the course to pin'
         chosen: (id) -> state.pinnedTerm(id)?
+        draggable: true
         onPick: (id) !->
           parts = select.value.split ':'
           state.addPin (Number parts[0]), parts[1], id
@@ -147,6 +178,7 @@ create = (ctx) ->
       body.appendChild list
       body.appendChild el 'details', { class: 'adder' }, [
         el 'summary', { text: 'Pin a course to a term' }
+        el 'p', { class: 'muted small', text: 'Pick the term and add it, or drag a course from this list straight onto a term in the grid.' }
         el 'div', { class: 'field' }, [el 'label', { text: 'Term' }, select]
         picker.el
       ]
@@ -180,6 +212,30 @@ create = (ctx) ->
           fill list, [removableChip 'waivers', id for id in ids]
         else
           fill list, [el 'p', { class: 'muted small', text: 'No waivers.' }]
+        picker.refresh!
+
+  # --- avoid ---------------------------------------------------------------
+
+  panel.appendChild block 'Courses to keep out',
+    'Courses the planner may never schedule. Dragging a course off the grid puts it here; a pin still overrides it.',
+    (body) ->
+      list = el 'div', { class: 'chips' }
+      picker = chips.picker {
+        placeholder: 'Search the course to keep out'
+        chosen: (id) -> state.has 'avoid', id
+        onPick: (id) !-> state.avoidCourses [id]
+      }
+      body.appendChild list
+      body.appendChild el 'details', { class: 'adder' }, [
+        el 'summary', { text: 'Keep a course out' }
+        picker.el
+      ]
+      !->
+        ids = state.profile!.avoid
+        if ids.length
+          fill list, [chips.chip id, { onRemove: !-> state.allowCourses [id] } for id in ids]
+        else
+          fill list, [el 'p', { class: 'muted small', text: 'Nothing excluded.' }]
         picker.refresh!
 
   # --- preferences ---------------------------------------------------------
@@ -246,6 +302,14 @@ create = (ctx) ->
 
   # --- the profile file ----------------------------------------------------
 
+  # Standing the marker implies is written out as plain completed and
+  # in-progress lists: the command line planner knows nothing about a
+  # marker, and both must read the same profile.
+  flattened = ->
+    marker = state.now!
+    return null unless marker?
+    fromPlan.derive ctx.school, state.profile!, (ctx.gridTerms?! or []), marker
+
   panel.appendChild block 'Your profile file',
     'Everything here stays in this browser. Export writes the same YAML the command line planner reads.',
     (body) ->
@@ -256,7 +320,7 @@ create = (ctx) ->
           class: 'choice'
           text: 'Export'
           onclick: !->
-            area.value = state.toYaml!
+            area.value = state.toYaml flattened!
             status.textContent = 'Exported below. Copy it somewhere safe.'
         }
         el 'button', {

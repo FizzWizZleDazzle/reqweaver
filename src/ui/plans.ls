@@ -1,15 +1,25 @@
 # Plan rendering: the term grid, the graduation checklist, the engine's
-# warnings, and the difference between one plan and the top plan. Every
-# number here comes from the engine; nothing is recomputed except the
-# per-cell totals and the plan-to-plan diff.
+# warnings and hints, and the difference between one plan and the top
+# plan. Every number here comes from the engine; nothing is recomputed
+# except the per-cell totals and the plan-to-plan diff. The grid is also
+# where a plan is edited: a course dragged out is one the engine may not
+# schedule, a course dragged in is pinned where it landed.
 
 { el, fill } = require './dom'
 { reqMatches } = require '../engine/gradreqs'
 catalog = require './catalog'
+state = require './state'
+pairs = require './pairs'
+whyUi = require './why'
+drag = require './drag'
 
 OBJECTIVE_LABEL =
   max_credits: 'Bank the most college credit'
   early_grad: 'Graduate high school early'
+
+PHASE_LABEL =
+  done: 'finished'
+  now: 'in progress'
 
 termKey = (entry) -> "#{entry.grade}:#{entry.term}"
 
@@ -57,11 +67,25 @@ create = (ctx) ->
   chips = ctx.chips
   selected = 0
   latest = null
+  advice = []
   stale = false
 
   name = (id) ->
     course = ctx.catalog.byId[id]
     if course? then "#{id} #{course.name}" else id
+
+  plan = -> latest?.plans?[selected] or null
+
+  # Why the engine put a course in the plan on screen, for the chips
+  # here and for the course dialog.
+  whyFor = (id) -> plan!?.why?[id] or null
+
+  # The whole grid on screen, past terms included: what a re-solve is
+  # told to hold, and what an export flattens.
+  terms = ->
+    shown = plan!
+    return [] unless shown?
+    (latest.past or []) ++ shown.terms
 
   courseChip = (id) -> chips.chip id
 
@@ -81,6 +105,7 @@ create = (ctx) ->
 
   idle = !->
     latest := null
+    advice := []
     fill root, [
       el 'div', { class: 'card empty' }, [
         el 'h2', { text: 'No plan yet' }
@@ -108,15 +133,56 @@ create = (ctx) ->
 
   show = (result) !->
     latest := result
+    advice := []
     selected := 0
     stale := false
     render!
+
+  # Hints arrive after the plans, because the engine probes nearby
+  # profiles to measure them.
+  setHints = (list) !->
+    advice := list or []
+    render! if latest?
 
   markStale = !->
     return unless latest?
     return if stale
     stale := true
     render!
+
+  # --- plan edits --------------------------------------------------------
+
+  # Dragging a course out, or pressing its x, tells the engine never to
+  # schedule it. Both halves of an A/B pair go together: half a course
+  # is not a thing a student can take.
+  reject = (id) !->
+    state.avoidCourses pairs.unit ctx.pairs, id
+    ctx.rerun!
+
+  # Where a course dropped into a term cell belongs: the half that was
+  # dropped lands where it was dropped, its partner in the term the
+  # catalog offers it in, same grade.
+  slotFor = (id, dropped, grade, term) ->
+    return { grade: grade, term: term } if id is dropped
+    course = ctx.catalog.byId[id]
+    columns = catalog.termIds ctx.school
+    for candidate in (course?.offered_terms or []) when candidate in columns and candidate isnt term
+      return { grade: grade, term: candidate }
+    { grade: grade, term: term }
+
+  place = (id, grade, term) !->
+    unit = pairs.unit ctx.pairs, id
+    state.allowCourses unit
+    for other in unit
+      slot = slotFor other, id, grade, term
+      state.setPin slot.grade, slot.term, other
+    ctx.rerun!
+
+  rebuild = !->
+    shown = plan!
+    return unless shown?
+    state.pinPlan shown.terms
+    ctx.rerun!
 
   # --- rendering ---------------------------------------------------------
 
@@ -130,15 +196,15 @@ create = (ctx) ->
           el 'p', { text: 'The engine found no assignment that satisfies every rule. Loosen a pin, opt into a summer term, or raise your per-term limit.' }
         ]
       ]
-    plan = result.plans[selected]
     parts = []
     parts.push summaryCard result
     parts.push warningCard result.warnings if result.warnings.length
+    parts.push hintCard advice if advice.length
     parts.push noticeCard result.notice if result.notice
     parts.push staleCard! if stale
     parts.push goalLine result if result.goalSource?
     parts.push tabs result
-    parts.push planCard result, plan
+    parts.push planCard result, plan!
     fill root, parts
 
   staleCard = ->
@@ -165,6 +231,17 @@ create = (ctx) ->
       el 'ul', {}, [warningItem warning for warning in warnings]
     ]
 
+  hintItem = (text) ->
+    el 'li', {}, [el('span', { class: 'hint-tag', text: 'hint' }), " #{text}"]
+
+  # Advice, not a problem: each line is a change the student could make
+  # and what the engine measured it would be worth.
+  hintCard = (list) ->
+    el 'div', { class: 'card hints' }, [
+      el 'h2', { text: 'Worth considering' }
+      el 'ul', {}, [hintItem text for text in list]
+    ]
+
   summaryLine = (label, value) ->
     el 'div', { class: 'summary-line' }, [
       el 'span', { class: 'muted small', text: label }
@@ -189,7 +266,7 @@ create = (ctx) ->
 
   tabs = (result) ->
     buttons = []
-    for plan, i in result.plans
+    for shown, i in result.plans
       buttons.push tabButton result, i
     el 'div', { class: 'tabs' }, buttons
 
@@ -207,64 +284,186 @@ create = (ctx) ->
       '. A college transfer table is the authority; confirm before you rely on it.'
     ]
 
-  planCard = (result, plan) ->
+  planCard = (result, shown) ->
+    past = result.bankedPast or 0
     parts = []
     parts.push el 'div', { class: 'stats' }, [
-      stat 'Banked college credit', String(plan.banked), 'estimate'
-      stat 'Graduation credits missing', String(plan.gradRemaining), null
-      stat 'Terms used', String(plan.terms.length), null
-      stat 'Plan score', plan.soft.toFixed(2), 'soft ranking'
+      stat 'Banked college credit', String(shown.banked + past),
+        (if past > 0 then 'estimate, terms behind you included' else 'estimate')
+      stat 'Graduation credits missing', String(shown.gradRemaining), null
+      stat 'Terms planned', String(shown.terms.length), null
+      stat 'Plan score', shown.soft.toFixed(2), 'soft ranking'
     ]
     parts.push bankedNote!
     if selected > 0
-      parts.push el 'p', { class: 'diff', text: "Plan #{selected + 1} #{diffText result.plans[0], plan, name}." }
-    parts.push el 'h2', { text: 'Term by term' }
-    parts.push grid plan
+      parts.push el 'p', { class: 'diff', text: "Plan #{selected + 1} #{diffText result.plans[0], shown, name}." }
+    parts.push el 'div', { class: 'plan-head' }, [
+      el 'h2', { text: 'Term by term' }
+      el 'button', {
+        class: 'choice'
+        text: 'Rebuild around this plan'
+        title: 'Pin every course where it sits, so the next run keeps the rest of the plan still'
+        onclick: rebuild
+      }
+    ]
+    parts.push el 'p', { class: 'muted small', text: 'Drag a course to another term to pin it there, or out of the grid to keep it out of every plan. The x on a chip does the same without dragging.' }
+    parts.push grid result, shown
     parts.push el 'h2', { text: 'Graduation requirements' }
-    parts.push checklist plan
+    parts.push checklist result, shown
     el 'div', { class: 'card plan' }, parts
 
-  cell = (grade, term, entry) ->
-    unless entry?
-      return el 'div', { class: 'grid-cell empty' }, [
-        el 'div', { class: 'cell-label', text: "Grade #{grade} #{term}" }
-        el 'p', { class: 'muted small', text: 'not in this plan' }
-      ]
+  # --- the term grid -----------------------------------------------------
+
+  creditsIn = (ids) ->
     credits = 0
-    for id in entry.courses
-      course = ctx.catalog.byId[id]
-      credits += (course?.credits or 0)
-    el 'div', { class: 'grid-cell' }, [
+    for id in ids
+      credits += (ctx.catalog.byId[id]?.credits or 0)
+    credits
+
+  cellTotal = (ids) ->
+    el 'div', { class: 'cell-total', text: "#{catalog.creditsLabel creditsIn ids} credits, #{ids.length} courses" }
+
+  # Course order inside a grade row: linked A/B halves first and in the
+  # same order in both terms, so a pair lines up across the two columns
+  # and its connector runs straight. A pair counts as linked only when
+  # its halves sit in neighboring columns of the same grade, which is
+  # the only arrangement a connector can honestly draw.
+  rowStems = (grade, columns, byKey) ->
+    at = {}
+    for term, column in columns
+      entry = byKey["#{grade}:#{term}"]
+      continue unless entry?
+      for id in entry.courses
+        stem = ctx.pairs.stemOf[id]
+        continue unless stem?
+        half = ctx.pairs.halfOf[id]
+        (at[stem] ?= {})[half] = column
+    linked = []
+    for stem, spots of at when spots.a? and spots.b?
+      linked.push stem if spots.b - spots.a is 1
+    linked.sort!
+
+  ordered = (ids, stems) ->
+    rank = (id) ->
+      stem = ctx.pairs.stemOf[id]
+      at = if stem? then stems.indexOf stem else -1
+      if at >= 0 then at else stems.length
+    sorted = ids.slice!
+    sorted.sort (a, b) ->
+      diff = rank(a) - rank(b)
+      if diff isnt 0 then diff else (if a < b then -1 else 1)
+    sorted
+
+  planChip = (id, stems) ->
+    stem = ctx.pairs.stemOf[id]
+    linked = stem? and stem in stems
+    partner = ctx.pairs.partnerOf[id]
+    options = {
+      why: whyUi.marker ctx, whyFor id
+      onRemove: !-> reject id
+      removeTitle: 'Keep this course out of every plan'
+      drag: { kind: 'plan', id: id }
+    }
+    if linked
+      options.half = ctx.pairs.halfOf[id]
+      options.title = "One course across two terms with #{partner}; they move together"
+    chips.chip id, options
+
+  emptyCell = (grade, term) ->
+    el 'div', { class: 'grid-cell empty' }, [
       el 'div', { class: 'cell-label', text: "Grade #{grade} #{term}" }
-      el 'div', { class: 'chips' }, [courseChip id for id in entry.courses]
-      el 'div', { class: 'cell-total', text: "#{catalog.creditsLabel credits} credits, #{entry.courses.length} courses" }
+      el 'p', { class: 'muted small', text: 'not in this plan' }
     ]
 
-  gradeRow = (grade, columns, byKey) ->
+  # A term the marker says is behind the student: shown, greyed, and not
+  # open to editing, because it has already happened.
+  pastCell = (entry) ->
+    el 'div', { class: "grid-cell past #{entry.phase}" }, [
+      el 'div', { class: 'cell-label', text: "Grade #{entry.grade} #{entry.term}" }
+      el 'div', { class: 'cell-phase', text: PHASE_LABEL[entry.phase] or entry.phase }
+      el 'div', { class: 'chips' }, [courseChip id for id in entry.courses]
+      cellTotal entry.courses
+    ]
+
+  cell = (grade, term, entry, stems) ->
+    node = if entry? and entry.courses.length
+      el 'div', { class: 'grid-cell' }, [
+        el 'div', { class: 'cell-label', text: "Grade #{grade} #{term}" }
+        el 'div', { class: 'chips' }, [planChip id, stems for id in ordered entry.courses, stems]
+        cellTotal entry.courses
+      ]
+    else
+      emptyCell grade, term
+    node.addEventListener 'dragover', (event) !->
+      return unless drag.held!?
+      event.preventDefault!
+      node.classList.add 'drop-over'
+    node.addEventListener 'dragleave', !-> node.classList.remove 'drop-over'
+    node.addEventListener 'drop', (event) !->
+      held = drag.held!
+      return unless held?
+      event.preventDefault!
+      node.classList.remove 'drop-over'
+      drag.end!
+      place held.id, grade, term
+    node
+
+  gradeRow = (grade, columns, byKey, pastByKey) ->
+    stems = rowStems grade, columns, byKey
     cells = [el 'div', { class: 'grid-grade', text: "Grade #{grade}" }]
     for term in columns
-      cells.push cell grade, term, byKey["#{grade}:#{term}"]
+      behind = pastByKey["#{grade}:#{term}"]
+      cells.push (if behind? then pastCell behind else cell grade, term, byKey["#{grade}:#{term}"], stems)
     el 'div', { class: 'grid-row' }, cells
 
-  grid = (plan) ->
+  # Where a course goes when it is dragged off the grid.
+  dropAway = ->
+    zone = el 'div', {
+      class: 'dropzone'
+      text: 'Drop a course here to keep it out of every plan'
+    }
+    zone.addEventListener 'dragover', (event) !->
+      held = drag.held!
+      return unless held? and held.kind is 'plan'
+      event.preventDefault!
+      zone.classList.add 'drop-over'
+    zone.addEventListener 'dragleave', !-> zone.classList.remove 'drop-over'
+    zone.addEventListener 'drop', (event) !->
+      held = drag.held!
+      return unless held?
+      event.preventDefault!
+      zone.classList.remove 'drop-over'
+      drag.end!
+      reject held.id
+    zone
+
+  grid = (result, shown) ->
     byKey = {}
-    for entry in plan.terms
+    for entry in shown.terms
       byKey[termKey entry] = entry
+    pastByKey = {}
+    for entry in (result.past or [])
+      pastByKey[termKey entry] = entry
     columns = catalog.termIds ctx.school
     head = [el 'div', { class: 'grid-corner' }]
     for term in columns
       head.push el 'div', { class: 'grid-term', text: term }
     rows = [el 'div', { class: 'grid-head' }, head]
     for grade in (ctx.school.grade_levels or [])
-      rows.push gradeRow grade, columns, byKey
-    el 'div', { class: 'grid', style: "--terms: #{columns.length}" }, rows
+      rows.push gradeRow grade, columns, byKey, pastByKey
+    el 'div', {}, [
+      el 'div', { class: 'grid', style: "--terms: #{columns.length}" }, rows
+      dropAway!
+    ]
+
+  # --- graduation requirements -------------------------------------------
 
   # Courses satisfying a requirement's predicate (tag, course list, or
   # content group), split into what the plan schedules and what the
-  # profile already held.
-  coursesMatching = (plan, req) ->
+  # student already holds.
+  coursesMatching = (result, shown, req) ->
     planned = []
-    for entry in plan.terms
+    for entry in shown.terms
       for id in entry.courses
         course = ctx.catalog.byId[id]
         planned.push id if course? and reqMatches req, course
@@ -272,20 +471,23 @@ create = (ctx) ->
     profile = ctx.profile!
     pool = profile.completed ++ profile.inProgress
     pool = pool ++ profile.preHsCompleted if ctx.school.pre_hs_credit?.counts_toward_grad
+    for entry in (result.past or [])
+      pool = pool ++ entry.courses
     for id in pool
       course = ctx.catalog.byId[id]
-      history.push id if course? and reqMatches req, course
+      history.push id if course? and (reqMatches req, course) and id not in history
     { planned: planned, history: history }
 
-  requirementRow = (req, plan) ->
-    earned = plan.coverage[req.id] or 0
+  # One row per requirement: the label, how far along it is, and the
+  # numbers. Everything behind it (what covers it, the school's note,
+  # the line in the specsheet) opens on demand.
+  requirementRow = (result, shown, req) ->
+    earned = shown.coverage[req.id] or 0
     counted = Math.min earned, req.credits
     ratio = if req.credits > 0 then counted / req.credits else 1
-    covering = coursesMatching plan, req
-    detail = [
-      el 'summary', { text: 'Courses that cover it' }
-      el 'div', { class: 'chips' }, [courseChip id for id in covering.planned]
-    ]
+    covering = coursesMatching result, shown, req
+    detail = [el 'p', { class: 'muted small', text: 'Courses that cover it' }]
+    detail.push el 'div', { class: 'chips' }, [courseChip id for id in covering.planned]
     if covering.history.length
       detail.push el 'p', { class: 'muted small', text: 'Already on your record' }
       detail.push el 'div', { class: 'chips' }, [courseChip id for id in covering.history]
@@ -295,25 +497,28 @@ create = (ctx) ->
       el 'a', { href: ctx.sourcePath, target: '_blank', rel: 'noopener', text: ctx.sourcePath }
       '.'
     ]
-    el 'div', { class: if counted >= req.credits then 'req met' else 'req short' }, [
-      el 'div', { class: 'req-head' }, [
+    el 'details', { class: if counted >= req.credits then 'req met' else 'req short' }, [
+      el 'summary', { class: 'req-row' }, [
         el 'span', { class: 'req-label', text: req.label }
-        el 'span', { class: 'req-count', text: "#{catalog.creditsLabel counted} of #{catalog.creditsLabel req.credits} credits" }
+        el 'span', { class: 'bar' }, [el 'span', { class: 'bar-fill', style: "width: #{Math.round ratio * 100}%" }]
+        el 'span', { class: 'req-count', text: "#{catalog.creditsLabel counted} / #{catalog.creditsLabel req.credits}" }
       ]
-      el 'div', { class: 'bar' }, [el 'div', { class: 'bar-fill', style: "width: #{Math.round ratio * 100}%" }]
-      el 'details', { class: 'req-detail' }, detail
+      el 'div', { class: 'req-detail' }, detail
     ]
 
-  checklist = (plan) ->
+  checklist = (result, shown) ->
     requirements = ctx.school.grad_requirements or []
     unless requirements.length
       return el 'p', { class: 'muted', text: 'This specsheet states no graduation requirements.' }
     rows = []
     for req in requirements
-      rows.push requirementRow req, plan
+      rows.push requirementRow result, shown, req
     el 'div', { class: 'checklist' }, rows
 
   idle!
-  { el: root, idle: idle, running: running, show: show, failed: failed, markStale: markStale }
+  {
+    el: root, idle: idle, running: running, show: show, failed: failed,
+    markStale: markStale, hints: setHints, whyFor: whyFor, terms: terms
+  }
 
 module.exports = { create, diffText }

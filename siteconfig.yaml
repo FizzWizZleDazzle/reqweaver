@@ -2,9 +2,10 @@
 # stages this file as public/data/siteconfig.json and the app reads it at
 # startup.
 
-# Goal encoding service (workers/encode). A student's free-text goal is
-# posted here and comes back as a vector in the same space as the course
-# vectors. Leave it empty until the endpoint is deployed: goals a school
-# precompiled still steer plans, and any other wording is reported as not
-# applied rather than failing.
-encode_api: ''
+# Base URL of the reqweaver API worker (workers/api, one Rust worker):
+#   POST {api_base}/encode        free-text goal -> vector
+#   POST {api_base}/api/plans     save a plan (returns id + write token)
+#   GET  {api_base}/api/plans/:id read a plan (the /s/<code> share source)
+# Leave empty until deployed: goals a school precompiled still steer
+# plans, saving and sharing stay hidden, and nothing fails.
+api_base: ''
