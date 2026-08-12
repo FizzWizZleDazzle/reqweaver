@@ -1,16 +1,24 @@
-# The reqweaver API: goal encoding (Workers AI), plan saving, and
-# read-only sharing, one Rust/WASM worker for minimal CPU time.
+# The whole site in one deploy: static assets (the built app in public/)
+# served free and unmetered, plus the Rust API worker, which only runs
+# for the routes named in run_worker_first - everything else never
+# touches the worker or the bill.
 #
 # One-time setup:
 #   npx wrangler kv namespace create PLANS   # put the id below
+# Deploy (after npm run build:web):
 #   npx wrangler deploy -c workers/api/wrangler.toml
-# Then set api_base in siteconfig.yaml to the deployed URL.
-name = "reqweaver-api"
+# The app and API share an origin, so siteconfig api_base stays empty.
+name = "reqweaver"
 main = "build/worker/shim.mjs"
 compatibility_date = "2026-08-01"
 
 [build]
 command = "cargo install -q worker-build && worker-build --release"
+
+[assets]
+directory = "../../public"
+not_found_handling = "single-page-application"
+run_worker_first = ["/api/*", "/encode"]
 
 [ai]
 binding = "AI"
