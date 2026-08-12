@@ -43,7 +43,10 @@ siteConfig = ->
   file = path.join ROOT, 'siteconfig.yaml'
   loaded = if fs.existsSync file then yaml.load fs.readFileSync(file, 'utf8') else null
   config = loaded or {}
-  config.api_base = (config.api_base or '')
+  # SITE_API_BASE overrides per build: the Worker deployment keeps the
+  # empty same-origin default, a Pages deployment names the Worker's
+  # absolute URL
+  config.api_base = process.env.SITE_API_BASE or config.api_base or ''
   config
 
 main = !->
