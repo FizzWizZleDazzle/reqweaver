@@ -1,0 +1,23 @@
+name: worker-ci
+# Validates the Rust worker build on pull requests that touch it, so a
+# broken crate or toolchain mismatch surfaces before merge instead of
+# in the post-merge deploy. --dry-run builds everything and uploads
+# nothing.
+on:
+  pull_request:
+    paths:
+      - 'workers/**'
+  push:
+    branches: [main]
+    paths:
+      - 'workers/**'
+jobs:
+  build-worker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - run: mkdir -p ../../public && npx wrangler deploy --dry-run --outdir dist
+        working-directory: workers/api

@@ -7,7 +7,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-worker = "0.6"
+worker = "0.8"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"
@@ -17,4 +17,6 @@ getrandom = { version = "0.2", features = ["js"] }
 [profile.release]
 opt-level = "s"
 lto = true
-strip = true
+# strip = true is deliberately absent: stripping removes metadata
+# wasm-bindgen's externref pass needs ("failed to generate catch
+# wrappers"); wasm-opt shrinks the module during worker-build anyway.
