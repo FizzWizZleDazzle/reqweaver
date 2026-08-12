@@ -5,7 +5,7 @@
 
 { prereqIds } = require './dag'
 { reqMatches, initialCoverage } = require './gradreqs'
-{ estBanked, goalAffinity } = require './search'
+{ estBanked, goalAffinity, goalStrongBar } = require './search'
 
 # Marginal requirement attribution: walk the plan in term order and give
 # each requirement's missing credits to the first matching courses. A
