@@ -42,20 +42,26 @@ load = (file) ->
 
 # Partner college sheets resolve from their id under the specs root the
 # school itself was loaded from: us/md/mcps/mc -> <specs>/us/md/mcps/mc.yaml.
+# Course vectors beside each sheet ride along so partner courses rank
+# by goal affinity too, matching the app's worker.
 loadColleges = (school, schoolPath) ->
   colleges = {}
+  vectors = {}
   partners = (school.dual_enrollment or {}).partners or []
-  return colleges unless partners.length
+  return { colleges, vectors } unless partners.length
   abs = path.resolve schoolPath
   marker = path.sep + 'specs' + path.sep
   at = abs.lastIndexOf marker
-  return colleges if at < 0
+  return { colleges, vectors } if at < 0
   specsRoot = abs.slice 0, at + marker.length - 1
   for partner in partners
     file = path.join specsRoot, partner.college + '.yaml'
     continue unless fs.existsSync file
     colleges[partner.college] = load file
-  colleges
+    embFile = path.join (path.dirname file), 'embeddings.' + path.basename(file).replace(/\.ya?ml$/, '') + '.json'
+    if fs.existsSync embFile
+      vectors[partner.college] = JSON.parse fs.readFileSync(embFile, 'utf8')
+  { colleges, vectors }
 
 # The exported sentence encoder (tools/export-encoder.py), when present.
 loadEncoder = ->
@@ -97,7 +103,8 @@ main = ->
   levels = load path.join(ROOT, 'registry', 'levels.yaml')
   exams = load path.join(ROOT, 'registry', 'exams.yaml')
   weights = load(args.weights or path.join(ROOT, 'weights', 'scorer-weights.yaml'))
-  colleges = loadColleges school, args.school
+  partnerData = loadColleges school, args.school
+  colleges = partnerData.colleges
   model = buildModel school, profile, levels, exams, colleges
   # semantic layer: precompiled course embeddings for this school, and the
   # goal encoded at runtime by the LiveScript MiniLM forward pass (falls

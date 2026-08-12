@@ -71,9 +71,16 @@ validate = (model, plan) ->
   coverage = initialCoverage model.school, model.profile, model.courses
   capCourses = minDefined model.school.max_courses_per_term, model.profile.maxCoursesPerTerm
   capCredits = model.school.max_credits_per_term
-  capCollege = null
+  # a partner's max_courses_per_term is a hard cap only when the sheet
+  # declares one; funded_per_term is the allowance the district pays
+  # for, and exceeding it is an out-of-pocket note, not a violation
+  hardBy = {}
+  fundedBy = {}
+  collegeName = {}
   for partner in ((model.school.dual_enrollment or {}).partners or [])
-    capCollege = minDefined capCollege, partner.max_courses_per_term
+    hardBy[partner.college] = partner.max_courses_per_term if partner.max_courses_per_term?
+    fundedBy[partner.college] = partner.funded_per_term if partner.funded_per_term?
+    collegeName[partner.college] = (model.colleges[partner.college] or {}).name or partner.college
   entries = (plan or []).slice!
   entries.sort (a, b) ->
     ta = termsByKey["#{a.grade}:#{a.term}"]
@@ -127,9 +134,15 @@ validate = (model, plan) ->
       issues.push issue(entry, null, 'capacity', "#{periods} periods over the #{capHere}-period cap")
     if creditCap? and credits > creditCap
       issues.push issue(entry, null, 'capacity', "#{credits} credits over the #{creditCap}-credit cap")
-    collegeCount = chosen.length - schoolChosen.length
-    if capCollege? and collegeCount > capCollege
-      issues.push issue(entry, null, 'capacity', "#{collegeCount} college courses over the dual-enrollment cap of #{capCollege}")
+    collegeCounts = {}
+    for c in chosen when c.college?
+      collegeCounts[c.college] = (collegeCounts[c.college] or 0) + 1
+    for college, n of collegeCounts
+      label = collegeName[college] or college
+      if hardBy[college]? and n > hardBy[college]
+        issues.push issue(entry, null, 'capacity', "#{n} courses at #{label} over its #{hardBy[college]}-per-term cap")
+      else if fundedBy[college]? and n > fundedBy[college]
+        issues.push issue(entry, null, 'cost', "#{n} courses at #{label}: #{fundedBy[college]} per term are funded, the rest are out of pocket")
     for course in chosen
       taken.done.add course.id
       taken.contentTaken.add course.content if course.content?

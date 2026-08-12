@@ -70,10 +70,12 @@ explain = (model, state) ->
       if banked > 0
         reasons.push { kind: 'banked', detail: banked }
         necessity = Math.max necessity, Math.min 0.7, 0.3 + banked / 8
+      # goalAffinity is centered against the catalog mean; positive
+      # means closer to the goal than the average course
       affinity = goalAffinity model, course
-      if affinity > 0.35
+      if affinity > 0.05
         reasons.push { kind: 'goal', detail: affinity }
-        necessity = Math.max necessity, 0.3 + 0.4 * affinity
+        necessity = Math.max necessity, Math.min 0.7, 0.3 + 2 * affinity
       interested = false
       for tag in (course.tags or []) when model.interests.has tag
         interested := true
@@ -82,6 +84,24 @@ explain = (model, state) ->
         necessity = Math.max necessity, 0.35
       reasons.push { kind: 'none' } if reasons.length is 0
       out[id] = { reasons: reasons, necessity: necessity }
+  # both halves of an A/B pair are one course a student cannot take
+  # half of, so they share the union of their reasons and the higher
+  # necessity; otherwise the half that consumed the requirement reads
+  # "requirement" while its twin reads "banked"
+  for id, info of out
+    partner = (model.pairA or {})[id] or (model.pairB or {})[id]
+    continue unless partner? and out[partner]?
+    other = out[partner]
+    merged = info.reasons.slice!
+    for r in other.reasons
+      dup = false
+      for m in merged when m.kind is r.kind
+        dup := true
+      merged.push r unless dup
+    if merged.length > 1
+      merged = [r for r in merged when r.kind isnt 'none']
+    info.reasons = merged
+    info.necessity = Math.max info.necessity, other.necessity
   out
 
 module.exports = { explain }

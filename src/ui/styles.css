@@ -259,20 +259,40 @@ button { font: inherit; cursor: pointer; }
   max-width: 100%;
 }
 
+/* Two lines: the course title, then id / level / credits and the
+   markers. The title wraps to two lines before it may ellipsize. */
 .chip-main {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  flex: 1 1 auto;
   background: none;
   border: 0;
   color: var(--text);
-  padding: 4px 8px;
+  padding: 5px 8px;
   text-align: left;
   min-width: 0;
 }
 .chip-main:hover { background: var(--accent-soft); }
 .chip-id { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.75rem; color: var(--muted); }
-.chip-name { font-size: 0.82rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 22ch; }
+.chip-name {
+  font-size: 0.82rem;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  max-width: 26ch; /* only where no container narrows the chip first */
+}
+.chip-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-width: 0; }
+.chip-credits {
+  font-size: 0.72rem;
+  color: var(--muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
 .chip-x {
   background: none;
   border: 0;
@@ -317,6 +337,10 @@ button { font: inherit; cursor: pointer; }
 @media (min-width: 1280px) {
   .why-label { display: inline; }
 }
+
+/* inside a term cell the dot and its tooltip carry the reason; the
+   word would push every chip to a third line and stretch the grid */
+.grid-cell .why-label, .grid-cell .issue-label { display: none; }
 
 /* a placement that breaks a rule: marked on the chip, detail in the
    marker's tooltip, nothing blocked */
@@ -412,7 +436,15 @@ button { font: inherit; cursor: pointer; }
   text-align: left;
   padding: 2px 0;
 }
-.picker-label .chip-name { max-width: none; flex: 1 1 auto; }
+/* rows stay compact but never cut a title: the name takes the row's
+   spare width and wraps as far as it needs */
+.picker-label .chip-name {
+  max-width: none;
+  flex: 1 1 auto;
+  display: block;
+  -webkit-line-clamp: none;
+  line-clamp: none;
+}
 
 /* --- catalog panel ------------------------------------------------------ */
 
@@ -507,7 +539,7 @@ button { font: inherit; cursor: pointer; }
 .plan-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
 .plan-head h2 { margin: 0; }
 
-.grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.grid { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
 .grid-head { display: none; }
 .grid-row { display: flex; flex-direction: column; gap: 8px; }
 .grid-grade { font-weight: 600; margin-top: 8px; }
@@ -562,16 +594,20 @@ body.dragging .dropzone { border-color: var(--accent); color: var(--accent); }
 .chip.half { border-color: var(--accent); }
 
 @media (min-width: 700px) {
-  .grid-head { display: grid; grid-template-columns: 90px repeat(var(--terms), minmax(0, 1fr)); gap: 8px; }
+  /* cells grew taller for the two-line chips, so the gutters and the
+     grade column tighten to keep the whole grid on a laptop screen */
+  .grid-head { display: grid; grid-template-columns: 70px repeat(var(--terms), minmax(0, 1fr)); gap: 6px; }
   .grid-term { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
-  .grid-row { display: grid; grid-template-columns: 90px repeat(var(--terms), minmax(0, 1fr)); gap: 8px; align-items: start; }
+  .grid-row { display: grid; grid-template-columns: 70px repeat(var(--terms), minmax(0, 1fr)); gap: 6px; align-items: start; }
   .grid-grade { margin-top: 0; align-self: center; }
   .cell-label { display: none; }
-  .chip-name { max-width: 14ch; }
-  .grid-cell .chips { flex-direction: column; align-items: stretch; }
+  /* the cell is the width limit here; the title uses all of it */
+  .grid-cell .chip-name { max-width: none; }
+  .grid-cell .chips { flex-direction: column; align-items: stretch; gap: 4px; }
   .chip.half-a { position: relative; border-top-right-radius: 0; border-bottom-right-radius: 0; }
   .chip.half-b { border-top-left-radius: 0; border-bottom-left-radius: 0; }
-  /* the connector runs across the cell padding and the column gap */
+  /* the connector runs across the cell padding (8px each side), both
+     1px cell borders, and the 6px column gap */
   .chip.half-a::after {
     content: "";
     position: absolute;

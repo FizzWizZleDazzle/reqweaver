@@ -6,6 +6,7 @@ assert = require 'assert'
 { school, levels, exams, loadYaml, check, freshProfile, cloneSchool, planCourseIds, verifyFeasible } = require './helpers'
 { buildModel, prereqsMet } = require '../engine/dag'
 { search, eagerness, mergeTuning } = require '../engine/search'
+{ reqMatches } = require '../engine/gradreqs'
 
 check 'course-list requirement predicates pull the sequence, not tag filler', ->
   seq = cloneSchool!
@@ -31,6 +32,12 @@ check 'content-group requirement predicates accept any variant tier', ->
   tookRegular = 'GEOA' in ids and 'GEOB' in ids
   tookHonors = 'GEOHA' in ids and 'GEOHB' in ids
   assert (tookRegular or tookHonors), 'no geometry variant satisfied the content requirement'
+
+check 'grad_tags override subject tags for requirement matching', ->
+  req = { id: 'health', credits: 1.0, satisfied_by: { tag: 'health' } }
+  college = { id: 'X', tags: ['elective', 'health'], grad_tags: ['elective'] }
+  assert not (reqMatches req, college), 'subject tag satisfied a requirement despite grad_tags'
+  assert (reqMatches req, { id: 'Y', tags: ['health'] }), 'plain tags stopped matching'
 
 check 'nested requires trees evaluate a or (c and (b or d))', ->
   course = { id: 'X', requires: { any: ['A', { all: ['C', { any: ['B', 'D'] }] }] } }

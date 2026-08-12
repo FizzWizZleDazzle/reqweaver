@@ -1,8 +1,9 @@
 # Course chips and the searchable course picker. A chip is the app's one
-# way of naming a course: it shows the id, the name, and the level, and it
-# opens the catalog entry so every course on screen links to its source.
-# In a plan it also carries why the engine put it there, whether it is
-# half of an A/B pair, and the drag handle that moves or drops it.
+# way of naming a course: the full name on its own line, then the id, the
+# level, and the credits beneath, and it opens the catalog entry so every
+# course on screen links to its source. In a plan it also carries why the
+# engine put it there, whether it is half of an A/B pair, and the drag
+# handle that moves or drops it.
 
 { el, fill } = require './dom'
 catalog = require './catalog'
@@ -17,7 +18,8 @@ create = (ctx) ->
     if course? then course.name else 'not in this catalog'
 
   # The small marker saying why a course is in the plan. The dot carries
-  # the full reasons as its tooltip; the word appears on wide screens.
+  # the full reasons as its tooltip; the word appears on wide screens,
+  # except in term cells, where it would cost every chip a third line.
   marker = (why) ->
     el 'span', { class: "why why-#{why.kind}", title: why.title }, [
       el 'span', { class: 'why-dot' }
@@ -33,23 +35,35 @@ create = (ctx) ->
         try event.dataTransfer.setData 'text/plain', payload.id
     node.addEventListener 'dragend', !-> drag.end!
 
+  # the graduation credit a course is worth on the grid, which for a
+  # dual-enrollment course is its fixed HS credit, not the college's
+  creditsText = (course) ->
+    value = if course.grad_credits? then course.grad_credits else (course.credits or 0)
+    "#{catalog.creditsLabel value} cr"
+
   chip = (id, options) ->
     opts = options or {}
     course = ctx.catalog.byId[id]
     level = if course? then catalog.levelOf course else 'unknown'
-    main = [
+    # the second line under the title: id, level, credits, then the
+    # why and issue markers so the title line stays clean
+    sub = [
       el 'span', { class: 'chip-id', text: id }
-      el 'span', { class: 'chip-name', text: label id }
       el 'span', { class: "badge level-#{level}", text: level }
     ]
-    main.push marker opts.why if opts.why?
+    sub.push el 'span', { class: 'chip-credits', text: creditsText course } if course?
+    sub.push marker opts.why if opts.why?
     # a rule the placement breaks: marked, never blocked, so the detail
     # rides on the marker's tooltip
     if opts.issue?
-      main.push el 'span', { class: 'issue-mark', title: opts.issue.title }, [
+      sub.push el 'span', { class: 'issue-mark', title: opts.issue.title }, [
         el 'span', { class: 'issue-dot' }
         el 'span', { class: 'issue-label', text: 'check' }
       ]
+    main = [
+      el 'span', { class: 'chip-name', text: label id }
+      el 'span', { class: 'chip-sub' }, sub
+    ]
     parts = [
       el 'button', {
         class: 'chip-main'

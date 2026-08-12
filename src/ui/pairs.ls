@@ -35,4 +35,4 @@ unit = (pairs, id) ->
   partner = pairs.partnerOf[id]
   if partner? then [id, partner] else [id]
 
-module.exports = { index, unit, trailingLetter }
+module.exports = { index, unit }

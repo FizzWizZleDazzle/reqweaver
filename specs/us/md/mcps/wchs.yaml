@@ -5373,5 +5373,6 @@ dual_enrollment:
   partners:
     - college: us/md/mcps/mc
       min_grade_level: 11
-      max_courses_per_term: 2
+      # the district pays for two per term; more is allowed out of pocket
+      funded_per_term: 2
       eligible_courses: all

@@ -38,12 +38,15 @@ create = (deps) ->
 
   # A course the reader can see the name of, when the school this plan
   # was built against is still in the index; otherwise the id alone.
+  # Same two-line shape as a planner chip: title, then id and level.
   chip = (courses, id) ->
     course = courses?[id]
-    parts = [el 'span', { class: 'chip-id', text: id }]
+    sub = [el 'span', { class: 'chip-id', text: id }]
+    parts = []
     if course?
       parts.push el 'span', { class: 'chip-name', text: course.name }
-      parts.push el 'span', { class: "badge level-#{catalog.levelOf course}", text: catalog.levelOf course }
+      sub.push el 'span', { class: "badge level-#{catalog.levelOf course}", text: catalog.levelOf course }
+    parts.push el 'span', { class: 'chip-sub' }, sub
     el 'span', { class: 'chip' }, [el 'span', { class: 'chip-main' }, parts]
 
   cell = (courses, grade, term, entry) ->
