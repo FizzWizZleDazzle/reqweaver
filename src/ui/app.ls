@@ -14,6 +14,7 @@ chipUi = require './chip'
 courseUi = require './course'
 profileUi = require './profile'
 plansUi = require './plans'
+browseUi = require './browse'
 shareUi = require './share'
 sharedUi = require './shared'
 solverUi = require './solver'
@@ -47,7 +48,9 @@ brand = (tagline) ->
   ]
 
 # One school at a time: navigating to another rebuilds the whole page
-# against the new specsheet.
+# against the new specsheet. Landing here shows the catalog and the term
+# grid at once, restored from the last visit; the solver only runs when
+# asked.
 build = (root, index, config, entry, school, levels) !->
   courses = catalog.index school
   openCourse = null
@@ -73,43 +76,42 @@ build = (root, index, config, entry, school, levels) !->
   sheet = courseUi.create ctx
   openCourse := sheet.open
 
-  runButton = el 'button', { class: 'primary', text: 'Run planner' }
-  status = el 'span', { class: 'run-status muted small' }
+  planner = plansUi.create ctx
+  # what the grid on screen says, for the course dialog, the catalog
+  # panel, the profile export, and the save payload
+  ctx.whyFor = planner.whyFor
+  ctx.gridTerms = planner.terms
+  ctx.snapshot = planner.snapshot
+  ctx.place = planner.place
+  ctx.removeFromGrid = planner.removeFrom
+  ctx.placedIn = planner.placedIn
+  ctx.validate = (job) !->
+    checker.run { schoolPath: entry.path, profile: state.profile!, plan: job.plan }
 
-  plans = plansUi.create ctx
-  # what the plan on screen says, for the course dialog, the profile
-  # export, and the save payload
-  ctx.whyFor = plans.whyFor
-  ctx.gridTerms = plans.terms
-  ctx.snapshot = plans.snapshot
+  browse = browseUi.create ctx
   panel = profileUi.create ctx
   share = shareUi.create ctx
 
-  setRunning = (on_, text) !->
-    runButton.disabled = on_
-    runButton.textContent = if on_ then 'Planning...' else 'Run planner'
-    status.textContent = text or ''
-
   solver = solverUi.create {
-    status: (message) !-> plans.running message.phase
-    done: (message) !->
-      setRunning false, "#{message.plans.length} plans shown, #{message.planCount} found"
-      plans.show message
-    hints: (message) !-> plans.hints message.hints
-    error: (message) !->
-      setRunning false, 'stopped'
-      plans.failed message.message
-    cancelled: !->
-      setRunning false, 'cancelled'
-      plans.idle!
+    status: (message) !-> planner.running message.phase
+    done: (message) !-> planner.show message
+    hints: (message) !-> planner.hints message.hints
+    error: (message) !-> planner.failed message.message
+    cancelled: !-> planner.stopped!
+  }
+
+  # The rule check behind the grid, on its own worker so a solve in
+  # flight never delays it.
+  checker = solverUi.validator {
+    report: planner.applyReport
+    error: planner.checkFailed
   }
 
   run := !->
     # the grid on screen, which the marker splits into what is already
     # standing and what is still open to planning
-    shown = plans.terms!
-    setRunning true, ''
-    plans.running 'loading'
+    shown = planner.terms!
+    planner.running 'loading'
     solver.run {
       schoolPath: entry.path
       embeddingsPath: entry.embeddings or null
@@ -120,9 +122,6 @@ build = (root, index, config, entry, school, levels) !->
       beam: state.ui!.beam
       top: TOP_PLANS
     }
-    document.querySelector('.col-results')?.scrollIntoView { behavior: 'smooth', block: 'start' } if window.innerWidth < 900
-
-  runButton.addEventListener 'click', run
 
   picker = schoolsUi.typeahead index.schools, {
     current: -> entry.name or entry.id
@@ -133,7 +132,7 @@ build = (root, index, config, entry, school, levels) !->
 
   header = el 'header', { class: 'topbar' }, [
     brand 'plan high school around the college credit you want to bank'
-    el 'div', { class: 'topbar-controls' }, [picker.el, runButton, status]
+    el 'div', { class: 'topbar-controls' }, [picker.el]
   ]
 
   footer = el 'footer', { class: 'footer' }, [
@@ -144,11 +143,29 @@ build = (root, index, config, entry, school, levels) !->
     ]
   ]
 
+  # The left column switches between the catalog and the profile; both
+  # stay mounted so pickers keep their filter text.
+  catalogPane = el 'div', { class: 'pane' }, [browse.el]
+  profilePane = el 'div', { class: 'pane hidden' }, [panel.el]
+  catalogTab = el 'button', { class: 'tab active', text: 'Catalog' }
+  profileTab = el 'button', { class: 'tab', text: 'Your profile' }
+  setPane = (wanted) !->
+    catalogTab.className = if wanted is 'catalog' then 'tab active' else 'tab'
+    profileTab.className = if wanted is 'profile' then 'tab active' else 'tab'
+    catalogPane.classList.toggle 'hidden', wanted isnt 'catalog'
+    profilePane.classList.toggle 'hidden', wanted isnt 'profile'
+  catalogTab.addEventListener 'click', !-> setPane 'catalog'
+  profileTab.addEventListener 'click', !-> setPane 'profile'
+
   fill root, [
     header
     el 'main', { class: 'layout' }, [
-      el 'div', { class: 'col-profile' }, [panel.el]
-      el 'div', { class: 'col-results' }, [plans.el, share.el]
+      el 'div', { class: 'col-profile' }, [
+        el 'div', { class: 'tabs paneswitch' }, [catalogTab, profileTab]
+        catalogPane
+        profilePane
+      ]
+      el 'div', { class: 'col-results' }, [planner.el, share.el]
     ]
     footer
     sheet.el
@@ -156,9 +173,12 @@ build = (root, index, config, entry, school, levels) !->
 
   active.refresh = !->
     panel.refresh!
-    plans.markStale!
+    planner.refresh!
+    browse.refresh!
     share.refresh!
-  active.leave = !-> solver.cancel!
+  active.leave = !->
+    solver.cancel!
+    checker.stop!
 
 chooser = (root, index, notice) !->
   recent = null

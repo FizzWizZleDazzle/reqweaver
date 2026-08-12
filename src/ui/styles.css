@@ -318,6 +318,31 @@ button { font: inherit; cursor: pointer; }
   .why-label { display: inline; }
 }
 
+/* a placement that breaks a rule: marked on the chip, detail in the
+   marker's tooltip, nothing blocked */
+
+.issue-mark { display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto; }
+.issue-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--warn-line);
+  flex: 0 0 auto;
+}
+.issue-label {
+  display: none;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--warn-line);
+  white-space: nowrap;
+}
+.chip.has-issue { border-color: var(--warn-line); background: var(--warn-soft); }
+
+@media (min-width: 1280px) {
+  .issue-label { display: inline; }
+}
+
 .badge {
   font-size: 0.68rem;
   text-transform: uppercase;
@@ -384,6 +409,35 @@ button { font: inherit; cursor: pointer; }
   padding: 2px 0;
 }
 .picker-label .chip-name { max-width: none; flex: 1 1 auto; }
+
+/* --- catalog panel ------------------------------------------------------ */
+
+.paneswitch { margin-bottom: 10px; }
+.pane.hidden { display: none; }
+
+.browse .search { margin-top: 4px; }
+.browse-body { margin-top: 8px; }
+.browse .group {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin-bottom: 6px;
+}
+.browse .group summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 10px;
+  cursor: pointer;
+  list-style: none;
+}
+.browse .group summary::-webkit-details-marker { display: none; }
+.browse .group summary::marker { content: ""; }
+.browse .group[open] summary, .browse .group summary:hover { background: var(--raised); }
+.browse .group-name { font-weight: 550; text-transform: capitalize; }
+.browse .group .picker-rows { border: 0; border-top: 1px solid var(--line); border-radius: 0; margin: 0; }
+.picker-row.draggable { cursor: grab; }
+.pill.placed { border-color: var(--accent); color: var(--accent); font-size: 0.72rem; padding: 1px 8px; white-space: nowrap; }
 
 /* --- results ----------------------------------------------------------- */
 
@@ -463,6 +517,17 @@ button { font: inherit; cursor: pointer; }
 .grid-cell.drop-over { border-color: var(--accent); background: var(--accent-soft); }
 .cell-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 6px; }
 .cell-total { font-size: 0.75rem; color: var(--muted); margin-top: 6px; }
+
+/* the rule check's verdict over the grid */
+.check-line { font-size: 0.85rem; padding: 4px 0 4px 10px; border-left: 3px solid var(--line); }
+.check-line.ok { border-left-color: var(--tone-prerequisite); color: var(--muted); }
+.check-line.issues { border-left-color: var(--warn-line); }
+
+/* a capacity issue belongs to the term, so it sits in the cell head */
+.cell-issues { font-size: 0.75rem; color: var(--warn-line); margin-bottom: 6px; }
+
+/* an optional term (summer) the profile has not opted into yet */
+.grid-cell.optout { border-style: dotted; }
 
 /* terms the "you are here" marker puts behind the student */
 .grid-cell.past { background: var(--raised); border-style: dashed; }

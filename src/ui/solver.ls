@@ -60,4 +60,37 @@ create = (handlers) ->
 
   { run, cancel, running: -> current? }
 
-module.exports = { create }
+# The rule-check client, on its own worker so a beam search in flight
+# never delays a grid check. A validate is quick and never cancelled;
+# the worker lives for the whole page, and only the newest report is
+# delivered.
+validator = (handlers) ->
+  worker = null
+  counter = 0
+
+  receive = (event) !->
+    message = event.data
+    return unless message? and message.id is counter
+    switch message.type
+    | 'validated' => handlers.report? message
+    | 'error'     => handlers.error? message
+
+  spawn = ->
+    made = new Worker 'worker.js'
+    made.addEventListener 'message', receive
+    made.addEventListener 'error', (event) !->
+      handlers.error? { message: event.message or 'the rule-check worker failed to start' }
+    made
+
+  run = (job) !->
+    worker := spawn! unless worker?
+    counter += 1
+    worker.postMessage ({ type: 'validate', id: counter } <<< job)
+
+  stop = !->
+    worker?.terminate!
+    worker := null
+
+  { run, stop }
+
+module.exports = { create, validator }

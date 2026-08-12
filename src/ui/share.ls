@@ -39,7 +39,6 @@ create = (ctx) ->
       coverage: shown.coverage
       banked: shown.banked
       gradRemaining: shown.gradRemaining
-      scores: { symbolic: shown.objectiveScore, soft: shown.soft }
     }
 
   say = (text) !-> message.textContent = text
@@ -60,7 +59,7 @@ create = (ctx) ->
     return if busy
     payload = payloadFor nameInput.value.trim! or defaultName!
     unless payload?
-      return say 'Run the planner first; there is no plan to save yet.'
+      return say 'Put a course on the grid first; there is no plan to save yet.'
     busy := true
     say 'Saving...'
     api.savePlan(ctx.config, payload).then (result) !->
@@ -82,7 +81,7 @@ create = (ctx) ->
     return if busy
     payload = payloadFor record.name
     unless payload?
-      return say 'Run the planner first; there is no plan to save yet.'
+      return say 'Put a course on the grid first; there is no plan to save yet.'
     busy := true
     say "Updating #{record.name}..."
     api.updatePlan(ctx.config, record.planId, record.writeToken, payload).then (result) !->

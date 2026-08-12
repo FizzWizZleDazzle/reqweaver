@@ -64,34 +64,39 @@ not applied, and saving says the API is not reachable.
 
 ## The app
 
-The browser app is the planner with a face on it. Your school is the
-address: search for it on the front page and you land on
-`/us/md/mcps/wchs`, a link you can keep. There you say what you have
-completed (including credit earned before grade 9),
-what you are taking now, what you have already committed to, and what
-you want; it plans in the background and shows the best plans as a
-grade-by-term grid you can read at a glance. Every course on screen
-opens its catalog entry, so you can check the description and the
-prerequisites behind any placement, and mark it completed, pin it, or
-waive its prerequisites from there. You can also say in a sentence what
-you want to study, and courses whose catalog descriptions match it rank
-higher; the plan says when a goal steered it. Alongside each plan sit
-the graduation checklist, the banked-credit estimate, the warnings the
-engine raised for a counselor to confirm, and hints worth considering,
-such as what a summer term would be worth to you.
+The browser app is a schedule you build by hand, with the planner one
+button away. Your school is the address: search for it on the front
+page and you land on `/us/md/mcps/wchs`, a link you can keep. There
+you get the school's full catalog on one side and your grade-by-term
+grid on the other. Drag courses onto terms and every placement is
+checked as it lands: an unmet prerequisite, a course outside its
+offered term or grade window, two variants of the same content, or a
+term over its period cap gets a marker saying what is wrong. Nothing
+is ever blocked; you may know an exception the catalog does not, and
+the markers are what you take to a counselor. The graduation
+checklist and the banked-credit estimate fill in as the grid does.
+Every course on screen opens its catalog entry, so you can check the
+description and the prerequisites behind any placement, and mark it
+completed, pin it, or waive its prerequisites from there.
 
-Each course in the grid says why it is there: the requirement it
-covers, the later course it unlocks, the credit it banks, or nothing at
-all, which marks it as yours to swap. Swapping is direct. Drag a course
-off the grid and the planner never schedules it again; drag one from
-the course list onto a term and it is pinned there; both re-plan
-immediately. "Rebuild around this plan" freezes everything where it
-sits, so the next change moves one course and leaves the rest alone.
-Courses a catalog splits into A and B halves stay linked across the two
-terms and move as one. Tell the app where you are now, and the terms
-behind that point become your record: they grey out, and the planner
-works on what is left. Your profile stays in your browser, and exports
-as the same YAML the command line planner reads.
+When you want help, "Auto-plan" fills the grid: say what you have
+completed (including credit earned before grade 9), what you are
+taking now, and what you want, and it searches out the best plans and
+lands them in the same grid, still editable, with the alternatives a
+tab away. "Fill around this grid" keeps every course you placed where
+it sits and plans the rest. A rigor preference steers it, and you can
+say in a sentence what you want to study; courses whose catalog
+descriptions match it rank higher, and the plan says when a goal
+steered it. Alongside its plans sit the warnings the engine raised
+for a counselor to confirm and hints worth considering, such as what
+a summer term would be worth to you. Each course it placed says why
+it is there: the requirement it covers, the later course it unlocks,
+the credit it banks, or nothing at all, which marks it as yours to
+swap. Courses a catalog splits into A and B halves stay linked across
+the two terms and move as one. Tell the app where you are now, and
+the terms behind that point become your record. Your grid and profile
+stay in your browser, and the profile exports as the same YAML the
+command line planner reads.
 
 Saving a plan puts it on the reqweaver API and hands you a link like
 `/s/aB3kf...`. There is no account and no password: the link is the

@@ -702,6 +702,7 @@ src/ui/app.ls           # entry, data loading, state wiring
 src/ui/state.ls         # profile + UI state, localStorage, YAML export/import
 src/ui/data.ls          # school index, site config, and specsheet fetch
 src/ui/catalog.ls       # read-only views over a specsheet
+src/ui/browse.ls        # catalog panel: search, tag groups, drag source
 src/ui/dom.ls           # element helpers
 src/ui/chip.ls          # course chips, searchable course picker
 src/ui/course.ls        # course detail dialog with profile actions
@@ -787,24 +788,32 @@ on the offending chip and never undo a placement: the student may
 know an exception the catalog does not, the same stance pins take in
 the engine.
 
-The grid is also where a plan is edited. Dragging a course off it, or
-pressing the x on its chip, adds it to the profile's avoid list and
-re-solves, so the engine plans around it; dragging a course from the
-picker onto a term pins it there. "Rebuild around this plan" turns
-every assignment in the plan on screen into a pin, so the next edit
-moves one course and leaves the rest still. Where a catalog splits a
+Editing is direct grid manipulation, not solver input. Dropping a
+course from the catalog onto a term places it there and nothing else:
+no pin, no re-solve, just a validate pass. Dragging a chip off the
+grid removes it. Pins and the avoid list remain solver inputs, set
+from the course dialog; hand-placing an avoided course clears its
+avoid entry, since the placement is the stronger statement. Two
+actions bring the solver in: "Auto-plan" replaces the grid with a
+proposal (terms behind the marker are kept), with the alternative
+proposals on tabs that load into the same grid; "Fill around this
+grid" pins every hand-placed course where it sits and plans the
+rest. Where a catalog splits a
 year-long course into A and B halves (the second names the first as a
 direct prerequisite and the names differ only in the trailing letter,
 both read from the catalog), the two render as one linked unit across
-neighboring terms and move together: dragging out either half excludes
-both, and pinning one places both.
+neighboring terms and move together: either half moves or leaves
+with the other, and pinning one places both.
 
 A "you are here" marker names the grade and term the student is in
 now. Terms before it in the plan on screen count as completed and the
 marker term as in progress; the worker derives those lists from the
 plan and the marker, adds them to the profile's own, and searches only
 the terms after the marker, so nothing is scheduled into a term that
-has already happened. The grid greys the terms behind the marker.
+has already happened. The grid draws the terms behind the marker as
+the record but keeps them editable, because the record itself is
+hand-built there; validate reads the whole grid in calendar order and
+needs no marker.
 Export flattens the same split into plain completed and in-progress
 lists, because the command line planner knows nothing about a marker
 and both must read the same profile.
@@ -812,7 +821,9 @@ and both must read the same profile.
 The student's profile (grade, completed courses including pre-grade-9
 credit, in-progress courses, pinned assignments, courses to avoid, exam
 scores, summer opt-ins, the marker, load preference, objective)
-persists to localStorage on every change. The
+persists to localStorage on every change, and so does the grid,
+stored per school id so switching schools never shows another
+school's course ids. The
 app is usable with no network after first load, except save/share.
 
 Every rendered claim carries provenance: a credit total, a satisfied
@@ -925,8 +936,7 @@ Key `plan:{planId}`:
     ],
     "coverage": { "english": 2.0, "math": 1.5 },
     "banked": 12,
-    "gradRemaining": 0,
-    "scores": { "symbolic": 34.0, "soft": 0.71 }
+    "gradRemaining": 0
   }
 }
 ```
