@@ -28,11 +28,12 @@ jobs:
       - run: npm test
       - run: npm run build:web
       - name: Deploy production
+        working-directory: workers/api
         run: |
           if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
             echo "no CLOUDFLARE_API_TOKEN secret; skipping production deploy"
           else
-            npx wrangler deploy -c workers/api/wrangler.toml --env production
+            npx wrangler deploy --env production
           fi
       - name: Publish release
         env:
