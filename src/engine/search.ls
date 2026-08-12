@@ -13,7 +13,12 @@ DEFAULT_TUNING =
   # term; scaled by the profile's rigor (four college classes alone is
   # about a 0.9 appetite)
   search: { beam: 100, topK: 14, subsets: 40, keepPlans: 20, collegeFullLoad: 5 }
-  objective: { gradWeight: 20, eagernessScale: 0.0001 }
+  # dedication: credits earned by advancing an already-started chain
+  # (its prerequisite is behind the student), scaled by goal alignment
+  # and zeroed by dislikes, weighted above what the same slot banks as
+  # an interchangeable elective. Multi-year commitment is worth more
+  # to an application than farmed credit.
+  objective: { gradWeight: 20, eagernessScale: 0.0001, dedication: 2 }
   priority: {
     requirement: 40, continuation: 5, familyContinuation: 10, interest: 2, goal: 12,
     usefulBanked: 2, unlocks: 0.5, banked: 4, rigor: 3, eagerRigor: 2,
@@ -208,13 +213,22 @@ priorityFor = (model, course, unmet, prevTerm, remaining, doneTags, hasBonus, do
   # goal stated, banked credit was re-buying Elementary Arabic past
   # the continuity penalty
   bankedScale = 0 if secondFamily and reqBonus is 0
+  # a disliked subject covers its requirement with the lightest
+  # sufficient course: the rigor pull inverts (light beats intense),
+  # banked credit stops attracting AP variants of it, and without a
+  # requirement to serve it takes the filler penalty
+  dislikePull = 0
+  if hasDislikedTag model, course
+    bankedScale = 0
+    dislikePull = w.rigor * ((courseIntensity course, model.levels) - 1)
+    dislikePull += w.collegeFiller if reqBonus is 0
   # with a stated goal, banked credit is worth more when it aligns:
   # otherwise a 4-credit off-topic course out-points a 3-credit course
   # in the student's field, and alignment never beats raw quantity
   align = 1
   if model.goalVec?
     align = Math.max 0.25, 1 + w.goalBank * fixed.goal
-  reqBonus + continuation + interestBonus - rootPenalty - collegeFiller +
+  reqBonus + continuation + interestBonus - rootPenalty - collegeFiller - dislikePull +
     w.goal * fixed.goal +
     align * bankedScale * w.usefulBanked * (usefulBanked model, course.id, remaining) +
     w.unlocks * (model.unlocks[course.id] or 0) +
@@ -274,6 +288,39 @@ apStillReachable = (model, state, term, twinId) ->
     continue unless offeredIn twin, t
     return true if t.index - term.index >= depth
   false
+
+hasDislikedTag = (model, course) ->
+  for tag in (course.tags or []) when model.dislikes.has tag
+    return true
+  false
+
+# The dedication a course earns when taken: it advances a chain the
+# student already stands on (a prerequisite is behind them), in a
+# subject they have not disliked, scaled by how well it aligns with
+# the stated goal.
+dedicationValue = (model, course, done) ->
+  fixed = staticScores model, course
+  # a disliked course is a strict cost in the objective, or it ties
+  # with a neutral elective and wins on the id tie-break; required
+  # coverage still dwarfs the charge, so the light variant gets taken,
+  # and nothing beyond the requirement does
+  return -(schedCredits course) if hasDislikedTag model, course
+  onChain = false
+  for id in fixed.preIds when done.has id
+    onChain := true
+  return 0 unless onChain
+  # alignment boosts a chain toward the goal but never starves one:
+  # three years of Spanish stays dedication for a physics-bound
+  # student (colleges read the commitment); only a dislike ends it
+  align = 1
+  if model.goalVec?
+    goalBank = model.tuning?.priority?.goalBank or 6
+    align = Math.max 1, 1 + goalBank * fixed.goal
+  # weighted by how high the course stands on its ladder: every AP has
+  # some lineage, so flat per-step credit cancels out across choices;
+  # depth is what makes "all the way to the highest course" mean
+  # something
+  (schedCredits course) * align * (model.chainDepth[course.id] or 1)
 
 # A requirement whose school path is still reachable does not hand its
 # bonus to a paid college stand-in: the college course is the fallback
@@ -355,6 +402,12 @@ beatsInSlot = (model, a, b) ->
   bLevel = model.levels[b.level or 'regular'] or {}
   return true if aLevel.exam_bearing and bLevel.college_credit
   return false if aLevel.college_credit and bLevel.exam_bearing
+  # in a disliked subject the lightest variant wins the slot
+  if (hasDislikedTag model, a) and (hasDislikedTag model, b)
+    ia = courseIntensity a, model.levels
+    ib = courseIntensity b, model.levels
+    return true if ia < ib
+    return false if ia > ib
   sa = staticScores model, a
   sb = staticScores model, b
   return true if sa.rigorAff > sb.rigorAff
@@ -594,9 +647,14 @@ successorState = (model, state, term, subset) ->
     for e in (course.excludes or [])
       excluded.add e
     addCourseCredits coverage, course, (model.school.grad_requirements or [])
-    banked += estBanked course, model.levels, model.exams
+    # a disliked subject banks nothing: the student will not sit an
+    # exam in it, so its credit must not buy the course a slot
+    banked += estBanked course, model.levels, model.exams unless hasDislikedTag model, course
     ids.push course.id
   ids.sort!
+  dedication = state.dedication or 0
+  for course in subset
+    dedication += dedicationValue model, course, state.done
   coveredAt = state.coveredAt
   if not coveredAt? and (creditsRemaining model.school, coverage) is 0
     coveredAt = term.index
@@ -606,6 +664,7 @@ successorState = (model, state, term, subset) ->
     excluded: excluded
     coverage: coverage
     banked: banked
+    dedication: dedication
     coveredAt: coveredAt
     plan: state.plan ++ [{ grade: term.grade, term: term.term, courses: ids }]
   }
@@ -642,6 +701,9 @@ eagerness = (model, state) ->
       # scores like plain filler, no worse, so a deliberately pinned
       # second language still continues.
       contrib = 1 + (model.unlocks[id] or 0) + affinityWeight * affinity
+      # a disliked course is tolerated coverage, not a preference the
+      # tie-break should reward for intensity
+      contrib := 1 if hasDislikedTag model, course
       fromDamped = false
       for pid in fixed.preIds when damped.has pid
         fromDamped := true
@@ -674,7 +736,9 @@ eagerness = (model, state) ->
 # objective so requirement courses always dominate electives.
 objectiveScore = (model, state, objective) ->
   missing = creditsRemaining model.school, state.coverage
-  base = state.banked   # max_credits and default
+  # max_credits and default: banked credit plus dedication, which
+  # outweighs what the same slot banks as an interchangeable elective
+  base = state.banked + model.tuning.objective.dedication * (state.dedication or 0)
   if objective is 'early_grad'
     # every term of earlier coverage outweighs anything banked credit
     # can add; banked breaks ties among equally short paths

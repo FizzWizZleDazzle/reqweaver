@@ -88,6 +88,27 @@ check 'continuity beats breadth: one language sequence, not two roots', ->
   finished = ('SPA2B' in ids) or ('CHI2B' in ids)
   assert finished, 'did not carry the started sequence through level 2'
 
+check 'dedication carries a started chain past richer electives', ->
+  twoLangs = loadYaml ['test', 'fixtures', 'two-langs.yaml']
+  profile = freshProfile!
+  profile.preHsCompleted = ['SPA1A', 'SPA1B']
+  profile.maxCoursesPerTerm = 1   # one slot: the chain must beat the AP electives outright
+  model = buildModel twoLangs, profile, levels, exams
+  result = search model, {}
+  ids = planCourseIds result.plans[0]
+  assert ('SPA2A' in ids and 'SPA3B' in ids), "started chain not carried: #{ids.join ','}"
+
+check 'a disliked subject covers with the lightest variant, never as filler', ->
+  profile = freshProfile!
+  profile.rigor = 1
+  profile.dislikes = ['math']
+  model = buildModel school, profile, levels, exams
+  result = search model, {}
+  ids = planCourseIds result.plans[0]
+  assert 'GEOA' in ids, 'regular geometry expected in a disliked subject'
+  assert 'GEOHA' not in ids, 'honors variant taken despite the dislike'
+  assert 'APCALCA' not in ids, 'AP filler taken in a disliked subject'
+
 check 'two roots in one term score below one root plus filler', ->
   twoLangs = loadYaml ['test', 'fixtures', 'two-langs.yaml']
   model = buildModel twoLangs, freshProfile!, levels, exams
