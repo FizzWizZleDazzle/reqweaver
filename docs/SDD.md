@@ -725,7 +725,7 @@ src/engine/search.ls    # beam search, objectives, heuristics
 src/scoring/features.ls # feature extraction
 src/scoring/scorer.ls   # weight-file forward pass
 src/tools/webdata.ls    # stages public/, generates the school index
-src/tools/serve.ls      # static server for local testing
+src/tools/serve.ls      # static server; --watch rebuilds and reloads tabs
 siteconfig.yaml         # per-deployment settings, staged as JSON
 ```
 
