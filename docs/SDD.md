@@ -401,11 +401,17 @@ any specsheet changes, recompiles that catalog's description vectors
 with the open-source encoder on the CPU runner, and commits the
 refreshed `embeddings.<school>.json` back beside the sheet - so a
 contributor adds a school as one YAML file and the semantic layer
-follows automatically. Publishing is a third workflow: `deploy`
+follows automatically. Publishing is two more workflows: `deploy`
 builds the site and pushes the combined Worker (free static assets
 plus the Rust API) on every push to main once a Cloudflare API token
-secret exists, which is what keeps the served data current with
-GitHub.
+secret exists - that deployment is staging. `release` promotes: a v*
+tag runs the full suite, deploys the production Worker environment
+(the one carrying the custom domain and its own KV namespace, so
+staging saves never mix with production), and publishes a GitHub
+Release with generated notes. Main is protected by a ruleset: no
+force pushes or deletion, changes through pull requests with the test
+check green, with bypass for the repository admin and the automation
+bot.
 
 Semantic assets ship separately from the app bundle. Per-school course
 embeddings (about 1.3 MB each) are static Pages assets beside the
