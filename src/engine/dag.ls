@@ -228,6 +228,10 @@ mergeColleges = (school, profile, courses, colleges) ->
       clone.college = partner.college
       clone.grad_credits = gradCredit
       clone.grade_levels = grades
+      # a college course takes more of the school day than one class
+      # period: at the default weight, five college courses fill a
+      # seven-period day completely
+      clone.periods = if partner.period_weight? then partner.period_weight else 1.4
       clone.offered_terms = (course.offered_terms or []).slice!
       restricted = false
       for t in regular when t not in clone.offered_terms
