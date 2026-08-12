@@ -6,7 +6,7 @@ yaml = require 'js-yaml'
 
 KEY = 'reqweaver.v1'
 
-LIST_FIELDS = <[ completed preHsCompleted inProgress waivers optionalTerms interests ]>
+LIST_FIELDS = <[ completed preHsCompleted inProgress waivers optionalTerms interests avoid ]>
 
 emptyProfile = ->
   {
@@ -16,11 +16,14 @@ emptyProfile = ->
     pinned: []
     waivers: []
     optionalTerms: []
+    avoid: []
     rigor: 0.5
     interests: []
     goal: ''
     objective: 'max_credits'
     maxCoursesPerTerm: null
+    # where the student is right now: { grade, term }, or null
+    now: null
   }
 
 defaults = ->
@@ -49,7 +52,7 @@ save = !->
   catch e
     console.warn 'could not save profile:', e
 
-KNOWN = LIST_FIELDS ++ <[ pinned rigor goal objective maxCoursesPerTerm ]>
+KNOWN = LIST_FIELDS ++ <[ pinned rigor goal objective maxCoursesPerTerm now ]>
 
 # Accept anything shaped like a profile and fill in what is missing, so a
 # hand-written or older file still loads. Fields the editor does not know
@@ -73,6 +76,8 @@ normalize = (given) ->
   p.goal = String given.goal if given.goal?
   p.objective = String given.objective if given.objective?
   p.maxCoursesPerTerm = Number given.maxCoursesPerTerm if given.maxCoursesPerTerm?
+  if given.now? and given.now.grade? and given.now.term?
+    p.now = { grade: Number(given.now.grade), term: String(given.now.term) }
   p
 
 # --- change notification ---------------------------------------------------
@@ -151,6 +156,21 @@ addPin = (grade, term, id) !->
   state.profile.pinned.push { grade: grade, term: term, courses: [id] }
   changed!
 
+# Pin a course to one term and nowhere else, in a single change: this is
+# what a drag into a term cell does to a course pinned somewhere already.
+setPin = (grade, term, id) !->
+  kept = []
+  for entry in state.profile.pinned
+    entry.courses = [c for c in entry.courses when c isnt id]
+    kept.push entry if entry.courses.length > 0
+  state.profile.pinned = kept
+  for entry in state.profile.pinned when entry.grade is grade and entry.term is term
+    entry.courses.push id
+    changed!
+    return
+  state.profile.pinned.push { grade: grade, term: term, courses: [id] }
+  changed!
+
 removePin = (grade, term, id) !->
   kept = []
   for entry in state.profile.pinned
@@ -165,6 +185,46 @@ pinnedTerm = (id) ->
     return entry
   null
 
+# Everything the shown plan schedules becomes a pin, so later edits move
+# one course and leave the rest of the plan where it is.
+pinPlan = (terms) !->
+  pins = []
+  for entry in (terms or []) when (entry.courses or []).length
+    pins.push {
+      grade: Number entry.grade
+      term: String entry.term
+      courses: [String id for id in entry.courses]
+    }
+  state.profile.pinned = pins
+  changed!
+
+# --- avoid -----------------------------------------------------------------
+
+# A course the engine may never schedule. Dropping its pin at the same
+# time matters: a pin overrides everything, avoid included, so a pinned
+# course that is also avoided would keep coming back.
+avoidCourses = (ids) !->
+  for id in ids
+    state.profile.avoid.push id unless id in state.profile.avoid
+    kept = []
+    for entry in state.profile.pinned
+      entry.courses = [c for c in entry.courses when c isnt id]
+      kept.push entry if entry.courses.length > 0
+    state.profile.pinned = kept
+  changed!
+
+allowCourses = (ids) !->
+  state.profile.avoid = [x for x in state.profile.avoid when x not in ids]
+  changed!
+
+# --- where you are now -----------------------------------------------------
+
+now = -> state.profile.now
+
+setNow = (grade, term) !->
+  state.profile.now = if grade? and term? then { grade: Number(grade), term: String(term) } else null
+  changed!
+
 # --- reset, export, import -------------------------------------------------
 
 reset = !->
@@ -172,16 +232,19 @@ reset = !->
   changed!
 
 # The engine reads plain lists; dump them in the same order the example
-# profiles use so an exported file reads like a hand-written one.
-toYaml = ->
+# profiles use so an exported file reads like a hand-written one. Where
+# a "you are here" marker holds part of a plan, the caller passes the
+# lists it implies and they are written out flat, so the command line
+# planner reads the same standing the app is showing.
+toYaml = (derived) ->
   p = state.profile
   out = {}
   for key, value of p when key not in KNOWN
     out[key] = value
   out = out <<< {
-    completed: p.completed
+    completed: (derived?.completed or p.completed)
     preHsCompleted: p.preHsCompleted
-    inProgress: p.inProgress
+    inProgress: (derived?.inProgress or p.inProgress)
     pinned: p.pinned
     waivers: p.waivers
     optionalTerms: p.optionalTerms
@@ -189,6 +252,8 @@ toYaml = ->
     interests: p.interests
     objective: p.objective
   }
+  out.avoid = p.avoid if p.avoid.length
+  out.now = p.now if p.now?
   out.goal = p.goal if p.goal and p.goal.length
   out.maxCoursesPerTerm = p.maxCoursesPerTerm if p.maxCoursesPerTerm?
   yaml.dump out, { lineWidth: 72, noRefs: true }
@@ -202,6 +267,6 @@ fromYaml = (text) ->
 module.exports = {
   load, save, subscribe, changed, profile, schoolId, ui, setSchool, setUi,
   setField, has, add, remove, toggle, setStanding, standingOf, STANDING,
-  pinKey, pinsFor, addPin, removePin, pinnedTerm, reset, toYaml, fromYaml,
-  emptyProfile
+  pinKey, pinsFor, addPin, setPin, removePin, pinnedTerm, pinPlan, avoidCourses,
+  allowCourses, now, setNow, reset, toYaml, fromYaml, emptyProfile
 }

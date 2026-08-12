@@ -6,6 +6,7 @@
 data = require './data'
 state = require './state'
 catalog = require './catalog'
+pairs = require './pairs'
 chipUi = require './chip'
 courseUi = require './course'
 profileUi = require './profile'
@@ -34,13 +35,19 @@ fail = (root, message) !->
 build = (root, index, config, entry, school, levels) !->
   courses = catalog.index school
   openCourse = null
+  run = null
+  # One context object, shared by reference: components added later read
+  # the callbacks the ones before them could not have.
   ctx = {
     school: school
     catalog: courses
+    pairs: pairs.index school
     levels: levels
     sourcePath: entry.path
     profile: state.profile
     openCourse: (id) !-> openCourse id
+    onCancel: !-> solver.cancel!
+    rerun: !-> run!
   }
 
   chips = chipUi.create ctx
@@ -51,7 +58,11 @@ build = (root, index, config, entry, school, levels) !->
   runButton = el 'button', { class: 'primary', text: 'Run planner' }
   status = el 'span', { class: 'run-status muted small' }
 
-  plans = plansUi.create ({ onCancel: !-> solver.cancel! } <<< ctx)
+  plans = plansUi.create ctx
+  # what the plan on screen says about the student, for the course
+  # dialog and for the profile export
+  ctx.whyFor = plans.whyFor
+  ctx.gridTerms = plans.terms
   panel = profileUi.create ctx
 
   setRunning = (on_, text) !->
@@ -64,6 +75,7 @@ build = (root, index, config, entry, school, levels) !->
     done: (message) !->
       setRunning false, "#{message.plans.length} plans shown, #{message.planCount} found"
       plans.show message
+    hints: (message) !-> plans.hints message.hints
     error: (message) !->
       setRunning false, 'stopped'
       plans.failed message.message
@@ -72,7 +84,10 @@ build = (root, index, config, entry, school, levels) !->
       plans.idle!
   }
 
-  run = !->
+  run := !->
+    # the grid on screen, which the marker splits into what is already
+    # standing and what is still open to planning
+    shown = plans.terms!
     setRunning true, ''
     plans.running 'loading'
     solver.run {
@@ -81,6 +96,7 @@ build = (root, index, config, entry, school, levels) !->
       # the goal-encoding service, when siteconfig.yaml names one
       encodeApi: config.encode_api or null
       profile: state.profile!
+      standingPlan: shown
       beam: state.ui!.beam
       top: TOP_PLANS
     }

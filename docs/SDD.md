@@ -86,10 +86,11 @@ Three parts:
 1. A static frontend on Cloudflare Pages, written in LiveScript. All
    planning computation runs in the browser; the app is fully
    functional without the backend except for saving and sharing.
-2. A Cloudflare Worker for accounts and saved-plan storage, backed by
-   Workers KV (plan blobs) and D1 (accounts, sessions, plan
-   ownership). The future AI advisor (section 14.2) adds a proxy
-   route here.
+2. One Cloudflare Worker (workers/api), written in Rust and compiled
+   to WASM to keep billed CPU time minimal, serving goal encoding
+   (Workers AI), saved-plan storage, and read-only sharing, backed by
+   Workers KV. Accounts add D1 tables later (section 9); the future
+   AI advisor (section 14.2) adds a proxy route here.
 3. A public community data repository of YAML specsheets, compiled to
    JSON at build time and served as static Pages assets.
 
@@ -719,6 +720,13 @@ entry that justifies it. With crowdsourced data, showing the source is
 what makes the output trustworthy and makes errors reportable.
 
 ## 9. Persistence and sharing
+
+The first shipping phase is accountless: saving returns a capability
+pair (plan id and write token), the share link is `/s/<code>` where
+the code is the plan id, and share reads are edge-cached for a few
+minutes to keep KV reads (and cost) minimal. The worker is the Rust
+one of section 3; accounts below layer onto the same records when
+they ship.
 
 ### 9.1 Storage choice
 

@@ -1,0 +1,20 @@
+# The reqweaver API: goal encoding (Workers AI), plan saving, and
+# read-only sharing, one Rust/WASM worker for minimal CPU time.
+#
+# One-time setup:
+#   npx wrangler kv namespace create PLANS   # put the id below
+#   npx wrangler deploy -c workers/api/wrangler.toml
+# Then set api_base in siteconfig.yaml to the deployed URL.
+name = "reqweaver-api"
+main = "build/worker/shim.mjs"
+compatibility_date = "2026-08-01"
+
+[build]
+command = "cargo install -q worker-build && worker-build --release"
+
+[ai]
+binding = "AI"
+
+[[kv_namespaces]]
+binding = "PLANS"
+id = "REPLACE_WITH_NAMESPACE_ID"

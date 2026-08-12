@@ -5,6 +5,8 @@
 { el, fill } = require './dom'
 catalog = require './catalog'
 state = require './state'
+pairs = require './pairs'
+whyUi = require './why'
 
 LEVEL_ORDER = <[ regular honors advanced ap ib college ]>
 
@@ -103,6 +105,39 @@ create = (ctx) ->
         open id
     }
 
+  # The click-only path to what dragging a chip off the grid does. Both
+  # halves of an A/B pair go together.
+  avoidControl = (id) ->
+    unit = pairs.unit ctx.pairs, id
+    excluded = state.has 'avoid', id
+    el 'button', {
+      class: if excluded then 'choice active' else 'choice'
+      text: if excluded then 'Kept out of plans' else 'Never plan this'
+      title: if unit.length > 1
+        then "Applies to both halves: #{unit.join ' and '}"
+        else 'The engine plans around this course; a pin still overrides it'
+      onclick: !->
+        if excluded then state.allowCourses unit else state.avoidCourses unit
+        ctx.rerun?!
+        open id
+    }
+
+  # What the engine says this course earned its slot for, in the plan on
+  # screen. Absent for a course no plan schedules.
+  reasonList = (id) ->
+    lines = whyUi.sentences ctx, (ctx.whyFor? id)
+    return null unless lines.length
+    el 'div', {}, [
+      el 'h3', { text: 'Why it is in the plan' }
+      el 'ul', { class: 'why-list' }, [el 'li', { text: line } for line in lines]
+    ]
+
+  pairLine = (id) ->
+    partner = ctx.pairs?.partnerOf?[id]
+    return null unless partner?
+    other = ctx.catalog.byId[partner]
+    el 'p', { class: 'muted small', text: "One course across two terms with #{partner} #{other?.name or ''}. The planner never schedules one half without the other." }
+
   view = (id) ->
     course = ctx.catalog.byId[id]
     unless course?
@@ -126,6 +161,8 @@ create = (ctx) ->
       parts.push el 'p', { class: 'muted small', text: "This level #{note} (registry/levels.yaml)." }
     if course.description
       parts.push el 'p', { class: 'description', text: course.description }
+    parts.push pairLine id
+    parts.push reasonList id
 
     offered = (course.offered_terms or []).join ', '
     offered = 'no term stated; only an open term can hold it' unless offered.length
@@ -161,7 +198,7 @@ create = (ctx) ->
 
     parts.push el 'h3', { text: 'Your profile' }
     parts.push standingControls id
-    parts.push el 'div', { class: 'choices' }, [waiverControl id]
+    parts.push el 'div', { class: 'choices' }, [waiverControl id, avoidControl id]
     parts.push pinControls id
 
     parts.push el 'p', { class: 'provenance' }, [
