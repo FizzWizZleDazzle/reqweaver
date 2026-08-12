@@ -647,6 +647,7 @@ successorState = (model, state, term, subset) ->
   coverage = {} <<< state.coverage
   banked = state.banked
   ids = []
+  bankedAligned = state.bankedAligned or 0
   for course in subset
     done.add course.id
     contentTaken.add course.content if course.content?
@@ -655,7 +656,17 @@ successorState = (model, state, term, subset) ->
     addCourseCredits coverage, course, (model.school.grad_requirements or [])
     # a disliked subject banks nothing: the student will not sit an
     # exam in it, so its credit must not buy the course a slot
-    banked += estBanked course, model.levels, model.exams unless hasDislikedTag model, course
+    unless hasDislikedTag model, course
+      earned = estBanked course, model.levels, model.exams
+      banked += earned
+      # the objective counts credit scaled by goal alignment: credit
+      # in the wrong area is not worth the slot it takes (raw banked
+      # stays for display)
+      scale = 1
+      if model.goalVec?
+        goalBank = model.tuning?.priority?.goalBank or 6
+        scale = Math.max 0.25, 1 + goalBank * (staticScores model, course).goal
+      bankedAligned += earned * scale
     ids.push course.id
   ids.sort!
   dedication = state.dedication or 0
@@ -670,6 +681,7 @@ successorState = (model, state, term, subset) ->
     excluded: excluded
     coverage: coverage
     banked: banked
+    bankedAligned: bankedAligned
     dedication: dedication
     coveredAt: coveredAt
     plan: state.plan ++ [{ grade: term.grade, term: term.term, courses: ids }]
@@ -742,9 +754,11 @@ eagerness = (model, state) ->
 # objective so requirement courses always dominate electives.
 objectiveScore = (model, state, objective) ->
   missing = creditsRemaining model.school, state.coverage
-  # max_credits and default: banked credit plus dedication, which
-  # outweighs what the same slot banks as an interchangeable elective
-  base = state.banked + model.tuning.objective.dedication * (state.dedication or 0)
+  # the default objective is dedication plus alignment-scaled credit:
+  # raw credit maximization filled slots with wrong-area classes
+  # (Fundamentals of Nursing for a software engineer), so credit
+  # counts in proportion to where the student is going
+  base = (state.bankedAligned or state.banked) + model.tuning.objective.dedication * (state.dedication or 0)
   if objective is 'early_grad'
     # every term of earlier coverage outweighs anything banked credit
     # can add; banked breaks ties among equally short paths
