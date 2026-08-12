@@ -23,6 +23,10 @@ terms_per_year:
     offerings: [HPE2047A, HPE2016, SOC2004A, SOC2004B,
                 MAT2000A, MAT2000B, MAT2003A, MAT2003B]
 grade_levels: [9, 10, 11, 12]
+# Tags whose courses are placement-restricted: they satisfy the same
+# requirements but only join plans for students actually in the
+# program (inferred from course history, or set in the profile).
+placement_groups: [eml]
 max_courses_per_term: 7
 pre_hs_credit:
   satisfies_prereqs: true
