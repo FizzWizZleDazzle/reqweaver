@@ -199,6 +199,30 @@ check 'explanations mark requirements, prereqs, banked, and filler', ->
   for id in ids when id.slice(0, 4) is 'ELEC'
     assert why[id].necessity < 0.2, "elective #{id} not marked swappable"
 
+check 'a high-rigor plan stuck on the gentle track earns a rigor hint', ->
+  { hints } = require './engine/hints'
+  gentle = cloneSchool!
+  # strip the intense variants so the plan cannot reach the target
+  gentle.courses = [c for c in gentle.courses when c.level is 'regular']
+  profile = freshProfile!
+  profile.rigor = 1
+  model = buildModel gentle, profile, levels, exams
+  result = search model, {}
+  advice = hints model, result, {}
+  found = false
+  for h in advice when h.indexOf('rigor target') >= 0
+    found := true
+  assert found, "no rigor hint in: #{advice.join ' / '}"
+
+check 'a satisfied plan earns no rigor hint', ->
+  { hints } = require './engine/hints'
+  profile = freshProfile!
+  profile.rigor = 0
+  model = buildModel school, profile, levels, exams
+  result = search model, {}
+  for h in hints model, result, {}
+    assert h.indexOf('rigor target') < 0, "unwanted rigor hint: #{h}"
+
 check 'nested requires trees evaluate a or (c and (b or d))', ->
   course = { id: 'X', requires: { any: ['A', { all: ['C', { any: ['B', 'D'] }] }] } }
   met = (ids) -> prereqsMet course, new Set(ids)

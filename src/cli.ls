@@ -9,6 +9,7 @@ yaml = require 'js-yaml'
 { buildModel } = require './engine/dag'
 { search } = require './engine/search'
 { explain } = require './engine/explain'
+{ hints } = require './engine/hints'
 { rank } = require './scoring/scorer'
 encoder = require './scoring/encoder'
 
@@ -90,6 +91,8 @@ main = ->
   console.log "objective: #{result.objective}   plans found: #{result.plans.length}   showing top #{Math.min top, ranked.length}"
   for warning in result.warnings
     console.log "warning: #{warning}"
+  for hint in hints model, result, options
+    console.log "hint: #{hint}"
   for entry, i in ranked
     break if i >= top
     printPlan model, entry, i + 1
