@@ -31,7 +31,7 @@ fail = (root, message) !->
 
 # One school at a time: switching schools rebuilds the whole page against
 # the new specsheet.
-build = (root, index, entry, school, levels) !->
+build = (root, index, config, entry, school, levels) !->
   courses = catalog.index school
   openCourse = null
   ctx = {
@@ -78,8 +78,8 @@ build = (root, index, entry, school, levels) !->
     solver.run {
       schoolPath: entry.path
       embeddingsPath: entry.embeddings or null
-      # the goal-encoding service, when the staged index names one
-      encoderUrl: index.encoder or null
+      # the goal-encoding service, when siteconfig.yaml names one
+      encodeApi: config.encode_api or null
       profile: state.profile!
       beam: state.ui!.beam
       top: TOP_PLANS
@@ -137,8 +137,8 @@ start = (root) !->
       entry := item
     entry := index.schools[0] unless entry?
     state.setSchool entry.id unless entry.id is wanted
-    Promise.all([data.loadSchool(entry), data.loadLevels!]).then (parts) !->
-      build root, index, entry, parts[0], parts[1]
+    Promise.all([data.loadSchool(entry), data.loadLevels!, data.loadSiteConfig!]).then (parts) !->
+      build root, index, (parts[2] or {}), entry, parts[0], parts[1]
   loading.catch (error) !->
     fail root, String(error?.message or error)
 

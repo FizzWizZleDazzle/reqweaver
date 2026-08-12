@@ -71,6 +71,7 @@ create = (ctx) ->
     switch phase
     | 'loading' => 'Loading the specsheet and the registries.'
     | 'embeddings' => 'Loading the course vectors for your goal.'
+    | 'encoding' => 'Sending your goal to the encoding service.'
     | 'building' => 'Building the prerequisite graph.'
     | 'searching' => 'Searching term by term. This takes a few seconds.'
     | 'scoring' => 'Ranking the plans that survived.'
@@ -151,7 +152,7 @@ create = (ctx) ->
   goalLine = (result) ->
     how = if result.goalSource is 'precomputed'
       then 'matched to a goal precompiled for this school'
-      else 'encoded for this plan'
+      else 'read by the encoding service'
     el 'p', { class: 'steer' }, [
       el 'span', { class: 'muted small', text: 'Plans steered toward' }
       el 'strong', { text: result.goal }

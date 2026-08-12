@@ -657,7 +657,7 @@ LiveScript modules, compiled to JS at build time:
 ```
 src/ui/app.ls           # entry, data loading, state wiring
 src/ui/state.ls         # profile + UI state, localStorage, YAML export/import
-src/ui/data.ls          # school index and specsheet fetch
+src/ui/data.ls          # school index, site config, and specsheet fetch
 src/ui/catalog.ls       # read-only views over a specsheet
 src/ui/dom.ls           # element helpers
 src/ui/chip.ls          # course chips, searchable course picker
@@ -674,6 +674,7 @@ src/scoring/features.ls # feature extraction
 src/scoring/scorer.ls   # weight-file forward pass
 src/tools/webdata.ls    # stages public/, generates the school index
 src/tools/serve.ls      # static server for local testing
+siteconfig.yaml         # per-deployment settings, staged as JSON
 ```
 
 `npm run build:web` compiles the LiveScript, stages the static assets,
@@ -686,7 +687,10 @@ wait on the storage service (section 9).
 
 The solver runs in a Web Worker; messages carry plain
 structured-clone objects. The worker loads the specsheet, the
-registries, and the weights itself, reports the phase it is in, and
+registries, the weights, and, when the student states a goal, the
+school's course vectors; it resolves the goal vector from the school's
+precompiled goals or the `encode_api` endpoint, holds it by goal text
+so re-solving does not re-encode, reports the phase it is in, and
 posts the ranked plans back when the search finishes; starting a new
 solve replaces the worker, which is how cancelling works. Beam search
 is anytime, so streaming improving partial results is available to
