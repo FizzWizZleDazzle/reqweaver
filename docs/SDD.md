@@ -568,6 +568,14 @@ hand those to the scorer for final ranking, and render the top 3 to 5
 with human-readable diffs ("Plan B trades one AP course for a lighter
 junior year").
 
+Each rendered plan also explains itself: every course carries the
+reasons it earned its slot (the requirement it covers under marginal
+attribution, the later plan courses needing it as a prerequisite,
+banked credit, goal or interest match) and a necessity score. A
+course with no reason is swappable filler, presented as such so the
+student can trade it away, for a teacher-aide period or anything they
+would rather take, without fearing they broke the plan.
+
 Determinism: seeded tie-breaking and stable sorts, so identical inputs
 always produce identical plans. Share links and bug reports depend on
 this.
