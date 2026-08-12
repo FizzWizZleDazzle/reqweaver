@@ -40,3 +40,7 @@ priority:
                         # alignment (x1.9 at strong alignment, x0.4
                         # when misaligned), so credit in the student's
                         # field outranks raw credit quantity
+  goalStrong: 0.5       # strong alignment = within this fraction of
+                        # the catalog's best match; a paid college slot
+                        # and the goal badge both require it (above the
+                        # mean is a low bar that lexical overlap clears)

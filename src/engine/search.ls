@@ -17,7 +17,8 @@ DEFAULT_TUNING =
   priority: {
     requirement: 40, continuation: 5, interest: 2, goal: 12,
     usefulBanked: 2, unlocks: 0.5, banked: 4, rigor: 3, eagerRigor: 2,
-    newSequence: 6, pairGap: 3, collegeFiller: 15, goalBank: 6
+    newSequence: 6, pairGap: 3, collegeFiller: 15, goalBank: 6,
+    goalStrong: 0.5
   }
 
 mergeTuning = (given) ->
@@ -59,17 +60,33 @@ cosine = (a, b) ->
 # barely separates on-topic from off-topic and banked credit steamrolls
 # it; centered, an off-topic course scores negative and the goal weight
 # means what it says.
-goalMean = (model) ->
-  return model.goalMeanMemo if model.goalMeanMemo?
+goalStats = (model) ->
+  return model.goalStatsMemo if model.goalStatsMemo?
   total = 0
   n = 0
+  best = -1
   for id, course of model.courses
     vec = model.embeddings?.courses?[id]
     continue unless vec?
-    total += cosine model.goalVec, vec
+    c = cosine model.goalVec, vec
+    total += c
     n += 1
-  model.goalMeanMemo = if n > 0 then total / n else 0
-  model.goalMeanMemo
+    best := c if c > best
+  mean = if n > 0 then total / n else 0
+  model.goalStatsMemo = { mean: mean, top: (if best > mean then best - mean else 0) }
+  model.goalStatsMemo
+
+goalMean = (model) -> (goalStats model).mean
+
+# Strong alignment: within reach of the catalog's best match for this
+# goal. Being merely above the mean is a low bar (the mean includes
+# gym and nursing), and a paid dual-enrollment slot should not clear
+# it on lexical overlap alone (a Photoshop course mentions software;
+# it is not software engineering).
+goalStrongBar = (model) ->
+  frac = model.tuning?.priority?.goalStrong
+  frac = 0.5 unless frac?
+  frac * (goalStats model).top
 
 goalAffinity = (model, course) ->
   vec = model.embeddings?.courses?[course.id]
@@ -171,7 +188,7 @@ priorityFor = (model, course, unmet, prevTerm, remaining, doneTags, hasBonus) ->
   # credit is exactly why it would otherwise win) and takes a penalty,
   # so it ranks below a plain school elective.
   collegeFiller = 0
-  if course.college? and model.goalVec? and fixed.goal <= 0 and reqBonus is 0
+  if course.college? and model.goalVec? and reqBonus is 0 and fixed.goal < goalStrongBar(model)
     collegeFiller = w.collegeFiller
     bankedScale = 0
   # with a stated goal, banked credit is worth more when it aligns:
@@ -790,4 +807,4 @@ search = (model, options) ->
   plans = collectPlans model, beam, params.keepPlans, warnings
   { plans: plans, warnings: Array.from(warnings), objective: objective }
 
-module.exports = { search, estBanked, courseIntensity, targetIntensity, rigorAffinity, cosine, goalAffinity, eagerness, mergeTuning }
+module.exports = { search, estBanked, courseIntensity, targetIntensity, rigorAffinity, cosine, goalAffinity, goalStrongBar, eagerness, mergeTuning }
