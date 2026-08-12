@@ -63,7 +63,8 @@ rigorHint = (model, best) ->
 # re-solve with the partner college merged in and report what dual
 # enrollment would change.
 dualEnrollHint = (model, best, options) ->
-  return null if model.profile.dualEnrollment
+  opted = model.profile.dualEnrollment
+  return null if opted is true or (Array.isArray(opted) and opted.length > 0)
   partners = (model.school.dual_enrollment or {}).partners or []
   loaded = [p.college for p in partners when model.colleges[p.college]?]
   return null unless loaded.length

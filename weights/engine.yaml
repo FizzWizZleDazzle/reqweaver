@@ -6,16 +6,33 @@ search:
   topK: 14         # ranked candidates considered per state
   subsets: 40      # per-term course subsets explored per state
   keepPlans: 20    # complete plans handed to the scorer
+  collegeFullLoad: 5  # college courses per term at rigor 1, scaled
+                      # down by rigor: four college classes alone is
+                      # about a 0.9 appetite
 objective:
   gradWeight: 20        # per missing graduation credit; must exceed the
                         # richest course's banked value per half credit
   eagernessScale: 0.0001
+  dedication: 2         # per continuation credit, weighted by how high
+                        # the course stands on its ladder and boosted by
+                        # goal alignment (never starved by it); disliked
+                        # subjects charge instead of earning. Deep
+                        # continuation outweighs what the slot banks as
+                        # an interchangeable elective, because multi-year
+                        # commitment reads better than farmed credit
 priority:
   requirement: 40       # unmet-graduation-requirement bonus; must beat
                         # any other candidate's full priority
   continuation: 5       # prereq taken in the immediately preceding term
+  familyContinuation: 10  # prereq completed anywhere behind the student:
+                          # the next level of a started family (Spanish 4
+                          # after middle-school Spanish 1-3) outranks an
+                          # interchangeable elective
   interest: 2           # course carries a profile interest tag
-  goal: 4               # embedding similarity to the free-text goal
+  goal: 12              # embedding similarity to the free-text goal,
+                        # centered against the catalog mean, so the
+                        # value is roughly -0.15 to 0.15 and off-topic
+                        # courses score negative
   usefulBanked: 2       # banked credit reachable within remaining terms
   unlocks: 0.5          # reachable descendants
   banked: 4             # the course's own banked-credit estimate
@@ -26,3 +43,15 @@ priority:
                         # such a root also loses its unlocks reward
   pairGap: 3            # per-term penalty for separating the halves of
                         # an A/B year course
+  collegeFiller: 15     # penalty for a dual-enrollment course below the
+                        # catalog's mean goal affinity that serves no
+                        # requirement; paid filler should not displace
+                        # what the student asked for
+  goalBank: 6           # with a goal, banked credit scales with
+                        # alignment (x1.9 at strong alignment, x0.4
+                        # when misaligned), so credit in the student's
+                        # field outranks raw credit quantity
+  goalStrong: 0.5       # strong alignment = within this fraction of
+                        # the catalog's best match; a paid college slot
+                        # and the goal badge both require it (above the
+                        # mean is a low bar that lexical overlap clears)

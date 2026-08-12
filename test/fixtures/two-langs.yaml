@@ -37,3 +37,7 @@ courses:
   - { id: ELEC4, name: Elective Four,  description: Elective Four,  credits: 0.5, tags: [], level: regular, offered_terms: [fall, spring], grade_levels: [9, 10], prereqs: { all_of: [], any_of: [] } }
   - { id: ELEC5, name: Elective Five,  description: Elective Five,  credits: 0.5, tags: [], level: regular, offered_terms: [fall, spring], grade_levels: [9, 10], prereqs: { all_of: [], any_of: [] } }
   - { id: ELEC6, name: Elective Six,   description: Elective Six,   credits: 0.5, tags: [], level: regular, offered_terms: [fall, spring], grade_levels: [9, 10], prereqs: { all_of: [], any_of: [] } }
+  - { id: APEL1, name: AP Elective One,   description: AP Elective One,   credits: 0.5, tags: [], level: ap, exam: AP_CALC_AB, offered_terms: [fall, spring], grade_levels: [9, 10], prereqs: { all_of: [], any_of: [] } }
+  - { id: APEL2, name: AP Elective Two,   description: AP Elective Two,   credits: 0.5, tags: [], level: ap, exam: AP_CALC_AB, offered_terms: [fall, spring], grade_levels: [9, 10], prereqs: { all_of: [], any_of: [] } }
+  - { id: APEL3, name: AP Elective Three, description: AP Elective Three, credits: 0.5, tags: [], level: ap, exam: AP_CALC_AB, offered_terms: [fall, spring], grade_levels: [9, 10], prereqs: { all_of: [], any_of: [] } }
+  - { id: APEL4, name: AP Elective Four,  description: AP Elective Four,  credits: 0.5, tags: [], level: ap, exam: AP_CALC_AB, offered_terms: [fall, spring], grade_levels: [9, 10], prereqs: { all_of: [], any_of: [] } }

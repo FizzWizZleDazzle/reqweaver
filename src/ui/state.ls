@@ -7,7 +7,7 @@ yaml = require 'js-yaml'
 KEY = 'reqweaver.v1'
 SAVES = 'reqweaver.saves.v1'
 
-LIST_FIELDS = <[ completed preHsCompleted inProgress waivers optionalTerms interests avoid ]>
+LIST_FIELDS = <[ completed preHsCompleted inProgress waivers optionalTerms interests dislikes avoid ]>
 
 emptyProfile = ->
   {
@@ -20,6 +20,7 @@ emptyProfile = ->
     avoid: []
     rigor: 0.5
     interests: []
+    dislikes: []
     goal: ''
     objective: 'max_credits'
     maxCoursesPerTerm: null
@@ -322,6 +323,7 @@ toYaml = (derived) ->
     optionalTerms: p.optionalTerms
     rigor: p.rigor
     interests: p.interests
+    dislikes: p.dislikes
     objective: p.objective
   }
   out.avoid = p.avoid if p.avoid.length
