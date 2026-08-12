@@ -4,6 +4,15 @@
 # flight replaces the worker, which is also how cancelling works, since a
 # beam search in progress does not check for messages.
 
+# The build inlines the worker bundle into the page script as a string,
+# so the whole app ships as one file; the blob URL is created once, and
+# the separate-file path remains for un-inlined builds (the dev server).
+workerUrl = ->
+  src = window.__WORKER_SRC__
+  return 'worker.js' unless src
+  window.__WORKER_URL__ ?= URL.createObjectURL new Blob [src], { type: 'text/javascript' }
+  window.__WORKER_URL__
+
 create = (handlers) ->
   worker = null
   current = null
@@ -34,7 +43,7 @@ create = (handlers) ->
     handlers.error? { message: event.message or 'the planner worker failed to start' }
 
   spawn = ->
-    made = new Worker 'worker.js'
+    made = new Worker workerUrl!
     made.addEventListener 'message', receive
     made.addEventListener 'error', broke
     made
@@ -76,7 +85,7 @@ validator = (handlers) ->
     | 'error'     => handlers.error? message
 
   spawn = ->
-    made = new Worker 'worker.js'
+    made = new Worker workerUrl!
     made.addEventListener 'message', receive
     made.addEventListener 'error', (event) !->
       handlers.error? { message: event.message or 'the rule-check worker failed to start' }
