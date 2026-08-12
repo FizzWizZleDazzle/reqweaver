@@ -14,7 +14,8 @@ terms_per_year:
   - id: summer
     sequence: 3
     optional: true
-    max_courses: 2
+    max_courses: 2   # 2 slots; an A/B pair taken together fills one
+    sequential: true # sessions run consecutively, so B may follow A
     offerings: [HPE2047A, HPE2047B, HPE2016, SOC2004A, SOC2004B, MAT2000A, MAT2000B, MAT2003A, MAT2003B]
 grade_levels: [9, 10, 11, 12]
 max_courses_per_term: 7

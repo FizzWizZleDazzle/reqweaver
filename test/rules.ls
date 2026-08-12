@@ -3,7 +3,7 @@
 # continuity.
 
 assert = require 'assert'
-{ school, levels, exams, loadYaml, check, freshProfile, cloneSchool, planCourseIds } = require './helpers'
+{ school, levels, exams, loadYaml, check, freshProfile, cloneSchool, planCourseIds, verifyFeasible } = require './helpers'
 { buildModel, prereqsMet } = require '../engine/dag'
 { search, eagerness, mergeTuning } = require '../engine/search'
 
@@ -89,6 +89,32 @@ check 'two roots in one term score below one root plus filler', ->
   bothRoots = eagerness model, { plan: at ['CHI1A', 'SPA1A'] }
   oneRoot = eagerness model, { plan: at ['ELEC1', 'SPA1A'] }
   assert oneRoot > bothRoots, "same-term roots not damped: #{oneRoot} <= #{bothRoots}"
+
+# Summer school compressed to one sequential term: two year-course
+# pairs are exactly the 2-slot cap, and B legally follows A inside it.
+summerSchool = ->
+  seq = cloneSchool!
+  seq.terms_per_year[2] = { id: 'summer', sequence: 3, optional: true, sequential: true, max_courses: 2, offerings: ['ALG1A', 'ALG1B', 'ART1A', 'ART1B', 'ELEC1', 'ELEC2', 'ELEC3'] }
+  # algebra and art run only in summer here, so covering math and art
+  # forces the pairs through the sequential term
+  for course in seq.courses when course.id in ['ALG1A', 'ALG1B', 'ART1A', 'ART1B']
+    course.offered_terms = []
+  seq
+
+check 'a sequential summer holds two A/B pairs as two slots', ->
+  profile = freshProfile!
+  profile.optionalTerms = ['9:summer']
+  model = buildModel summerSchool!, profile, levels, exams
+  result = search model, {}
+  best = result.plans[0]
+  assert best.gradRemaining is 0, "requirements unmet: #{best.gradRemaining}"
+  summer = null
+  for entry in best.plan when entry.term is 'summer'
+    summer := entry
+  assert summer?, 'no summer entry in the plan'
+  for id in ['ALG1A', 'ALG1B', 'ART1A', 'ART1B']
+    assert id in summer.courses, "#{id} missing from the summer session"
+  verifyFeasible model, best
 
 check 'a split A/B pair scores below other filler at the same slot', ->
   model = buildModel school, freshProfile!, levels, exams

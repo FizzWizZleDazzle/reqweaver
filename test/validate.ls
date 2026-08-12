@@ -3,7 +3,7 @@
 # must come back as a typed issue, never a refusal.
 
 assert = require 'assert'
-{ school, levels, exams, check, freshProfile } = require './helpers'
+{ school, levels, exams, check, freshProfile, cloneSchool } = require './helpers'
 { buildModel } = require '../engine/dag'
 { search } = require '../engine/search'
 { validate } = require '../engine/validate'
@@ -53,6 +53,24 @@ check 'the requirement tracker credits a partial hand-built plan', ->
   for req in report.requirements
     assert.strictEqual req.have, 1.0, "#{req.id} should hold 1.0 credit"
   assert.strictEqual report.remaining, 2.0, 'total remaining credit wrong'
+
+check 'sequential summer lets B follow A and counts a pair as one slot', ->
+  seq = cloneSchool!
+  seq.terms_per_year[2] = { id: 'summer', sequence: 3, optional: true, sequential: true, max_courses: 2, offerings: ['ALG1A', 'ALG1B', 'ART1A', 'ART1B', 'ELEC1', 'ELEC2'] }
+  profile = freshProfile!
+  profile.optionalTerms = ['9:summer']
+  model = buildModel seq, profile, levels, exams
+  clean = validate model, [{ grade: 9, term: 'summer', courses: ['ALG1A', 'ALG1B', 'ART1A', 'ART1B'] }]
+  assert.strictEqual clean.issues.length, 0, "pair-compressed summer raised: #{JSON.stringify clean.issues}"
+  over = validate model, [{ grade: 9, term: 'summer', courses: ['ALG1A', 'ALG1B', 'ELEC1', 'ELEC2'] }]
+  capacity = [i for i in over.issues when i.kind is 'capacity']
+  assert capacity.length > 0, 'three slots in a two-slot summer not flagged'
+
+check 'a non-sequential term still rejects B beside A', ->
+  model = buildModel school, freshProfile!, levels, exams
+  report = validate model, [{ grade: 9, term: 'fall', courses: ['ALG1A', 'ALG1B'] }]
+  prereq = [i for i in report.issues when i.kind is 'prereq']
+  assert prereq.length > 0, 'same-term prereq satisfied outside a sequential term'
 
 check 'a waiver clears the prereq issue like it does in search', ->
   profile = freshProfile!

@@ -5,7 +5,7 @@ fs = require 'fs'
 path = require 'path'
 yaml = require 'js-yaml'
 assert = require 'assert'
-{ prereqsMet } = require '../engine/dag'
+{ prereqsMet, pairSlots } = require '../engine/dag'
 
 ROOT = path.join __dirname, '..', '..'
 loadYaml = (parts) -> yaml.load fs.readFileSync path.join.apply(path, [ROOT] ++ parts), 'utf8'
@@ -48,18 +48,35 @@ verifyFeasible = (model, state) ->
   for pin in (model.profile.pinned or [])
     for id in (pin.courses or [])
       overridden.add id
+  termsByKey = {}
+  for t in model.terms
+    termsByKey["#{t.grade}:#{t.term}"] = t
   done = new Set(model.done0)
   for entry in state.plan
+    term = termsByKey["#{entry.grade}:#{entry.term}"]
+    # sequential terms (summer sessions) count an A/B pair as one slot
+    # and let a course follow its prerequisite within the term
+    seq = term? and term.sequential
     cap = model.school.max_courses_per_term
-    assert (not cap? or entry.courses.length <= cap), 'course cap violated'
+    cap = term.maxCourses if term? and term.maxCourses?
+    load = if seq then (pairSlots entry.courses, model.pairA) else entry.courses.length
+    assert (not cap? or load <= cap), "course cap violated in #{entry.grade}:#{entry.term}"
+    prereqDone = done
+    if seq
+      prereqDone = new Set(done)
+      for id in entry.courses
+        prereqDone.add id
     for id in entry.courses
       assert not done.has(id), "#{id} taken twice"
       continue if overridden.has id
       course = model.courses[id]
       assert course?, "unknown course #{id}"
-      assert entry.term in course.offered_terms, "#{id} not offered in #{entry.term}"
+      offered = (entry.term in (course.offered_terms or [])) or
+                (term? and term.offerings? and id in term.offerings) or
+                (term? and term.open)
+      assert offered, "#{id} not offered in #{entry.term}"
       assert entry.grade in course.grade_levels, "#{id} outside grade window in grade #{entry.grade}"
-      assert (model.waivers.has(id) or prereqsMet course, done, model.contentEquiv), "#{id} taken before its prereqs"
+      assert (model.waivers.has(id) or prereqsMet course, prereqDone, model.contentEquiv), "#{id} taken before its prereqs"
     for id in entry.courses
       done.add id
 
