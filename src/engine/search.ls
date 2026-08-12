@@ -3,7 +3,7 @@
 # reorders what survives here. Deterministic: identical inputs always
 # produce identical plans (stable sorts, lexicographic tiebreaks).
 
-{ prereqsMet, prereqIds } = require './dag'
+{ prereqsMet, prereqIds, offeredIn } = require './dag'
 { reqMatches, addCourseCredits, initialCoverage, creditsRemaining, unmetReqs } = require './gradreqs'
 
 # Built-in tuning; weights/engine.yaml carries the same values and wins
@@ -138,12 +138,6 @@ duplicatesContent = (course, state) ->
   for other in (course.excludes or []) when state.done.has other
     return true
   false
-
-# A course is available in a term when the term's own offerings list
-# names it, the term is open, or the course's offered_terms match.
-offeredIn = (course, term) ->
-  return course.id in term.offerings if term.offerings?
-  term.open or term.term in (course.offered_terms or [])
 
 # Every course that is legal in this term for this state. Hard rules,
 # with one opening for real-world exceptions: a waiver stands in for a
