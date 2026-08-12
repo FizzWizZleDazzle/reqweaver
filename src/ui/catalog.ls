@@ -4,14 +4,45 @@
 
 { forwardEdges } = require '../engine/dag'
 
-index = (school) ->
+index = (school, extra) ->
   byId = {}
   list = []
   for course in (school.courses or [])
     byId[course.id] = course
     list.push course
+  # merged partner-college courses; school ids win a collision, like the
+  # engine's merge
+  for course in (extra or []) when not byId[course.id]?
+    byId[course.id] = course
+    list.push course
   list.sort (a, b) -> if a.id < b.id then -1 else 1
   { byId: byId, list: list, dependents: forwardEdges byId }
+
+# The partner college's approved courses as the engine plans them (see
+# dag.ls mergeColleges, which this mirrors for display): each carries
+# the college id, the partner's fixed HS graduation credit, the grade
+# window from the partner's minimum grade, and the college's optional
+# terms unless the course is term-restricted.
+collegeCourses = (school, partner, sheet) ->
+  gradCredit = if partner.grad_credit_per_course? then partner.grad_credit_per_course else 1.0
+  minGrade = partner.min_grade_level
+  grades = [g for g in (school.grade_levels or []) when not minGrade? or g >= minGrade]
+  regular = [t.id for t in (sheet.terms_per_year or []) when not t.optional]
+  extra = [t.id for t in (sheet.terms_per_year or []) when t.optional]
+  out = []
+  for course in (sheet.courses or []) when course.approved
+    clone = {} <<< course
+    clone.college = partner.college
+    clone.grad_credits = gradCredit
+    clone.grade_levels = grades
+    clone.offered_terms = (course.offered_terms or []).slice!
+    restricted = false
+    for t in regular when t not in clone.offered_terms
+      restricted := true
+    unless restricted
+      clone.offered_terms = clone.offered_terms ++ extra
+    out.push clone
+  out
 
 # Every tag the catalog uses, so the interest picker offers the school's
 # own vocabulary rather than a hard-coded list.
@@ -113,6 +144,6 @@ creditsLabel = (value) ->
   if n is Math.round n then "#{n}.0" else String n
 
 module.exports = {
-  index, tags, termSlots, termIds, requirementTree, hasPrereqs, filter,
-  levelOf, levelNote, creditsLabel
+  index, collegeCourses, tags, termSlots, termIds, requirementTree,
+  hasPrereqs, filter, levelOf, levelNote, creditsLabel
 }

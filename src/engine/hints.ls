@@ -84,7 +84,8 @@ dualEnrollHint = (model, best, options) ->
   closes = (target - actual) - gap > 0.2
   return null unless closes or gained >= 2
   delta = if closes then 'close the gap' else "bank about #{gained} more college credits"
-  "the school catalog runs short of courses at your rigor; dual enrollment at #{loaded.join ', '} would #{delta}"
+  names = [(model.colleges[id].name or id) for id in loaded]
+  "the school catalog runs short of courses at your rigor; dual enrollment at #{names.join ', '} would #{delta}"
 
 # Unused periods the student could spend on interests or keep free.
 capacityHint = (model, best) ->

@@ -52,24 +52,67 @@ brand = (tagline) ->
 # grid at once, restored from the last visit; the solver only runs when
 # asked.
 build = (root, index, config, entry, school, levels) !->
-  courses = catalog.index school
   openCourse = null
   run = null
+  # Dual-enrollment partners: the sheets load beside the school, keyed by
+  # partner id, and the catalog on screen folds their approved courses in
+  # while the profile opts in. The worker fetches its own copies by path.
+  partners = (school.dual_enrollment or {}).partners or []
+  colleges = {}
+  collegePaths = {}
+  collegeVectors = {}
+  for partner in partners
+    sheetPath = data.partnerPath entry, partner.college
+    collegePaths[partner.college] = sheetPath if sheetPath?
+    vectorsPath = data.partnerEmbeddingsPath entry, partner.college
+    collegeVectors[partner.college] = vectorsPath if vectorsPath?
+  hasPartners = Object.keys(collegePaths).length > 0
   # One context object, shared by reference: components added later read
   # the callbacks the ones before them could not have.
   ctx = {
     school: school
     entry: entry
     config: config
-    catalog: courses
+    catalog: catalog.index school
     pairs: pairs.index school
     levels: levels
+    partners: partners
+    colleges: colleges
     sourcePath: entry.path
     profile: state.profile
     openCourse: (id) !-> openCourse id
     onCancel: !-> solver.cancel!
     rerun: !-> run!
   }
+
+  # The catalog the components read, rebuilt when the dual-enrollment
+  # opt-in flips or a partner sheet arrives; unchanged state costs
+  # nothing on the every-keystroke refresh path.
+  catalogKey = null
+  syncCatalog = !->
+    enrolled = !!state.profile!.dualEnrollment
+    key = "#{enrolled}:#{Object.keys(colleges).length}"
+    return if key is catalogKey
+    catalogKey := key
+    extra = []
+    if enrolled
+      for partner in partners
+        sheet = colleges[partner.college]
+        extra = extra ++ catalog.collegeCourses(school, partner, sheet) if sheet?
+    ctx.catalog = catalog.index school, extra
+  syncCatalog!
+
+  # Partner sheets load in the background: the toggle needs the college's
+  # name and the catalog its courses. A sheet that fails to load leaves
+  # dual enrollment out of the page rather than breaking it.
+  fetchPartner = (id, sheetPath) !->
+    data.loadPartner(sheetPath).then ((sheet) !->
+      colleges[id] = sheet
+      syncCatalog!
+      active.refresh?!
+    ), (!-> null)
+  for partner in partners
+    fetchPartner partner.college, collegePaths[partner.college] if collegePaths[partner.college]?
 
   chips = chipUi.create ctx
   ctx.chips = chips
@@ -86,7 +129,10 @@ build = (root, index, config, entry, school, levels) !->
   ctx.removeFromGrid = planner.removeFrom
   ctx.placedIn = planner.placedIn
   ctx.validate = (job) !->
-    checker.run { schoolPath: entry.path, profile: state.profile!, plan: job.plan }
+    # the rule check needs the partner sheets only while the profile
+    # opts in; the engine would ignore them anyway
+    validatePaths = if (hasPartners and state.profile!.dualEnrollment) then collegePaths else null
+    checker.run { schoolPath: entry.path, profile: state.profile!, plan: job.plan, collegePaths: validatePaths }
 
   browse = browseUi.create ctx
   panel = profileUi.create ctx
@@ -117,6 +163,10 @@ build = (root, index, config, entry, school, levels) !->
       embeddingsPath: entry.embeddings or null
       # the goal encoder, on this origin unless siteconfig names another
       encodeApi: api.encodeUrl config
+      # partner sheets go along even without the opt-in: merging is
+      # gated in the engine, and the dual-enrollment hint probes them
+      collegePaths: (if hasPartners then collegePaths else null)
+      collegeEmbeddings: (if hasPartners then collegeVectors else null)
       profile: state.profile!
       standingPlan: shown
       beam: state.ui!.beam
@@ -172,6 +222,7 @@ build = (root, index, config, entry, school, levels) !->
   ]
 
   active.refresh = !->
+    syncCatalog!
     panel.refresh!
     planner.refresh!
     browse.refresh!

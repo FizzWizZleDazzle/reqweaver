@@ -852,6 +852,16 @@ short of courses at that rigor and dual enrollment at the partner
 college would close the gap or bank more credit, and how many periods
 sit unused.
 
+Dual enrollment is a profile toggle named after the partner college,
+with the terms spelled out beside it (courses taken at the college,
+1.0 HS credit each, counselor sign-off). Turning it on adds the
+partner's approved courses to the catalog panel as their own group;
+their chips carry an accent mark, their dialog shows college credits
+and the fixed HS credit with the district's category and scheduling
+code, and grid cell totals count the HS credit. The partner sheet
+loads beside the school (it is not in the discovery index), and the
+worker passes it to the model on both the solve and validate paths.
+
 The grid is the planner, not a viewer over solver output. A student
 who never presses solve builds a schedule by dragging courses from
 the catalog into terms; on every change the worker runs the engine's

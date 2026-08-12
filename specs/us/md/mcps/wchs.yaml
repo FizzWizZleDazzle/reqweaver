@@ -5375,4 +5375,3 @@ dual_enrollment:
       min_grade_level: 11
       max_courses_per_term: 2
       eligible_courses: all
-      # college catalog not yet scraped
