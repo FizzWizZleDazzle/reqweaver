@@ -13,18 +13,23 @@ SEARCH_LIMIT = 60
 groupLabel = (tag) -> String(tag).replace /_/g, ' '
 
 # Courses bucketed by their first tag; a course with no tags lands
-# under "other".
-groupsOf = (list) ->
+# under "other". Merged partner-college courses get one group per
+# college, after the departments, named by collegeLabel.
+groupsOf = (list, collegeLabel) ->
   byTag = {}
   for course in list
-    tag = (course.tags or [])[0] or 'other'
+    tag = if course.college? then "college:#{course.college}" else ((course.tags or [])[0] or 'other')
     byTag[tag] = [] unless byTag[tag]?
     byTag[tag].push course
-  names = Object.keys(byTag).sort!
-  [{ tag: name, label: groupLabel(name), courses: byTag[name] } for name in names]
+  departments = [name for name in Object.keys(byTag) when name.indexOf('college:') isnt 0].sort!
+  partners = [name for name in Object.keys(byTag) when name.indexOf('college:') is 0].sort!
+  out = [{ tag: name, label: groupLabel(name), courses: byTag[name] } for name in departments]
+  for name in partners
+    out.push { tag: name, label: collegeLabel(name.slice 'college:'.length), courses: byTag[name] }
+  out
 
 create = (ctx) ->
-  grouped = groupsOf ctx.catalog.list
+  collegeLabel = (id) -> "#{ctx.colleges?[id]?.name or id} - dual enrollment"
   # which department groups are unfolded, kept across re-renders
   openTags = {}
 
@@ -79,8 +84,11 @@ create = (ctx) ->
   body = el 'div', { class: 'browse-body' }
 
   render = !->
+    # regrouped every render: the catalog gains and loses the partner
+    # college's courses with the dual-enrollment opt-in
     query = input.value.trim!
     unless query.length
+      grouped = groupsOf ctx.catalog.list, collegeLabel
       return fill body, [groupNode group for group in grouped]
     matches = catalog.filter ctx.catalog.list, query, SEARCH_LIMIT
     unless matches.length

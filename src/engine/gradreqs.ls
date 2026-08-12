@@ -9,17 +9,27 @@
 #   satisfied_by: { courses: [ENG2003A, ENG2003B] }   an explicit id list
 #   satisfied_by: { content: [english9_a, english9_b] }  content groups, so
 #     placement variants (honors / AP / EML tiers) all satisfy the slot
-reqMatches = (req, course) ->
-  sb = req.satisfied_by or {}
+#   satisfied_by: { any: [pred, pred] }   alternatives, e.g. a content
+#     group or the partner college's approved stand-ins
+matchPred = (sb, course) ->
   return sb.tag in (course.tags or []) if sb.tag?
   return course.id in sb.courses if sb.courses?
   return course.content? and course.content in sb.content if sb.content?
+  if sb.any?
+    for alt in sb.any
+      return true if matchPred alt, course
+    return false
   false
 
-# Credits a course contributes toward each matching requirement.
+reqMatches = (req, course) -> matchPred (req.satisfied_by or {}), course
+
+# Credits a course contributes toward each matching requirement. A
+# merged college course carries grad_credits, the partner's fixed HS
+# graduation credit, distinct from the college credits it banks.
 addCourseCredits = (coverage, course, reqs) ->
+  credit = if course.grad_credits? then course.grad_credits else (course.credits or 0)
   for req in reqs when reqMatches req, course
-    coverage[req.id] = (coverage[req.id] or 0) + (course.credits or 0)
+    coverage[req.id] = (coverage[req.id] or 0) + credit
   coverage
 
 # Coverage the student starts with. Pre-grade-9 courses count only where

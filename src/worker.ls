@@ -49,6 +49,21 @@ post = (message) !-> self.postMessage message
 # after a profile edit does not re-encode a goal that has not changed.
 goalCache = {}
 
+# Partner college sheets, by the paths the page hands over (colleges are
+# not in the discovery index). A sheet that fails to load drops out of
+# the model rather than failing the run; the school still plans alone.
+loadColleges = (paths) ->
+  loadOne = (id, path) ->
+    fetchYaml(path).then ((sheet) -> { id: id, sheet: sheet }), (-> null)
+  entries = []
+  for id, path of (paths or {})
+    entries.push loadOne id, path
+  Promise.all(entries).then (loaded) ->
+    colleges = {}
+    for entry in loaded when entry?
+      colleges[entry.id] = entry.sheet
+    colleges
+
 # A vector is only usable if it is the right width and can be scaled to
 # unit length, since cosine against the course vectors assumes both. The
 # course vectors ship normalized; a service response is normalized here
@@ -99,6 +114,27 @@ noticeFor = (reason) ->
   | 'unusable' => 'The goal service answered with something this build cannot use, so the plans below are not steered toward your goal.'
   | otherwise => 'The goal service did not answer, so the plans below are not steered toward your goal.'
 
+# Course vectors for the merged partner courses, fetched only while the
+# profile opts into dual enrollment. Partner vectors that fail to load
+# or disagree on width drop out; the merged courses then score no goal
+# affinity, like any course without a vector.
+collegeVectors = (model, job, embeddings) ->
+  return Promise.resolve embeddings unless model.profile.dualEnrollment
+  loads = []
+  for id, path of (job.collegeEmbeddings or {}) when model.colleges[id]?
+    loads.push fetchJson(path).catch(-> null)
+  return Promise.resolve embeddings unless loads.length
+  Promise.all(loads).then (extras) ->
+    usable = [extra for extra in extras when extra?.dim is embeddings.dim and extra.courses?]
+    return embeddings unless usable.length
+    courses = {}
+    for extra in usable
+      courses <<< extra.courses
+    # school vectors win a collision, like the course merge; the cached
+    # school object stays untouched
+    courses <<< (embeddings.courses or {})
+    { dim: embeddings.dim, courses: courses, goals: embeddings.goals }
+
 # Attach the semantic layer the engine reads: the school's precomputed
 # course vectors plus a vector for the student's goal. Everything here is
 # optional and inert when absent; the search runs either way.
@@ -106,14 +142,15 @@ applyGoal = (model, job) ->
   goal = (job.profile?.goal or '').trim!
   return Promise.resolve { goal: null } unless goal.length and job.embeddingsPath?
   post { type: 'status', phase: 'embeddings' }
-  fetchJson(job.embeddingsPath).then (embeddings) ->
-    model.embeddings = embeddings
-    encodeGoal(goal, embeddings, job.encodeApi).then (encoded) ->
-      if encoded.vector?
-        model.goalVec = encoded.vector
-        { goal: goal, source: encoded.source }
-      else
-        { goal: goal, source: null, notice: noticeFor encoded.reason }
+  fetchJson(job.embeddingsPath).then (loaded) ->
+    collegeVectors(model, job, loaded).then (embeddings) ->
+      model.embeddings = embeddings
+      encodeGoal(goal, embeddings, job.encodeApi).then (encoded) ->
+        if encoded.vector?
+          model.goalVec = encoded.vector
+          { goal: goal, source: encoded.source }
+        else
+          { goal: goal, source: null, notice: noticeFor encoded.reason }
 
 # A plan state carries Sets and back-references; the UI needs the term
 # assignments, the banked-credit estimate, the coverage totals, the
@@ -178,11 +215,12 @@ solve = (job) !->
     fetchYaml SCORER
     fetchYaml TUNING
   ]
+  files.push loadColleges job.collegePaths
   run = Promise.all(files).then (parts) ->
-    [school, levels, exams, weights, tuning] = parts
+    [school, levels, exams, weights, tuning, colleges] = parts
     post { type: 'status', phase: 'building' }
     held = applyStanding school, job
-    model = buildModel school, held.profile, levels, exams
+    model = buildModel school, held.profile, levels, exams, colleges
     model.terms = standing.trimTerms school, model.terms, held.cut
     applyGoal(model, job).then (semantic) ->
       post { type: 'status', phase: 'searching', terms: model.terms.length }
@@ -219,9 +257,10 @@ check = (job) !->
     fetchYaml LEVELS
     fetchYaml EXAMS
   ]
+  files.push loadColleges job.collegePaths
   run = Promise.all(files).then (parts) ->
-    [school, levels, exams] = parts
-    model = buildModel school, (job.profile or {}), levels, exams
+    [school, levels, exams, colleges] = parts
+    model = buildModel school, (job.profile or {}), levels, exams, colleges
     report = validate model, (job.plan or [])
     post {
       type: 'validated'

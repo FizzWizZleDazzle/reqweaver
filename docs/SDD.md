@@ -225,7 +225,32 @@ dual_enrollment:
       min_grade_level: 11
       max_courses_per_term: 2
       eligible_courses: all   # or an explicit list of college course ids
+      grad_credit_per_course: 1.0   # HS graduation credit per course
 ```
+
+A college sheet (kind: college) uses the same course schema plus four
+fields the merge consumes. `approved: true` marks a course on the
+district's dual-enrollment list; only approved courses merge.
+`hs_credit` records the district's credit category and the counselor
+scheduling code verbatim, for provenance. A top-level `credit_by_exam`
+table carries the college's own exam articulation (exam id, minimum
+score, credits awarded, courses satisfied), one entry per score tier;
+`exam_equivalent` on a course names the exams that duplicate it.
+
+Merging happens per profile and only when the profile opts in
+(`dualEnrollment: true`). A merged course banks its own college
+credits but counts the partner's fixed `grad_credit_per_course`
+toward graduation requirements and school credit caps, opens at the
+partner's minimum grade, and gains the college's optional terms
+(summer sessions) unless the course is term-restricted. School course
+ids win a collision. A college course with `exam_equivalent` matching
+a school course's exam gets mutual excludes with it, either satisfies
+a prerequisite naming the other, the variant filter resolves the
+conflict toward the exam-bearing course (the AP course is free and
+its credit transfers more broadly), and any plan that schedules the
+college counterpart carries a warning: it does not register the
+student for the AP exam, and school courses assuming the district
+credit need counselor confirmation.
 
 Rules:
 
@@ -439,6 +464,20 @@ would go to R2 (free egress, immutable content-hashed caching) if the
 offline mode ever ships. At student-scale traffic the whole
 arrangement stays inside the plan's included quotas.
 
+The encode endpoint carries its own abuse and cost guards, because
+one malicious caller would otherwise spend model time for everyone.
+Encoding is deterministic per (model, text), so vectors cache in KV:
+a repeated goal, including a naive flood, costs a KV read and never
+reaches the metered model. Only a cache miss counts against a per-IP
+per-minute limit, so spending model time requires inventing unique
+strings from one address, and the limiter caps that. The app already
+degrades to no goal steering when encoding fails, so a throttled
+caller loses nothing else. No account gates the endpoint: accounts
+without email are free to mass-create, so they add friction without
+adding protection; if abuse appears anyway, the escalation is
+Cloudflare Turnstile on the goal input, and the recorded exit remains
+self-hosting the open weights.
+
 Distribution is a build step, not a runtime fetch. On merge (via
 repository_dispatch) and on a daily cron, the app's build pulls the
 data repository, re-runs validation, compiles the YAML into one JSON
@@ -453,7 +492,10 @@ Until that repository exists, `npm run build:web` stages the
 specs, registries, and weights files of this repository under
 `public/data/` with a generated school index, and the client parses the
 YAML. The index is what the app offers in its school picker, so adding
-a sheet under `specs/` is enough to make it selectable.
+a sheet under `specs/` is enough to make it selectable. College sheets
+are staged but left out of the index: a college is a dual-enrollment
+partner fetched through the school that names it, and planning on a
+college directly is not a feature yet (section 14.1).
 
 ## 6. Core planning engine
 
@@ -613,7 +655,14 @@ Expanding one state:
    (section 7) is a secondary sort key applied only among states whose
    g + h values fall within an epsilon band, so it breaks ties without
    steering the search away from the objective.
-5. Keep the top W successors under that lexicographic order.
+5. Keep the top W successors under that lexicographic order, plus the
+   best state of every unmet-requirement signature the cut would
+   drop: a scarce requirement (one source, two terms) has few
+   pursuers, and pure score ordering crowds them out with
+   higher-coverage states that provably cannot cover earlier. The
+   guard is coarse (it keys on which requirements are owed, not on
+   which resources remain), so adversarially tight catalogs still
+   reward a wider beam; W stays the user-facing effort knob.
 
 After the final term, deduplicate complete feasible plans by
 assignment signature, take the top N (default 20) by objective value,
@@ -746,7 +795,7 @@ src/engine/search.ls    # beam search, objectives, heuristics
 src/scoring/features.ls # feature extraction
 src/scoring/scorer.ls   # weight-file forward pass
 src/tools/webdata.ls    # stages public/, generates the school index
-src/tools/serve.ls      # static server; --watch rebuilds and reloads tabs
+src/tools/serve.ls      # static server; --watch reloads tabs; local /encode
 siteconfig.yaml         # per-deployment settings, staged as JSON
 ```
 
@@ -796,7 +845,22 @@ word itself where the screen is wide; a course the engine scored as
 filler is drawn to invite replacement. The course dialog spells every
 reason out in a sentence. Advisory hints follow the plans in a second
 message, because measuring them means re-solving nearby profiles; they
-render as advice, apart from the warnings the engine raised.
+render as advice, apart from the warnings the engine raised. The
+hints are counterfactual probes: what summer school would add, when
+the plan runs below the requested rigor, when the school catalog runs
+short of courses at that rigor and dual enrollment at the partner
+college would close the gap or bank more credit, and how many periods
+sit unused.
+
+Dual enrollment is a profile toggle named after the partner college,
+with the terms spelled out beside it (courses taken at the college,
+1.0 HS credit each, counselor sign-off). Turning it on adds the
+partner's approved courses to the catalog panel as their own group;
+their chips carry an accent mark, their dialog shows college credits
+and the fixed HS credit with the district's category and scheduling
+code, and grid cell totals count the HS credit. The partner sheet
+loads beside the school (it is not in the discovery index), and the
+worker passes it to the model on both the solve and validate paths.
 
 The grid is the planner, not a viewer over solver output. A student
 who never presses solve builds a schedule by dragging courses from

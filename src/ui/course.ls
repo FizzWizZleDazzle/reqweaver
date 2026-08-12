@@ -172,17 +172,28 @@ create = (ctx) ->
     note = catalog.levelNote ctx.levels, course
     dependents = ctx.catalog.dependents[id] or []
     parts = []
+    # a dual-enrollment course banks its own college credits and counts
+    # the partner's fixed HS graduation credit; both belong on the head
+    creditBadges = if course.college?
+      then [
+        el 'span', { class: 'badge', text: "#{catalog.creditsLabel course.credits} college credits" }
+        el 'span', { class: 'badge', text: "#{catalog.creditsLabel course.grad_credits} HS credit" }
+      ]
+      else [el 'span', { class: 'badge', text: "#{catalog.creditsLabel course.credits} credits" }]
     parts.push el 'header', { class: 'sheet-head' }, [
       el 'div', { class: 'sheet-id', text: course.id }
       el 'h2', { text: course.name }
       el 'div', { class: 'badges' }, [
         el 'span', { class: "badge level-#{level}", text: level }
-        el 'span', { class: 'badge', text: "#{catalog.creditsLabel course.credits} credits" }
+      ] ++ creditBadges ++ [
         (if course.periods and course.periods > 1
           then el 'span', { class: 'badge', text: "#{course.periods} periods" }
           else null)
       ]
     ]
+    if course.college?
+      collegeName = ctx.colleges?[course.college]?.name or course.college
+      parts.push el 'p', { class: 'muted small', text: "Dual enrollment: taken at #{collegeName}, earns #{catalog.creditsLabel course.grad_credits} HS graduation credit, and needs counselor sign-off." }
     if note.length
       parts.push el 'p', { class: 'muted small', text: "This level #{note} (registry/levels.yaml)." }
     if course.description
@@ -198,6 +209,10 @@ create = (ctx) ->
     meta.push metaRow 'Grades', (course.grade_levels or []).join ', '
     meta.push metaRow 'Exam', course.exam
     meta.push metaRow 'Content group', course.content
+    if course.hs_credit?
+      meta.push metaRow 'HS credit', [course.hs_credit.category, course.hs_credit.synergy].filter(-> it?).join ', '
+    if (course.exam_equivalent or []).length
+      meta.push metaRow 'Duplicates exam material', (course.exam_equivalent or []).join ', '
     if (course.excludes or []).length
       meta.push metaRow 'Never with', el('span', {}, [link other for other in course.excludes])
     if (course.coreqs or []).length

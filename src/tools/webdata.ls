@@ -82,6 +82,10 @@ main = !->
       copy vectors, (path.join OUT, 'data', 'specs', relativeVectors)
       entry.embeddings = "data/specs/#{relativeVectors.split(path.sep).join '/'}"
       embedded += 1
+    # colleges are dual-enrollment partners, fetched by the sheet path a
+    # school's dual_enrollment block names; planning on a college is not
+    # a feature yet, so they stay out of the discovery index
+    continue if entry.kind is 'college'
     entries.push entry
   entries.sort (a, b) -> if a.name < b.name then -1 else 1
 

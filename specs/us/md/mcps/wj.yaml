@@ -19,6 +19,7 @@ terms_per_year:
     optional: true
     max_courses: 2   # 2 slots; an A/B pair taken together fills one
     sequential: true # sessions run consecutively, so B may follow A
+    max_credits: 1.0 # one credit per summer, the current MCPS policy
     offerings: [HPE2047A, HPE2016, SOC2004A, SOC2004B,
                 MAT2000A, MAT2000B, MAT2003A, MAT2003B]
 grade_levels: [9, 10, 11, 12]
@@ -115,7 +116,12 @@ grad_requirements:
   - id: english12
     label: English 12
     credits: 1.0
-    satisfied_by: { content: [english12_a, english12_b] }
+    satisfied_by:
+      any:
+        - { content: [english12_a, english12_b] }
+        - { courses: [ENGL101, ENGL102, ENGL103, ENGL190, ENGL264, ENGL265] }
+    notes: >-
+      An approved Montgomery College English course through dual enrollment stands in for senior English; the counselor schedules it as ENG5111, CE Adv English. Taking it in an MC summer session is the known path to finishing the English sequence early.
   - id: us-history
     label: U.S. History
     credits: 1.0
@@ -136,6 +142,16 @@ grad_requirements:
     satisfied_by: { tag: health }
     notes: >-
       The health and physical education file states a requirement for physical education only. 0.5 credits of health is the standard MSDE requirement, recorded here so that plans do not skip health, and should be verified against school policy.
+
+  - id: program
+    label: World Language or CTE Program
+    credits: 2.0
+    satisfied_by:
+      any:
+        - { tag: world_language }
+        - { tag: cte }
+    notes: >-
+      The MSDE program requirement: 2.0 credits of one world language or of career and technical education. The 4-credit career-pathway alternative is not modeled separately; two CTE credits satisfy this entry.
 
 courses:
 
@@ -5768,4 +5784,3 @@ dual_enrollment:
       min_grade_level: 11
       max_courses_per_term: 2
       eligible_courses: all
-      # college catalog not yet scraped

@@ -1,7 +1,10 @@
 # Standalone planner CLI.
 # Usage: node lib/cli.js --school <specsheet.yaml> --profile <profile.yaml>
 #        [--weights <weights.yaml>] [--objective max_credits|early_grad]
-#        [--beam N] [--top N]
+#        [--beam N] [--top N] [--dual-enroll]
+# Partner college sheets named by the school's dual_enrollment block are
+# loaded automatically from their id under specs/; merging them into the
+# plan is the profile's dualEnrollment opt-in (or --dual-enroll).
 
 fs = require 'fs'
 path = require 'path'
@@ -15,13 +18,20 @@ encoder = require './scoring/encoder'
 
 ROOT = path.join __dirname, '..'
 
+FLAGS = ['dual-enroll']
+
 parseArgs = (argv) ->
   args = {}
   i = 0
   while i < argv.length
     if argv[i].slice(0, 2) is '--'
-      args[argv[i].slice 2] = argv[i + 1]
-      i += 2
+      name = argv[i].slice 2
+      if name in FLAGS
+        args[name] = true
+        i += 1
+      else
+        args[name] = argv[i + 1]
+        i += 2
     else
       i += 1
   args
@@ -29,6 +39,23 @@ parseArgs = (argv) ->
 # YAML is the project's file format; js-yaml also accepts JSON as a subset.
 load = (file) ->
   yaml.load fs.readFileSync(file, 'utf8')
+
+# Partner college sheets resolve from their id under the specs root the
+# school itself was loaded from: us/md/mcps/mc -> <specs>/us/md/mcps/mc.yaml.
+loadColleges = (school, schoolPath) ->
+  colleges = {}
+  partners = (school.dual_enrollment or {}).partners or []
+  return colleges unless partners.length
+  abs = path.resolve schoolPath
+  marker = path.sep + 'specs' + path.sep
+  at = abs.lastIndexOf marker
+  return colleges if at < 0
+  specsRoot = abs.slice 0, at + marker.length - 1
+  for partner in partners
+    file = path.join specsRoot, partner.college + '.yaml'
+    continue unless fs.existsSync file
+    colleges[partner.college] = load file
+  colleges
 
 # The exported sentence encoder (tools/export-encoder.py), when present.
 loadEncoder = ->
@@ -66,10 +93,12 @@ main = ->
   profile = load args.profile
   profile.objective = args.objective if args.objective
   profile.rigor = parseFloat args.rigor if args.rigor
+  profile.dualEnrollment = true if args['dual-enroll']
   levels = load path.join(ROOT, 'registry', 'levels.yaml')
   exams = load path.join(ROOT, 'registry', 'exams.yaml')
   weights = load(args.weights or path.join(ROOT, 'weights', 'scorer-weights.yaml'))
-  model = buildModel school, profile, levels, exams
+  colleges = loadColleges school, args.school
+  model = buildModel school, profile, levels, exams, colleges
   # semantic layer: precompiled course embeddings for this school, and the
   # goal encoded at runtime by the LiveScript MiniLM forward pass (falls
   # back to a precomputed goal vector when the model export is absent)

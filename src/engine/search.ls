@@ -121,11 +121,16 @@ priorityFor = (model, course, unmet, prevTerm, remaining, doneTags) ->
   if isSequenceRoot model, course
     for tag in (course.tags or []) when doneTags.has tag
       rootPenalty := w.newSequence + w.unlocks * (model.unlocks[course.id] or 0)
+  # under early_grad, banked credit is only the objective's tie-break;
+  # letting it drive candidate ranking starves the subset enumeration
+  # of requirement-diverse combinations (the cap explores ranking
+  # prefixes), which hides the earliest covering plans
+  bankedScale = if model.objective is 'early_grad' then 0 else 1
   reqBonus + continuation + interestBonus - rootPenalty +
     w.goal * (goalAffinity model, course) +
-    w.usefulBanked * (usefulBanked model, course.id, remaining) +
+    bankedScale * w.usefulBanked * (usefulBanked model, course.id, remaining) +
     w.unlocks * (model.unlocks[course.id] or 0) +
-    w.banked * (estBanked course, model.levels, model.exams) +
+    bankedScale * w.banked * (estBanked course, model.levels, model.exams) +
     w.rigor * (rigorAffinity model, course)
 
 # --- per-term candidate handling -------------------------------------------
@@ -185,6 +190,16 @@ filterVariants = (model, candidates) ->
                  (other.id in (c.excludes or [])) or
                  (c.id in (other.excludes or []))
       continue unless conflict
+      # an exam-bearing course always beats its college counterpart in
+      # the same slot: the AP course is free, and its exam credit
+      # transfers more broadly than one college's articulation
+      myLevel = model.levels[c.level or 'regular'] or {}
+      theirLevel = model.levels[other.level or 'regular'] or {}
+      if myLevel.college_credit and theirLevel.exam_bearing
+        dominated := true
+        break
+      if myLevel.exam_bearing and theirLevel.college_credit
+        continue
       mine = rigorAffinity model, c
       theirs = rigorAffinity model, other
       # ties break toward the variant banking more credit (BC over AB),
@@ -232,10 +247,15 @@ resolvePins = (model, state, term, pinnedIds, warnings) ->
       placed.push course
   placed
 
+# Scheduling credit: a merged college course counts its fixed HS
+# graduation credit, not its college credits, against school caps.
+schedCredits = (course) ->
+  if course.grad_credits? then course.grad_credits else (course.credits or 0)
+
 subsetCredits = (chosen) ->
   total = 0
   for course in chosen
-    total += course.credits or 0
+    total += schedCredits course
   total
 
 # The course cap counts class periods: a double-period course
@@ -247,16 +267,33 @@ subsetPeriods = (chosen) ->
   total
 
 # seq is set for sequential terms: { done, waivers, equiv, pairA }. In
-# those the course cap counts slots where an A/B pair fills one; other
-# terms count class periods.
+# those the course cap counts slots where an A/B pair fills one, and
+# both the slot and credit caps are the school's summer-school policy,
+# so they bind school courses only; a partner college's summer course
+# is not school summer school and answers to caps.college, the
+# partner's own per-term limit, instead.
 fitsCaps = (chosen, course, caps, seq) ->
   if caps.courses?
     if seq?
-      ids = [c.id for c in chosen] ++ [course.id]
-      return false if (pairSlots ids, seq.pairA) > caps.courses
+      unless course.college?
+        ids = [c.id for c in chosen when not c.college?] ++ [course.id]
+        return false if (pairSlots ids, seq.pairA) > caps.courses
     else
       return false if subsetPeriods(chosen) + (course.periods or 1) > caps.courses
-  return false if caps.credits? and subsetCredits(chosen) + (course.credits or 0) > caps.credits
+  if caps.college? and course.college?
+    n = 1
+    for c in chosen when c.college?
+      n += 1
+    return false if n > caps.college
+  if caps.credits?
+    if seq?
+      unless course.college?
+        total = schedCredits course
+        for c in chosen when not c.college?
+          total += schedCredits c
+        return false if total > caps.credits
+    else
+      return false if subsetCredits(chosen) + (schedCredits course) > caps.credits
   true
 
 # A subset in a sequential term must be internally consistent: every
@@ -400,7 +437,10 @@ eagerness = (model, state) ->
       if partner? and seenAt[partner]?
         gap = i - seenAt[partner] - 1
         contrib := contrib - gapWeight * gap if gap > 0
-      weight += contrib * (course.credits or 0)
+      # weight by the HS scheduling footprint: a college course's own
+      # credit count would let it crowd every half-credit school course
+      # out of the tie-break
+      weight += contrib * schedCredits course
       seenAt[id] = i
       for tag in (course.tags or [])
         termTags.add tag
@@ -428,6 +468,11 @@ planSignature = (state) ->
 
 # --- beam ------------------------------------------------------------------
 
+# Which requirements a state still owes; the diversity key below.
+reqSignature = (model, state) ->
+  parts = [req.id for req in unmetReqs model.school, state.coverage]
+  parts.join ','
+
 scoreAndPrune = (model, states, objective, beamWidth) ->
   for state in states
     state.g = objectiveScore model, state, objective
@@ -435,7 +480,21 @@ scoreAndPrune = (model, states, objective, beamWidth) ->
   states.sort (a, b) ->
     diff = b.g - a.g
     if diff isnt 0 then diff else (if a.sig < b.sig then -1 else 1)
-  states.slice 0, beamWidth
+  kept = states.slice 0, beamWidth
+  # requirement diversity: the best state of every distinct
+  # unmet-requirement signature survives the cut. A scarce requirement
+  # (one source, two terms) has few pursuers, and pure score ordering
+  # crowds them out with higher-coverage states that provably cannot
+  # cover earlier. Adds at most a handful of states per term.
+  seen = new Set!
+  for state in kept
+    seen.add reqSignature model, state
+  for state in states.slice beamWidth
+    key = reqSignature model, state
+    continue if seen.has key
+    seen.add key
+    kept.push state
+  kept
 
 # Courses taken in the state's most recent planned term, for the
 # continuation bonus.
@@ -474,9 +533,12 @@ expandState = (model, state, term, pinnedIds, caps, params, warnings) ->
   ranked = [c for c in candidates.slice(0, params.topK) when c.id not in pinnedIds]
   injectUnmetReqs ranked, candidates, unmet, pinnedIds
   effCaps = caps
-  if term.maxCourses?
-    limit = if caps.courses? then Math.min(caps.courses, term.maxCourses) else term.maxCourses
-    effCaps = { courses: limit, credits: caps.credits }
+  if term.maxCourses? or term.maxCredits?
+    effCaps = {
+      courses: minDefined caps.courses, term.maxCourses
+      credits: minDefined caps.credits, term.maxCredits
+      college: caps.college
+    }
   seq = null
   if term.sequential
     seq = { done: state.done, waivers: model.waivers, equiv: model.contentEquiv, pairA: model.pairA }
@@ -500,16 +562,29 @@ collectPlans = (model, beam, keep, warnings) ->
   if covered.length is 0 and unique.length > 0
     warnings.add 'no plan covers all graduation requirements within the horizon'
     covered = unique
-  covered.slice 0, keep
+  kept = covered.slice 0, keep
+  # a scheduled college counterpart of an AP course carries two catches
+  # the student must hear about
+  for state in kept
+    for entry in state.plan
+      for id in entry.courses
+        course = model.courses[id]
+        continue unless course? and course.college? and course.exam_equivalent?
+        warnings.add "#{id} (#{course.college}) covers AP course material but does not register you for the AP exam, and school courses that assume the district credit need counselor confirmation"
+  kept
 
 minDefined = (a, b) ->
   return Math.min a, b if a? and b?
   if a? then a else b
 
 loadCaps = (model) ->
+  college = null
+  for partner in ((model.school.dual_enrollment or {}).partners or [])
+    college = minDefined college, partner.max_courses_per_term
   {
     courses: minDefined model.school.max_courses_per_term, model.profile.maxCoursesPerTerm
     credits: model.school.max_credits_per_term
+    college: college
   }
 
 # Pins grouped per term; several pin entries for one term merge.
@@ -526,6 +601,7 @@ search = (model, options) ->
   params = {} <<< model.tuning.search
   params.beam = opts.beam if opts.beam?
   objective = model.profile.objective or 'max_credits'
+  model.objective = objective
   caps = loadCaps model
   pins = pinsByTerm model.profile
   warnings = new Set!   # deduped; the same pin warning repeats across beam states

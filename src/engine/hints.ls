@@ -33,7 +33,7 @@ summerHint = (model, best, options) ->
   return null unless missing.length
   probeProfile = JSON.parse JSON.stringify model.profile
   probeProfile.optionalTerms = available
-  probeModel = buildModel model.school, probeProfile, model.levels, model.exams
+  probeModel = buildModel model.school, probeProfile, model.levels, model.exams, model.colleges
   probeModel.embeddings = model.embeddings
   probeModel.goalVec = model.goalVec
   probe = search probeModel, { beam: 40, tuning: (options or {}).tuning }
@@ -56,9 +56,36 @@ rigorHint = (model, best) ->
   target = targetIntensity model.profile
   actual = planIntensity model, best
   return null unless target - actual > 0.5
-  "the plan averages intensity #{actual.toFixed 1} against your rigor target
- #{target.toFixed 1}; summer school, a placement waiver, or pinning the
- intense variants can catch the track you want sooner".replace /\n /g, ''
+  head = "the plan averages intensity #{actual.toFixed 1} against your rigor target #{target.toFixed 1}"
+  head + '; summer school, a placement waiver, or pinning the intense variants can catch the track you want sooner'
+
+# The school's own catalog runs out of courses at the student's rigor;
+# re-solve with the partner college merged in and report what dual
+# enrollment would change.
+dualEnrollHint = (model, best, options) ->
+  return null if model.profile.dualEnrollment
+  partners = (model.school.dual_enrollment or {}).partners or []
+  loaded = [p.college for p in partners when model.colleges[p.college]?]
+  return null unless loaded.length
+  rigor = if model.profile.rigor? then model.profile.rigor else 0.5
+  target = targetIntensity model.profile
+  actual = planIntensity model, best
+  return null unless (target - actual > 0.5 and rigor >= 0.6) or best.gradRemaining > 0
+  probeProfile = JSON.parse JSON.stringify model.profile
+  probeProfile.dualEnrollment = true
+  probeModel = buildModel model.school, probeProfile, model.levels, model.exams, model.colleges
+  probeModel.embeddings = model.embeddings
+  probeModel.goalVec = model.goalVec
+  probe = search probeModel, { beam: 40, tuning: (options or {}).tuning }
+  pbest = probe.plans[0]
+  return null unless pbest?
+  gap = (targetIntensity probeProfile) - planIntensity(probeModel, pbest)
+  gained = pbest.banked - best.banked
+  closes = (target - actual) - gap > 0.2
+  return null unless closes or gained >= 2
+  delta = if closes then 'close the gap' else "bank about #{gained} more college credits"
+  names = [(model.colleges[id].name or id) for id in loaded]
+  "the school catalog runs short of courses at your rigor; dual enrollment at #{names.join ', '} would #{delta}"
 
 # Unused periods the student could spend on interests or keep free.
 capacityHint = (model, best) ->
@@ -71,14 +98,14 @@ capacityHint = (model, best) ->
       used += model.courses[id]?.periods or 1
     free += cap - used if cap > used
   return null unless free >= 4
-  "the plan leaves about #{free} periods open; state interests or a goal to
- fill them with courses you care about, or keep them as off periods".replace /\n /g, ''
+  head = "the plan leaves about #{free} periods open"
+  head + '; state interests or a goal to fill them with courses you care about, or keep them as off periods'
 
 hints = (model, result, options) ->
   best = result.plans[0]
   return [] unless best?
   out = []
-  for hint in [summerHint(model, best, options), rigorHint(model, best), capacityHint(model, best)]
+  for hint in [summerHint(model, best, options), rigorHint(model, best), dualEnrollHint(model, best, options), capacityHint(model, best)]
     out.push hint if hint?
   out
 

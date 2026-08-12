@@ -23,6 +23,8 @@ emptyProfile = ->
     goal: ''
     objective: 'max_credits'
     maxCoursesPerTerm: null
+    # opt-in to courses at the school's dual-enrollment partner college
+    dualEnrollment: false
     # where the student is right now: { grade, term }, or null
     now: null
   }
@@ -59,7 +61,7 @@ save = !->
   catch e
     console.warn 'could not save profile:', e
 
-KNOWN = LIST_FIELDS ++ <[ pinned rigor goal objective maxCoursesPerTerm now ]>
+KNOWN = LIST_FIELDS ++ <[ pinned rigor goal objective maxCoursesPerTerm now dualEnrollment ]>
 
 # Accept anything shaped like a profile and fill in what is missing, so a
 # hand-written or older file still loads. Fields the editor does not know
@@ -83,6 +85,7 @@ normalize = (given) ->
   p.goal = String given.goal if given.goal?
   p.objective = String given.objective if given.objective?
   p.maxCoursesPerTerm = Number given.maxCoursesPerTerm if given.maxCoursesPerTerm?
+  p.dualEnrollment = !!given.dualEnrollment if given.dualEnrollment?
   if given.now? and given.now.grade? and given.now.term?
     p.now = { grade: Number(given.now.grade), term: String(given.now.term) }
   p
@@ -325,6 +328,7 @@ toYaml = (derived) ->
   out.now = p.now if p.now?
   out.goal = p.goal if p.goal and p.goal.length
   out.maxCoursesPerTerm = p.maxCoursesPerTerm if p.maxCoursesPerTerm?
+  out.dualEnrollment = true if p.dualEnrollment
   yaml.dump out, { lineWidth: 72, noRefs: true }
 
 fromYaml = (text) ->

@@ -339,6 +339,10 @@ button { font: inherit; cursor: pointer; }
 }
 .chip.has-issue { border-color: var(--warn-line); background: var(--warn-soft); }
 
+/* A dual-enrollment course, taken at the partner college: the accent
+   edge tells it apart from school courses wherever the chip appears. */
+.chip.college { border-left: 3px solid var(--accent); }
+
 @media (min-width: 1280px) {
   .issue-label { display: inline; }
 }

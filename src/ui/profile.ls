@@ -153,6 +153,33 @@ create = (ctx) ->
         wanted = if limit? then String limit else ''
         cap.value = wanted if cap.value isnt wanted and document.activeElement isnt cap
 
+  # --- dual enrollment ------------------------------------------------------
+
+  # One opt-in for the school's partner college(s): the same boolean the
+  # engine gates its catalog merge on. Shown only when the specsheet
+  # names a partner.
+  partnerName = (partner) -> ctx.colleges?[partner.college]?.name or partner.college
+
+  partnerCredit = (partner) ->
+    if partner.grad_credit_per_course? then partner.grad_credit_per_course else 1.0
+
+  if (ctx.partners or []).length
+    panel.appendChild block 'Dual enrollment', null, (body) ->
+      checkbox = el 'input', {
+        type: 'checkbox'
+        onchange: (event) !-> state.setField 'dualEnrollment', event.target.checked
+      }
+      caption = el 'span'
+      note = el 'p', { class: 'muted small' }
+      body.appendChild el 'label', { class: 'check' }, [checkbox, caption]
+      body.appendChild note
+      !->
+        names = [partnerName partner for partner in ctx.partners].join ' and '
+        caption.textContent = "Dual enrollment at #{names}"
+        credit = catalog.creditsLabel partnerCredit ctx.partners[0]
+        note.textContent = "Approved college courses join the catalog and the planner. Each is taken at the college, counts #{credit} HS credit toward graduation, and needs counselor sign-off."
+        checkbox.checked = !!state.profile!.dualEnrollment
+
   # --- pins ----------------------------------------------------------------
 
   pinRow = (entry) ->

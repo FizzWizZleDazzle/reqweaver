@@ -54,17 +54,20 @@ check 'the requirement tracker credits a partial hand-built plan', ->
     assert.strictEqual req.have, 1.0, "#{req.id} should hold 1.0 credit"
   assert.strictEqual report.remaining, 2.0, 'total remaining credit wrong'
 
-check 'sequential summer lets B follow A and counts a pair as one slot', ->
+check 'sequential summer lets B follow A within the credit allowance', ->
   seq = cloneSchool!
-  seq.terms_per_year[2] = { id: 'summer', sequence: 3, optional: true, sequential: true, max_courses: 2, offerings: ['ALG1A', 'ALG1B', 'ART1A', 'ART1B', 'ELEC1', 'ELEC2'] }
+  seq.terms_per_year[2] = { id: 'summer', sequence: 3, optional: true, sequential: true, max_courses: 2, max_credits: 1.0, offerings: ['ALG1A', 'ALG1B', 'ART1A', 'ART1B', 'ELEC1', 'ELEC2'] }
   profile = freshProfile!
   profile.optionalTerms = ['9:summer']
   model = buildModel seq, profile, levels, exams
-  clean = validate model, [{ grade: 9, term: 'summer', courses: ['ALG1A', 'ALG1B', 'ART1A', 'ART1B'] }]
+  clean = validate model, [{ grade: 9, term: 'summer', courses: ['ALG1A', 'ALG1B'] }]
   assert.strictEqual clean.issues.length, 0, "pair-compressed summer raised: #{JSON.stringify clean.issues}"
-  over = validate model, [{ grade: 9, term: 'summer', courses: ['ALG1A', 'ALG1B', 'ELEC1', 'ELEC2'] }]
-  capacity = [i for i in over.issues when i.kind is 'capacity']
-  assert capacity.length > 0, 'three slots in a two-slot summer not flagged'
+  twoPairs = validate model, [{ grade: 9, term: 'summer', courses: ['ALG1A', 'ALG1B', 'ART1A', 'ART1B'] }]
+  credit = [i for i in twoPairs.issues when i.kind is 'capacity']
+  assert credit.length > 0, 'two pairs over the one-credit summer allowance not flagged'
+  over = validate model, [{ grade: 9, term: 'summer', courses: ['ALG1A', 'ELEC1', 'ELEC2'] }]
+  slots = [i for i in over.issues when i.kind is 'capacity']
+  assert slots.length > 0, 'three slots in a two-slot summer not flagged'
 
 check 'a non-sequential term still rejects B beside A', ->
   model = buildModel school, freshProfile!, levels, exams
