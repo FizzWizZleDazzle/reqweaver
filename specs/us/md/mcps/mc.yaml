@@ -137,6 +137,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5100, CE Adv Accounting" }
+    grad_tags: [elective]
   - id: ACCT222
     name: "Accounting II"
     description: >-
@@ -151,6 +152,7 @@ courses:
     prereqs: { all_of: [ACCT221] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5100, CE Adv Accounting" }
+    grad_tags: [elective]
   - id: ACCT223
     name: "Computer Applications for Accounting"
     description: >-
@@ -180,6 +182,7 @@ courses:
     prereqs: { all_of: [ACCT222] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5100, CE Adv Accounting" }
+    grad_tags: [elective]
   - id: ACCT228
     name: "Ethics and Professionalism in Accounting"
     description: >-
@@ -194,6 +197,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5100, CE Adv Accounting" }
+    grad_tags: [elective]
   - id: ACCT231
     name: "Intermediate Accounting I"
     description: >-
@@ -209,6 +213,7 @@ courses:
     prereqs: { all_of: [ACCT222] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5100, CE Adv Accounting" }
+    grad_tags: [elective]
   - id: ACCT232
     name: "Intermediate Accounting II"
     description: >-
@@ -224,6 +229,7 @@ courses:
     prereqs: { all_of: [ACCT231] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5100, CE Adv Accounting" }
+    grad_tags: [elective]
   - id: ACCT235
     name: "Cost Accounting and Analysis"
     description: >-
@@ -240,6 +246,7 @@ courses:
     prereqs: { all_of: [ACCT222] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5100, CE Adv Accounting" }
+    grad_tags: [elective]
   - id: ACCT237
     name: "Federal Income Taxation I"
     description: >-
@@ -258,6 +265,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5100, CE Adv Accounting" }
+    grad_tags: [elective]
   - id: ACCT239
     name: "Business Finance"
     description: >-
@@ -275,6 +283,7 @@ courses:
     prereqs: { all_of: [ACCT221] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5100, CE Adv Accounting" }
+    grad_tags: [elective]
   - id: ACCT240
     name: "Auditing Theory and Practice"
     description: >-
@@ -291,6 +300,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5100, CE Adv Accounting" }
+    grad_tags: [elective]
   - id: ACCT245
     name: "Accounting Information Systems"
     description: >-
@@ -305,6 +315,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5100, CE Adv Accounting" }
+    grad_tags: [elective]
   - id: ACCT247
     name: "Federal Income Taxation II"
     description: >-
@@ -323,6 +334,7 @@ courses:
     prereqs: { all_of: [ACCT237] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5100, CE Adv Accounting" }
+    grad_tags: [elective]
   # --- ANIM ----------------------------------------------------------------
   - id: ANIM200
     name: "Animation I: Introduction to 2D Animation"
@@ -388,6 +400,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: ANTH215
     name: "Human Evolution and Archaeology"
     description: >-
@@ -406,6 +419,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: ANTH216
     name: "Human Evolution and Archaeology Laboratory"
     description: >-
@@ -425,6 +439,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: ANTH240
     name: "Introduction to Archaeology"
     description: >-
@@ -440,6 +455,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: ANTH256
     name: "World Cultures"
     description: >-
@@ -455,6 +471,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: ANTH260
     name: "Independent Study Anthropology"
     description: >-
@@ -488,6 +505,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: AOSC105
     name: "Meteorology: An Introduction to Weather"
     description: >-
@@ -509,6 +527,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   # --- ARAB ----------------------------------------------------------------
   - id: ARAB101
     name: "Elementary Arabic I"
@@ -526,6 +545,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Arabic", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   - id: ARAB102
     name: "Elementary Arabic II"
     description: >-
@@ -541,7 +561,9 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Arabic", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   # --- ARCH ----------------------------------------------------------------
+    prereqs: { all_of: [ARAB101], any_of: [] }
   - id: ARCH101
     name: "Introduction to Architecture and the Built Environment"
     description: >-
@@ -558,6 +580,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: ARCH103
     name: "Building Technology and Documentation"
     description: >-
@@ -575,6 +598,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: ARCH104
     name: "Introduction to Architectural Graphics"
     description: >-
@@ -591,6 +615,7 @@ courses:
     prereqs: { all_of: [ARCH103], any_of: [ARCH101, IDES101] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: ARCH183
     name: "CAD: Architectural Applications"
     description: >-
@@ -606,6 +631,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: ARCH200
     name: "CAD: 3D Presentation"
     description: >-
@@ -622,6 +648,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: ARCH201
     name: "Introduction to Architectural Design"
     description: >-
@@ -639,6 +666,7 @@ courses:
     prereqs: { all_of: [ARCH101, ARCH104, CMGT100] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: ARCH202
     name: "CAD: REVIT I"
     description: >-
@@ -656,6 +684,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: ARCH203
     name: "Principles of Sustainability"
     description: >-
@@ -674,6 +703,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   # --- ARTT ----------------------------------------------------------------
   - id: ARTT100
     name: "Introduction to Drawing"
@@ -689,6 +719,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
     exam_equivalent: [AP_ART_DRAWING]
   - id: ARTT102
     name: "Introduction to 2D Design"
@@ -707,6 +738,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
     exam_equivalent: [AP_ART_2D_DESIGN]
   - id: ARTT103
     name: "Introduction to 3D Design"
@@ -726,6 +758,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
     exam_equivalent: [AP_ART_3D_DESIGN]
   - id: ARTT105
     name: "Color Theory and Application"
@@ -740,6 +773,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT112
     name: "Digital Photography for Fine Arts I"
     description: >-
@@ -755,6 +789,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT120
     name: "Ceramics I"
     description: >-
@@ -770,6 +805,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT123
     name: "Crafts"
     description: >-
@@ -789,6 +825,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT127
     name: "Art Appreciation (Art in Culture)"
     description: >-
@@ -802,6 +839,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
     exam_equivalent: [AP_ART_HISTORY, AP_ART_2D_DESIGN, AP_ART_3D_DESIGN, AP_ART_DRAWING]
   - id: ARTT152
     name: "Photographic Expression I"
@@ -818,6 +856,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT200
     name: "Global Art History I"
     description: >-
@@ -832,6 +871,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
     exam_equivalent: [AP_ART_HISTORY]
   - id: ARTT201
     name: "Global Art History II"
@@ -847,6 +887,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT202
     name: "Introduction to Museums"
     description: >-
@@ -878,6 +919,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT205
     name: "Figure Drawing I"
     description: >-
@@ -892,6 +934,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT206
     name: "Figure Drawing II"
     description: >-
@@ -908,6 +951,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT211
     name: "Painting I"
     description: >-
@@ -923,6 +967,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT212
     name: "Painting II"
     description: >-
@@ -938,6 +983,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT213
     name: "Digital Photography for Fine Arts II"
     description: >-
@@ -952,6 +998,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT220
     name: "Ceramics II"
     description: >-
@@ -968,6 +1015,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT221
     name: "Sculpture I"
     description: >-
@@ -982,6 +1030,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT222
     name: "Sculpture II"
     description: >-
@@ -996,6 +1045,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT225
     name: "Woodcut: Global Printmaking"
     description: >-
@@ -1013,6 +1063,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT226
     name: "Monotype Workshop"
     description: >-
@@ -1041,6 +1092,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT228
     name: "Lithography and Relief Printmaking"
     description: >-
@@ -1056,6 +1108,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT230
     name: "Intaglio Printmaking"
     description: >-
@@ -1069,6 +1122,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT233
     name: "Screenprinting"
     description: >-
@@ -1082,6 +1136,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT245
     name: "Jewelry and Metalsmithing"
     description: >-
@@ -1096,6 +1151,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT247
     name: "Weaving and Textiles"
     description: >-
@@ -1110,6 +1166,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT252
     name: "Photographic Expression II"
     description: >-
@@ -1124,6 +1181,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT255
     name: "Studio Practicum"
     description: >-
@@ -1148,6 +1206,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT256
     name: "Studio Practicum"
     description: >-
@@ -1172,6 +1231,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT257
     name: "Individualized Art Workshop"
     description: >-
@@ -1191,6 +1251,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT263
     name: "Professional Practice for the Visual Artist"
     description: >-
@@ -1217,6 +1278,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT266
     name: "Architectural History: 1400 to Present"
     description: >-
@@ -1232,6 +1294,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT268
     name: "History of Photography"
     description: >-
@@ -1260,6 +1323,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT272
     name: "Asian Art"
     description: >-
@@ -1274,6 +1338,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT274
     name: "Indigenous Art of the Americas"
     description: >-
@@ -1299,6 +1364,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT277
     name: "African American Art"
     description: >-
@@ -1328,6 +1394,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT280
     name: "Global Modernisms: Art of the 20th Century"
     description: >-
@@ -1341,6 +1408,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
+    grad_tags: [elective]
   - id: ARTT285
     name: "Global Contemporary Art"
     description: >-
@@ -1384,6 +1452,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
+    grad_tags: [world_language]
   - id: ASLP105
     name: "Visual Gestural Communication"
     description: >-
@@ -1401,6 +1470,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
+    grad_tags: [world_language]
   - id: ASLP106
     name: "Fingerspelling and Number Use in ASL"
     description: >-
@@ -1419,6 +1489,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
+    grad_tags: [world_language]
   - id: ASLP110
     name: "ASL II"
     description: >-
@@ -1434,6 +1505,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
+    grad_tags: [world_language]
   - id: ASLP121
     name: "Introduction to the Deaf Community and Culture"
     description: >-
@@ -1449,6 +1521,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
+    grad_tags: [world_language]
   - id: ASLP200
     name: "ASL III"
     description: >-
@@ -1465,6 +1538,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
+    grad_tags: [world_language]
   - id: ASLP205
     name: "Structural ASL I"
     description: >-
@@ -1483,6 +1557,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
+    grad_tags: [world_language]
   - id: ASLP206
     name: "Structural ASL II"
     description: >-
@@ -1499,6 +1574,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
+    grad_tags: [world_language]
   - id: ASLP207
     name: "ASL Translation and Interpretation"
     description: >-
@@ -1516,6 +1592,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
+    grad_tags: [world_language]
   - id: ASLP210
     name: "ASL IV"
     description: >-
@@ -1532,6 +1609,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
+    grad_tags: [world_language]
   - id: ASLP222
     name: "Deaf History and Culture"
     description: >-
@@ -1549,6 +1627,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
+    grad_tags: [world_language]
   - id: ASLP269
     name: "Independent Study in ASL"
     description: >-
@@ -1581,6 +1660,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
+    grad_tags: [world_language]
   # --- ASTR ----------------------------------------------------------------
   - id: ASTR101
     name: "Introductory Astronomy"
@@ -1602,6 +1682,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: ASTR202
     name: "Introduction to Modern Astronomy"
     description: >-
@@ -1620,6 +1701,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   # --- AUTO ----------------------------------------------------------------
   - id: AUTO101
     name: "Introduction to Automotive Technology"
@@ -1637,6 +1719,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: AUTO111
     name: "Engine Repair"
     description: >-
@@ -1884,6 +1967,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BEHE200
     name: "Group Dynamics"
     description: >-
@@ -1899,6 +1983,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BEHE201
     name: "Field Experience in Behavioral Health"
     description: >-
@@ -1919,6 +2004,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   # --- BIOL ----------------------------------------------------------------
   - id: BIOL101
     name: "General Biology"
@@ -1937,6 +2023,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Biology", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [science]
     exam_equivalent: [AP_BIOLOGY]
   - id: BIOL105
     name: "Environmental Biology"
@@ -1956,6 +2043,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Biology OR NGSS Earth/Space Science", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [science]
     exam_equivalent: [AP_ENVIRONMENTAL_SCIENCE]
   - id: BIOL106
     name: "Environmental Biology Laboratory"
@@ -1991,6 +2079,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOL130
     name: "The Human Body"
     description: >-
@@ -2009,6 +2098,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOL131
     name: "The Human Body Laboratory"
     description: >-
@@ -2040,6 +2130,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOL150
     name: "Principles of Biology I"
     description: >-
@@ -2059,6 +2150,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Biology", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [science]
     exam_equivalent: [AP_BIOLOGY]
   - id: BIOL151
     name: "Principles of Biology II"
@@ -2076,6 +2168,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Biology", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [science]
     exam_equivalent: [AP_BIOLOGY]
   - id: BIOL202
     name: "Interdisciplinary Bioinformatics-An Introduction"
@@ -2090,6 +2183,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOL210
     name: "Microbiology"
     description: >-
@@ -2107,6 +2201,7 @@ courses:
     prereqs: { all_of: [BIOL150] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOL212
     name: "Human Anatomy and Physiology I"
     description: >-
@@ -2121,6 +2216,7 @@ courses:
     prereqs: { all_of: [BIOL150] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOL213
     name: "Human Anatomy and Physiology II"
     description: >-
@@ -2137,6 +2233,7 @@ courses:
     prereqs: { all_of: [BIOL212] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOL217
     name: "Ecology"
     description: >-
@@ -2155,6 +2252,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOL222
     name: "Principles of Genetics"
     description: >-
@@ -2175,6 +2273,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOL226
     name: "Nutrition"
     description: >-
@@ -2190,6 +2289,7 @@ courses:
     prereqs: { all_of: [BIOL150] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOL228
     name: "Pathophysiology"
     description: >-
@@ -2203,6 +2303,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOL230
     name: "Molecular Cell Biology"
     description: >-
@@ -2221,6 +2322,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOL252
     name: "Principles of Biology III"
     description: >-
@@ -2236,6 +2338,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   # --- BIOT ----------------------------------------------------------------
   - id: BIOT110
     name: "Introduction to Biotechnology"
@@ -2258,6 +2361,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOT120
     name: "Introduction to Cell Culture"
     description: >-
@@ -2311,6 +2415,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOT201
     name: "Protein Biotechnology Skills"
     description: >-
@@ -2348,6 +2453,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOT231
     name: "Immunological Methods"
     description: >-
@@ -2381,6 +2487,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOT241
     name: "Nucleic Acid Methods"
     description: >-
@@ -2412,6 +2519,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: BIOT251
     name: "Techniques of Biomanufacturing"
     description: >-
@@ -2480,6 +2588,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: BLDG133
     name: "Building Trades Blueprint Reading"
     description: >-
@@ -2494,6 +2603,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: BLDG140
     name: "Fundamentals of Carpentry"
     description: >-
@@ -2507,6 +2617,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: BLDG142
     name: "Fundamentals of Woodworking"
     description: >-
@@ -2533,6 +2644,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: BLDG160
     name: "Fundamentals of Plumbing"
     description: >-
@@ -2560,6 +2672,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: BLDG172
     name: "HVACR Electricity"
     description: >-
@@ -2574,6 +2687,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: BLDG173
     name: "Intermediate Refrigeration and Introduction to Heating"
     description: >-
@@ -2619,6 +2733,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: BLDG200
     name: "Special Topics in Building Trades Technology"
     description: >-
@@ -2648,6 +2763,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: BLDG240
     name: "Advanced Framing and Exterior Finishing"
     description: >-
@@ -2826,6 +2942,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5102, CE Adv Business" }
+    grad_tags: [elective]
   - id: BSAD111
     name: "Personal Finance"
     description: >-
@@ -2842,6 +2959,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5102, CE Adv Business" }
+    grad_tags: [elective]
   - id: BSAD210
     name: "Statistics for Business and Economics"
     description: >-
@@ -2862,6 +2980,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
   - id: BSAD268
     name: "Macklin Business Institute Freshmen Internship"
     description: >-
@@ -2925,6 +3044,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5102, CE Adv Business" }
+    grad_tags: [elective]
   - id: BSAN250
     name: "Business Analytics Capstone"
     description: >-
@@ -2955,6 +3075,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
+    grad_tags: [elective]
   - id: CCJS200
     name: "Criminology"
     description: >-
@@ -2970,6 +3091,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
+    grad_tags: [elective]
   - id: CCJS201
     name: "Introduction to Law Enforcement"
     description: >-
@@ -2984,6 +3106,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
+    grad_tags: [elective]
   - id: CCJS211
     name: "Criminal Investigation"
     description: >-
@@ -2998,6 +3121,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
+    grad_tags: [elective]
   - id: CCJS215
     name: "Organization and Administration"
     description: >-
@@ -3012,6 +3136,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
+    grad_tags: [elective]
   - id: CCJS216
     name: "Police Operations"
     description: >-
@@ -3027,6 +3152,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
+    grad_tags: [elective]
   - id: CCJS221
     name: "Criminal Law"
     description: >-
@@ -3041,6 +3167,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
+    grad_tags: [elective]
   - id: CCJS222
     name: "Criminal Evidence"
     description: >-
@@ -3054,6 +3181,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
+    grad_tags: [elective]
   - id: CCJS230
     name: "Introduction to Corrections"
     description: >-
@@ -3068,6 +3196,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
+    grad_tags: [elective]
   - id: CCJS232
     name: "Criminal Forensics"
     description: >-
@@ -3082,6 +3211,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
+    grad_tags: [elective]
   - id: CCJS242
     name: "Theory and Practice"
     description: >-
@@ -3102,6 +3232,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
+    grad_tags: [elective]
   - id: CCJS244
     name: "Contemporary Issues"
     description: >-
@@ -3115,6 +3246,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
+    grad_tags: [elective]
   - id: CCJS246
     name: "Constitutional Law"
     description: >-
@@ -3129,6 +3261,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
+    grad_tags: [elective]
   - id: CCJS250
     name: "Seminar: Criminal Justice"
     description: >-
@@ -3143,6 +3276,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
+    grad_tags: [elective]
   - id: CCJS255
     name: "Independent Study in Criminal Justice"
     description: >-
@@ -3213,6 +3347,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: CHEM106
     name: "Chemistry and Society Laboratory"
     description: >-
@@ -3246,6 +3381,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [science]
     exam_equivalent: [AP_CHEMISTRY]
   - id: CHEM132
     name: "Principles of Chemistry II"
@@ -3261,6 +3397,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [science]
     exam_equivalent: [AP_CHEMISTRY]
   - id: CHEM135
     name: "General Chemistry for Engineers"
@@ -3279,6 +3416,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [science]
   - id: CHEM150
     name: "Essentials of Organic and Biochemistry"
     description: >-
@@ -3297,6 +3435,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: CHEM203
     name: "Organic Chemistry I"
     description: >-
@@ -3315,6 +3454,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: CHEM204
     name: "Organic Chemistry II"
     description: >-
@@ -3332,6 +3472,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: CHEM272
     name: "Bioanalytical Laboratory"
     description: >-
@@ -3365,6 +3506,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Chinese", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   - id: CHIN102
     name: "Elementary Chinese II"
     description: >-
@@ -3381,7 +3523,9 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Chinese", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_CHINESE_LANG]
+    prereqs: { all_of: [CHIN101], any_of: [] }
   - id: CHIN201
     name: "Intermediate Chinese I"
     description: >-
@@ -3397,7 +3541,9 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Chinese", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_CHINESE_LANG]
+    prereqs: { all_of: [CHIN102], any_of: [] }
   - id: CHIN202
     name: "Intermediate Chinese II"
     description: >-
@@ -3414,8 +3560,10 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Chinese", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_CHINESE_LANG]
   # --- CMAP ----------------------------------------------------------------
+    prereqs: { all_of: [CHIN201], any_of: [] }
   - id: CMAP106
     name: "Computer Literacy"
     description: >-
@@ -3431,6 +3579,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5103, CE Adv Computer Apps" }
+    grad_tags: [elective]
   - id: CMAP120
     name: "Introduction to Computer Applications"
     description: >-
@@ -3447,6 +3596,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5103, CE Adv Computer Apps" }
+    grad_tags: [elective]
   - id: CMAP232
     name: "Word Processing Applications"
     description: >-
@@ -3462,6 +3612,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5103, CE Adv Computer Apps" }
+    grad_tags: [elective]
   - id: CMAP245
     name: "Database Applications"
     description: >-
@@ -3478,6 +3629,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5103, CE Adv Computer Apps" }
+    grad_tags: [elective]
   - id: CMAP252
     name: "Spreadsheet Applications"
     description: >-
@@ -3494,6 +3646,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5103, CE Adv Computer Apps" }
+    grad_tags: [elective]
   # --- CMGT ----------------------------------------------------------------
   - id: CMGT100
     name: "Construction Methods and Materials"
@@ -3512,6 +3665,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: CMGT110
     name: "Construction Plan Reading"
     description: >-
@@ -3528,6 +3682,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: CMGT135
     name: "Construction Field Operations"
     description: >-
@@ -3545,6 +3700,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: CMGT190
     name: "Computer Applications in Construction"
     description: >-
@@ -3559,6 +3715,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: CMGT210
     name: "Construction Management"
     description: >-
@@ -3577,6 +3734,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: CMGT250
     name: "Construction Surveying"
     description: >-
@@ -3596,6 +3754,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: CMGT270
     name: "Construction Estimating"
     description: >-
@@ -3616,6 +3775,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: CMGT275
     name: "Construction Planning and Scheduling"
     description: >-
@@ -3632,6 +3792,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: CMGT280
     name: "Mechanical and Electrical Systems"
     description: >-
@@ -3649,6 +3810,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: CMGT285
     name: "Practical Construction Law"
     description: >-
@@ -3668,6 +3830,7 @@ courses:
     prereqs: { all_of: [CMGT210] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
+    grad_tags: [elective]
   - id: CMGT290
     name: "Professional Practicum"
     description: >-
@@ -3718,6 +3881,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Technology Credit", synergy: "TEC5126, CE Adv Technology Credit" }
+    grad_tags: [technology]
     exam_equivalent: [AP_CS_PRINCIPLES]
   - id: CMSC135
     name: "Introduction to Scripting"
@@ -3735,6 +3899,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC140
     name: "Introduction to Programming"
     description: >-
@@ -3753,6 +3918,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
     exam_equivalent: [AP_CS_A]
   - id: CMSC141
     name: "Intermediate Programming"
@@ -3781,6 +3947,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC203
     name: "Computer Science I"
     description: >-
@@ -3799,6 +3966,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
     exam_equivalent: [AP_CS_A]
   - id: CMSC204
     name: "Computer Science II"
@@ -3820,6 +3988,7 @@ courses:
     prereqs: { all_of: [MATH181, CMSC203] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC206
     name: "Python Programming"
     description: >-
@@ -3837,6 +4006,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC207
     name: "Introduction to Discrete Structures"
     description: >-
@@ -3853,6 +4023,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [math]
   - id: CMSC214
     name: "Advanced Java Programming"
     description: >-
@@ -3868,6 +4039,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC216
     name: "Introduction to Computer Systems"
     description: >-
@@ -3888,6 +4060,7 @@ courses:
     prereqs: { all_of: [CMSC204, MATH182] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC220
     name: "Client-Server Programming with Java"
     description: >-
@@ -3902,6 +4075,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC222
     name: "Visual Programming"
     description: >-
@@ -3917,6 +4091,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC224
     name: "Developing Web Applications Using C# and ASP.NET"
     description: >-
@@ -3945,6 +4120,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC230
     name: "Advanced Object-Oriented Programming with C++"
     description: >-
@@ -3959,6 +4135,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC234
     name: "Mobile Game and Application Programming"
     description: >-
@@ -3974,6 +4151,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC240
     name: "Advanced Mobile App and Game Development"
     description: >-
@@ -3990,6 +4168,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC243
     name: "Systems Analysis and Design"
     description: >-
@@ -4005,6 +4184,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC246
     name: "Introduction to SQL Using Oracle"
     description: >-
@@ -4023,6 +4203,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC250
     name: "UNIX/LINUX Operating System"
     description: >-
@@ -4037,6 +4218,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC253
     name: "UNIX/LINUX System Administration"
     description: >-
@@ -4053,6 +4235,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC260
     name: "Computer Security"
     description: >-
@@ -4069,6 +4252,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: CMSC266
     name: "Programming for Digital Devices"
     description: >-
@@ -4136,6 +4320,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENG5125, CE Adv Speech" }
+    grad_tags: [elective]
   - id: COMM109
     name: "Voice and Diction"
     description: >-
@@ -4150,6 +4335,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENG5125, CE Adv Speech" }
+    grad_tags: [elective]
   - id: COMM112
     name: "Business and Professional Speech Communication"
     description: >-
@@ -4165,6 +4351,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENG5125, CE Adv Speech" }
+    grad_tags: [elective]
   - id: COMM121
     name: "Public Speaking"
     description: >-
@@ -4179,6 +4366,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENG5125, CE Adv Speech" }
+    grad_tags: [elective]
   - id: COMM204
     name: "Interpersonal Communication"
     description: >-
@@ -4193,6 +4381,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENG5125, CE Adv Speech" }
+    grad_tags: [elective]
   - id: COMM220
     name: "Small Group Communication"
     description: >-
@@ -4207,6 +4396,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENG5125, CE Adv Speech" }
+    grad_tags: [elective]
   - id: COMM225
     name: "Intercultural Communication"
     description: >-
@@ -4222,6 +4412,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENG5125, CE Adv Speech" }
+    grad_tags: [elective]
   - id: COMM230
     name: "Introduction to Public Relations"
     description: >-
@@ -4237,6 +4428,7 @@ courses:
     prereqs: { any_of: [COMM108, COMM112] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENG5125, CE Adv Speech" }
+    grad_tags: [elective]
   - id: COMM250
     name: "Introduction to Communication Inquiry and Theory"
     description: >-
@@ -4251,6 +4443,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENG5125, CE Adv Speech" }
+    grad_tags: [elective]
   - id: COMM251
     name: "Introduction to Journalism"
     description: >-
@@ -4267,6 +4460,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENG5125, CE Adv Speech" }
+    grad_tags: [elective]
   - id: COMM252
     name: "News Writing"
     description: >-
@@ -4284,6 +4478,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENG5125, CE Adv Speech" }
+    grad_tags: [elective]
   # --- DANC ----------------------------------------------------------------
   - id: DANC100
     name: "Introduction to Dance"
@@ -4301,6 +4496,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Fine Art", synergy: "ART5117, CE Adv Integrated Arts" }
+    grad_tags: [fine_arts]
   - id: DANC101
     name: "Ballet I"
     description: >-
@@ -4329,6 +4525,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5107, CE Adv Dance" }
+    grad_tags: [elective]
   - id: DANC103
     name: "Modern Dance I"
     description: >-
@@ -4358,6 +4555,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5107, CE Adv Dance" }
+    grad_tags: [elective]
   - id: DANC105
     name: "Jazz Dance I"
     description: >-
@@ -4386,6 +4584,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5107, CE Adv Dance" }
+    grad_tags: [elective]
   - id: DANC107
     name: "Tap Dance I"
     description: >-
@@ -4413,6 +4612,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5107, CE Adv Dance" }
+    grad_tags: [elective]
   - id: DANC201
     name: "Ballet III"
     description: >-
@@ -4429,6 +4629,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5107, CE Adv Dance" }
+    grad_tags: [elective]
   - id: DANC203
     name: "Modern Dance III"
     description: >-
@@ -4446,6 +4647,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5107, CE Adv Dance" }
+    grad_tags: [elective]
   - id: DANC204
     name: "Modern Dance IV"
     description: >-
@@ -4461,6 +4663,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5107, CE Adv Dance" }
+    grad_tags: [elective]
   - id: DANC205
     name: "Jazz Dance III"
     description: >-
@@ -4476,6 +4679,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5107, CE Adv Dance" }
+    grad_tags: [elective]
   - id: DANC270
     name: "Special Topics in Dance"
     description: >-
@@ -4520,6 +4724,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: DATA110
     name: "Data Visualization and Communication"
     description: >-
@@ -4535,6 +4740,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: DATA201
     name: "Statistical Methods in Data Science"
     description: >-
@@ -4552,6 +4758,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: DATA205
     name: "Capstone Experience in Data Science"
     description: >-
@@ -4567,6 +4774,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: DATA269
     name: "Data Science and Technologies Internship"
     description: >-
@@ -4604,6 +4812,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5108, CE Adv Economics" }
+    grad_tags: [elective]
   - id: ECON201
     name: "Principles of Economics I"
     description: >-
@@ -4623,6 +4832,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5108, CE Adv Economics" }
+    grad_tags: [elective]
     exam_equivalent: [AP_MACROECONOMICS]
   - id: ECON202
     name: "Principles of Economics II"
@@ -4643,6 +4853,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5108, CE Adv Economics" }
+    grad_tags: [elective]
     exam_equivalent: [AP_MICROECONOMICS]
   # --- EDUC ----------------------------------------------------------------
   - id: EDUC101
@@ -4660,6 +4871,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC102
     name: "Field Experience in Education"
     description: >-
@@ -4708,6 +4920,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC119
     name: "Introduction to Early Childhood Education"
     description: >-
@@ -4722,6 +4935,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC135
     name: "Child Growth and Development"
     description: >-
@@ -4741,6 +4955,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC136
     name: "Curriculum Planning in Early Childhood Education"
     description: >-
@@ -4761,6 +4976,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC153
     name: "Infant and Toddler Development and Curriculum Planning"
     description: >-
@@ -4778,6 +4994,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC154
     name: "School-Age Child Care"
     description: >-
@@ -4794,6 +5011,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC170
     name: "First Start: Care of Infants and Toddlers with Disabilities"
     description: >-
@@ -4810,6 +5028,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC180
     name: "Children's Literature"
     description: >-
@@ -4825,6 +5044,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC201
     name: "Introduction to Special Education"
     description: >-
@@ -4842,6 +5062,7 @@ courses:
     prereqs: { any_of: [EDUC101, EDUC102, EDUC135, PSYC215] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC202
     name: "Field Experience in Special Education"
     description: >-
@@ -4874,6 +5095,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC210
     name: "Curriculum Seminar-Science and Mathematics for Young Children"
     description: >-
@@ -4906,6 +5128,7 @@ courses:
     prereqs: { all_of: [EDUC136] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC227
     name: "Administering Early Childhood Programs"
     description: >-
@@ -4922,6 +5145,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC233
     name: "Practicum in Early Childhood Education"
     description: >-
@@ -4937,6 +5161,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC243
     name: "Processes and Acquisition of Literacy"
     description: >-
@@ -4959,6 +5184,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC244
     name: "Instruction in Literacy"
     description: >-
@@ -4981,6 +5207,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC245
     name: "Materials for Teaching Literacy"
     description: >-
@@ -5019,6 +5246,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC256
     name: "Principles of Educational Assessment"
     description: >-
@@ -5040,6 +5268,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC260
     name: "Methods of Teaching for Elementary Education"
     description: >-
@@ -5058,6 +5287,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
+    grad_tags: [elective]
   - id: EDUC265
     name: "Methods of Teaching Secondary Students"
     description: >-
@@ -5218,6 +5448,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: EMGT103
     name: "Emergency Response and Recovery"
     description: >-
@@ -5234,6 +5465,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: EMGT104
     name: "Incident Management System and EOC Interface"
     description: >-
@@ -5249,6 +5481,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: EMGT105
     name: "Hazard Mitigation and Preparedness"
     description: >-
@@ -5266,6 +5499,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: EMGT106
     name: "Technology in Emergency Management"
     description: >-
@@ -5281,6 +5515,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: EMGT200
     name: "Emergency Planning"
     description: >-
@@ -5295,6 +5530,7 @@ courses:
     prereqs: { all_of: [EMGT101] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: EMGT206
     name: "Public Health Preparedness"
     description: >-
@@ -5311,6 +5547,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: EMGT210
     name: "Health Care Emergency Management"
     description: >-
@@ -5330,6 +5567,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: EMGT230
     name: "Community Emergency Response Teams"
     description: >-
@@ -5347,6 +5585,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: EMGT240
     name: "Capstone Emergency Management"
     description: >-
@@ -5361,6 +5600,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   # --- ENEE ----------------------------------------------------------------
   - id: ENEE140
     name: "Introduction to Programming Concepts for Engineers"
@@ -5393,6 +5633,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
+    grad_tags: [elective]
   - id: ENEE207
     name: "Electric Circuits"
     description: >-
@@ -5411,6 +5652,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
+    grad_tags: [elective]
   - id: ENEE222
     name: "Elements of Discrete Signal Analysis"
     description: >-
@@ -5429,6 +5671,7 @@ courses:
     prereqs: { all_of: [ENEE290], any_of: [ENEE140, CMSC140, CMSC203] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
+    grad_tags: [elective]
   - id: ENEE244
     name: "Digital Logic Design"
     description: >-
@@ -5442,6 +5685,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
+    grad_tags: [elective]
   - id: ENEE245
     name: "Digital Circuits and Systems Laboratory"
     description: >-
@@ -5495,6 +5739,7 @@ courses:
     prereqs: { all_of: [MATH182, PHYS161] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
+    grad_tags: [elective]
   - id: ENEE299
     name: "Special Topics in Electrical and Computer Engineering"
     description: >-
@@ -5526,6 +5771,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Technology Credit", synergy: "TEC5126, CE Adv Technology Credit" }
+    grad_tags: [technology]
   - id: ENES102
     name: "Statics"
     description: >-
@@ -5541,6 +5787,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
+    grad_tags: [elective]
   - id: ENES104
     name: "Introduction to Engineering Professions"
     description: >-
@@ -5576,6 +5823,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
+    grad_tags: [elective]
   - id: ENES206
     name: "MATLAB for Engineers"
     description: >-
@@ -5608,6 +5856,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
+    grad_tags: [elective]
   - id: ENES221
     name: "Dynamics"
     description: >-
@@ -5624,6 +5873,7 @@ courses:
     prereqs: { all_of: [ENES102, MATH182, PHYS161] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
+    grad_tags: [elective]
   - id: ENES232
     name: "Thermodynamics"
     description: >-
@@ -5640,6 +5890,7 @@ courses:
     prereqs: { all_of: [PHYS161] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
+    grad_tags: [elective]
   - id: ENES240
     name: "Scientific and Engineering Computation"
     description: >-
@@ -5658,6 +5909,7 @@ courses:
     prereqs: { all_of: [MATH182] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
+    grad_tags: [elective]
   - id: ENES272
     name: "Introduction to Computer Aided Design"
     description: >-
@@ -5714,6 +5966,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "English", synergy: "ENG5111, CE Adv English" }
+    grad_tags: [english]
     exam_equivalent: [AP_ENGLISH_LANG]
   - id: ENGL102
     name: "Critical Reading, Writing, and Research"
@@ -5735,6 +5988,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "English", synergy: "ENG5111, CE Adv English" }
+    grad_tags: [english]
     exam_equivalent: [AP_ENGLISH_LANG]
   - id: ENGL103
     name: "Critical Reading, Writing, and Research in the Work Place"
@@ -5759,6 +6013,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "English", synergy: "ENG5111, CE Adv English" }
+    grad_tags: [english]
   - id: ENGL110
     name: "Principles of English Grammar"
     description: >-
@@ -5772,6 +6027,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL115
     name: "College Vocabulary Development"
     description: >-
@@ -5800,6 +6056,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL190
     name: "Introduction to Literature"
     description: >-
@@ -5816,6 +6073,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "English", synergy: "ENG5111, CE Adv English" }
+    grad_tags: [english]
     exam_equivalent: [AP_ENGLISH_LIT]
   - id: ENGL201
     name: "Introduction to World Literature I"
@@ -5833,6 +6091,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL202
     name: "Introduction to World Literature II"
     description: >-
@@ -5850,6 +6109,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL205
     name: "Masterpieces of Asian Literature"
     description: >-
@@ -5865,6 +6125,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL208
     name: "Women in Literature"
     description: >-
@@ -5881,6 +6142,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL211
     name: "Survey of American Literature I"
     description: >-
@@ -5898,6 +6160,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL212
     name: "Survey of American Literature II"
     description: >-
@@ -5916,6 +6179,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL213
     name: "Survey of British Literature I"
     description: >-
@@ -5933,6 +6197,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL214
     name: "Survey of British Literature II"
     description: >-
@@ -5951,6 +6216,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL226
     name: "Survey of African American Literature I"
     description: >-
@@ -5969,6 +6235,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL227
     name: "Survey of African American Literature II"
     description: >-
@@ -5987,6 +6254,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL228
     name: "Survey of Latina/o/x Literature in the US"
     description: >-
@@ -6010,6 +6278,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL230
     name: "Introduction to Modern Drama"
     description: >-
@@ -6026,6 +6295,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL233
     name: "The Short Story"
     description: >-
@@ -6041,6 +6311,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL235
     name: "Film and Literature"
     description: >-
@@ -6059,6 +6330,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL245
     name: "The Bible as Literature"
     description: >-
@@ -6075,6 +6347,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL248
     name: "Literature of the Holocaust"
     description: >-
@@ -6090,6 +6363,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL258
     name: "Techniques of Proofreading and Editing"
     description: >-
@@ -6105,6 +6379,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL259
     name: "Designing Digital Communication for Professional Writers"
     description: >-
@@ -6122,6 +6397,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: ENGL264
     name: "Introduction to Creative Writing of Fiction"
     description: >-
@@ -6141,6 +6417,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "English", synergy: "ENG5111, CE Adv English" }
+    grad_tags: [english]
   - id: ENGL265
     name: "Advanced Creative Writing of Fiction"
     description: >-
@@ -6159,6 +6436,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "English", synergy: "ENG5111, CE Adv English" }
+    grad_tags: [english]
   - id: ENGL272
     name: "Introduction to Creative Writing of Poetry"
     description: >-
@@ -6176,6 +6454,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   # --- FILM ----------------------------------------------------------------
   - id: FILM110
     name: "Introduction to Film"
@@ -6195,6 +6474,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Fine Art", synergy: "ART5117, CE Adv Integrated Arts" }
+    grad_tags: [fine_arts]
   - id: FILM200
     name: "Introduction to Film Studies"
     description: >-
@@ -6225,6 +6505,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   - id: FILM220
     name: "Basic Movie Production"
     description: >-
@@ -6240,6 +6521,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   - id: FILM230
     name: "Movie Making Independent Study: Editing"
     description: >-
@@ -6289,6 +6571,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: FIRE102
     name: "Fire Behavior and Combustion"
     description: >-
@@ -6301,6 +6584,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: FIRE103
     name: "Building Construction for Fire Protection"
     description: >-
@@ -6317,6 +6601,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: FIRE104
     name: "Principles of Fire and Emergency Services Safety & Survival"
     description: >-
@@ -6330,6 +6615,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: FIRE105
     name: "Fire Prevention"
     description: >-
@@ -6345,6 +6631,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: FIRE201
     name: "Fire Protection Systems"
     description: >-
@@ -6359,6 +6646,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: FIRE202
     name: "Fire Protection Hydraulics and Water Supply"
     description: >-
@@ -6373,6 +6661,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: FIRE203
     name: "Principles of Fire and Emergency Service Administration"
     description: >-
@@ -6388,6 +6677,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: FIRE220
     name: "Strategy and Tactics"
     description: >-
@@ -6401,6 +6691,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: FIRE250
     name: "Fire Protection Internship"
     description: >-
@@ -6415,6 +6706,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   # --- FREN ----------------------------------------------------------------
   - id: FREN101
     name: "Elementary French I"
@@ -6432,6 +6724,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: French", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   - id: FREN102
     name: "Elementary French II"
     description: >-
@@ -6446,6 +6739,8 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: French", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
+    prereqs: { all_of: [FREN101], any_of: [] }
   - id: FREN201
     name: "Intermediate French I"
     description: >-
@@ -6462,7 +6757,9 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: French", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_FRENCH_LANG]
+    prereqs: { all_of: [FREN102], any_of: [] }
   - id: FREN202
     name: "Intermediate French II"
     description: >-
@@ -6478,7 +6775,9 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: French", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_FRENCH_LANG]
+    prereqs: { all_of: [FREN201], any_of: [] }
   - id: FREN207
     name: "Readings in French Literature"
     description: >-
@@ -6494,6 +6793,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: French", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_FRENCH_LIT]
   - id: FREN208
     name: "Readings in French Literature II"
@@ -6513,6 +6813,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: French", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_FRENCH_LIT]
   # --- GDES ----------------------------------------------------------------
   - id: GDES116
@@ -6533,6 +6834,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES121
     name: "Fundamentals of Graphic Design I"
     description: >-
@@ -6550,6 +6852,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES124
     name: "Fundamentals of Graphic Design II"
     description: >-
@@ -6565,6 +6868,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES134
     name: "Illustration I"
     description: >-
@@ -6581,6 +6885,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES135
     name: "Illustration II"
     description: >-
@@ -6596,6 +6901,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES140
     name: "Introduction to Animation"
     description: >-
@@ -6611,6 +6917,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES210
     name: "Graphic Design I"
     description: >-
@@ -6628,6 +6935,7 @@ courses:
     prereqs: { all_of: [ARTT102, GDES116] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES211
     name: "Graphic Design II"
     description: >-
@@ -6644,6 +6952,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES212
     name: "Publication Design with InDesign"
     description: >-
@@ -6660,6 +6969,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES214
     name: "Photoshop for Graphics and Photography"
     description: >-
@@ -6679,6 +6989,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES216
     name: "Illustrator for Vector Graphics"
     description: >-
@@ -6695,6 +7006,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES218
     name: "Graphic Design for the Web"
     description: >-
@@ -6711,6 +7023,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES220
     name: "Typography I"
     description: >-
@@ -6728,6 +7041,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES221
     name: "Typography II"
     description: >-
@@ -6771,6 +7085,7 @@ courses:
     prereqs: { all_of: [GDES223] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES228
     name: "Advanced Graphic Design for Web and Interaction"
     description: >-
@@ -6816,6 +7131,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES240
     name: "Animation 2: 3-D Modeling"
     description: >-
@@ -6830,6 +7146,7 @@ courses:
     prereqs: { all_of: [GDES140] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES242
     name: "Animation 3: Motion Capture and Character Development"
     description: >-
@@ -6847,6 +7164,7 @@ courses:
     prereqs: { all_of: [GDES240] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
+    grad_tags: [elective]
   - id: GDES269
     name: "Special Graphic Design Assignments"
     description: >-
@@ -6896,6 +7214,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: GEOG105
     name: "Cultural Geography"
     description: >-
@@ -6912,6 +7231,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
     exam_equivalent: [AP_HUMAN_GEOGRAPHY]
   - id: GEOG113
     name: "Economic Geography"
@@ -6931,6 +7251,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: GEOG124
     name: "Physical Geography"
     description: >-
@@ -6949,6 +7270,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: GEOG130
     name: "Global Geography"
     description: >-
@@ -6966,6 +7288,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: GEOG211
     name: "Political Geography"
     description: >-
@@ -6982,6 +7305,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: GEOG222
     name: "Geography of the United States"
     description: >-
@@ -6997,6 +7321,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: GEOG235
     name: "Preserving Our Natural Heritage: The Geography of Conservation and Natural Resources"
     description: >-
@@ -7013,6 +7338,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: GEOG240
     name: "Introduction to Cartography"
     description: >-
@@ -7032,6 +7358,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: GEOG250
     name: "Interpretation of Geographic Imagery: Use and Analysis"
     description: >-
@@ -7047,6 +7374,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: GEOG251
     name: "Principles of Map Design"
     description: >-
@@ -7064,6 +7392,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: GEOG255
     name: "Introduction to Computer Mapping"
     description: >-
@@ -7080,6 +7409,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: GEOG260
     name: "Introduction to Geographic Information Systems"
     description: >-
@@ -7098,6 +7428,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: GEOG265
     name: "Research Topics in Applied Geography"
     description: >-
@@ -7115,6 +7446,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: GEOG270
     name: "Advanced Geographic Information Systems"
     description: >-
@@ -7132,6 +7464,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   # --- GEOL ----------------------------------------------------------------
   - id: GEOL101
     name: "Physical Geology"
@@ -7149,6 +7482,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: GEOL102
     name: "Historical Geology"
     description: >-
@@ -7167,6 +7501,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   # --- GERM ----------------------------------------------------------------
   - id: GERM101
     name: "Elementary German I"
@@ -7184,6 +7519,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: German", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   - id: GERM102
     name: "Elementary German II"
     description: >-
@@ -7198,6 +7534,8 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: German", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
+    prereqs: { all_of: [GERM101], any_of: [] }
   - id: GERM201
     name: "Intermediate German I"
     description: >-
@@ -7213,7 +7551,9 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: German", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_GERMAN_LANG]
+    prereqs: { all_of: [GERM102], any_of: [] }
   - id: GERM202
     name: "Intermediate German II"
     description: >-
@@ -7227,8 +7567,10 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: German", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_GERMAN_LANG]
   # --- GHUM ----------------------------------------------------------------
+    prereqs: { all_of: [GERM201], any_of: [] }
   - id: GHUM101
     name: "Introduction to Global Humanities"
     description: >-
@@ -7247,6 +7589,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   # --- GNDS ----------------------------------------------------------------
   - id: GNDS101
     name: "Introduction to Gender Studies"
@@ -7271,6 +7614,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: GNDS102
     name: "Understanding LGBT Identities"
     description: >-
@@ -7294,6 +7638,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   # --- HIND ----------------------------------------------------------------
   - id: HIND101
     name: "Elementary Hindi I"
@@ -7308,6 +7653,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   - id: HIND102
     name: "Elementary Hindi II"
     description: >-
@@ -7321,6 +7667,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   # --- HINM ----------------------------------------------------------------
   - id: HINM115
     name: "Medical Terminology I"
@@ -7363,6 +7710,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: HINM134
     name: "Healthcare Delivery Systems"
     description: >-
@@ -7385,6 +7733,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: HINM144
     name: "Health Data Content, Structure and Standards"
     description: >-
@@ -7468,6 +7817,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: HINM180
     name: "Health Data Management"
     description: >-
@@ -7485,6 +7835,7 @@ courses:
     prereqs: { all_of: [CMAP120, HINM134, HINM144, HINM154] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: HINM190
     name: "Supervision of Health Information Services"
     description: >-
@@ -7503,6 +7854,7 @@ courses:
     prereqs: { all_of: [CMAP120, HINM134, HINM144, HINM154] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: HINM200
     name: "Professional Practice Experience I"
     description: >-
@@ -7534,6 +7886,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: HINM225
     name: "Ambulatory Coding"
     description: >-
@@ -7638,6 +7991,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST114
     name: "The World in the 20th Century"
     description: >-
@@ -7654,6 +8008,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST116
     name: "World History: A Comparative Survey from the Ancient World to A.D. 1500"
     description: >-
@@ -7674,6 +8029,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
     exam_equivalent: [AP_WORLD_HISTORY]
   - id: HIST117
     name: "World History: A Comparative Survey from A.D. 1500 to the Present"
@@ -7695,6 +8051,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World History", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
     exam_equivalent: [AP_WORLD_HISTORY]
   - id: HIST146
     name: "History of the Ancient World"
@@ -7712,6 +8069,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST147
     name: "History of Europe from the Fall of Rome to the 17th Century"
     description: >-
@@ -7732,6 +8090,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
     exam_equivalent: [AP_EUROPEAN_HISTORY]
   - id: HIST148
     name: "History of Europe from the 17th Century to the Present"
@@ -7756,6 +8115,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
     exam_equivalent: [AP_EUROPEAN_HISTORY]
   - id: HIST190
     name: "History of Sport in America"
@@ -7771,6 +8131,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST200
     name: "History of the United States, a Survey Course: from Colonial Times to 1865"
     description: >-
@@ -7788,6 +8149,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "U.S. History", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
     exam_equivalent: [AP_US_HISTORY]
   - id: HIST201
     name: "History of the United States, a Survey Course: from 1865 to the Present"
@@ -7806,6 +8168,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "U.S. History", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
     exam_equivalent: [AP_US_HISTORY]
   - id: HIST205
     name: "History of Technology"
@@ -7825,6 +8188,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST209
     name: "History of Asian Americans"
     description: >-
@@ -7841,6 +8205,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST211
     name: "History of Latinos in the United States"
     description: >-
@@ -7858,6 +8223,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST225
     name: "History of Maryland"
     description: >-
@@ -7874,6 +8240,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST228
     name: "Women in the Western World"
     description: >-
@@ -7890,6 +8257,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST233
     name: "Alternative Lifestyles: 19th Century American Utopias"
     description: >-
@@ -7906,6 +8274,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST235
     name: "The History of African Americans to 1865"
     description: >-
@@ -7924,6 +8293,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST236
     name: "The History of African Americans Since 1865"
     description: >-
@@ -7940,6 +8310,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST240
     name: "Civil Rights in America"
     description: >-
@@ -7955,6 +8326,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST242
     name: "Open Topics in History, Including Foreign Travel"
     description: >-
@@ -7972,6 +8344,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST245
     name: "Latin American History"
     description: >-
@@ -7989,6 +8362,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST247
     name: "East Asian Civilization"
     description: >-
@@ -8003,6 +8377,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST250
     name: "Modern Asia"
     description: >-
@@ -8017,6 +8392,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST252
     name: "The United States and 20th Century World Affairs"
     description: >-
@@ -8034,6 +8410,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST255
     name: "Modern Middle East"
     description: >-
@@ -8054,6 +8431,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST257
     name: "Modern Military History 1494-1815"
     description: >-
@@ -8070,6 +8448,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST258
     name: "Modern Military History 1815-Present"
     description: >-
@@ -8086,6 +8465,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST260
     name: "The United States since 1945"
     description: >-
@@ -8103,6 +8483,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST262
     name: "The History of England from 55 B.C. to 1688"
     description: >-
@@ -8125,6 +8506,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST263
     name: "The History of England from 1688 to the Present"
     description: >-
@@ -8148,6 +8530,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST265
     name: "African History to 1800"
     description: >-
@@ -8165,6 +8548,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: HIST266
     name: "African History from 1800"
     description: >-
@@ -8183,6 +8567,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   # --- HLTH ----------------------------------------------------------------
   - id: HLTH100
     name: "Principles of Healthier Living"
@@ -8213,6 +8598,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Health (1.0 MCPS Credit: Health A/B)", synergy: "HPE5114, CE Adv Health" }
+    grad_tags: [elective]
   - id: HLTH113
     name: "First Aid and CPR"
     description: >-
@@ -8251,6 +8637,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: HLTH125
     name: "Personalized Health Fitness"
     description: >-
@@ -8269,6 +8656,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Physical Education", synergy: "HPE5122, CE Adv Physical Education" }
+    grad_tags: [pe]
   - id: HLTH131
     name: "Drugs and Lifestyle Wellness"
     description: >-
@@ -8285,6 +8673,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: HLTH150
     name: "Fitness and Nutrition for Weight Management"
     description: >-
@@ -8304,6 +8693,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: HLTH160
     name: "The Science and Theory of Health"
     description: >-
@@ -8321,6 +8711,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: HLTH170
     name: "Introduction to Aging"
     description: >-
@@ -8338,6 +8729,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: HLTH200
     name: "Health Issues in Human Sexuality"
     description: >-
@@ -8358,6 +8750,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: HLTH212
     name: "Controlling Stress and Tension"
     description: >-
@@ -8375,6 +8768,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: HLTH215
     name: "Women's Health"
     description: >-
@@ -8390,6 +8784,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: HLTH220
     name: "Emergency Medical Responder"
     description: >-
@@ -8407,6 +8802,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: HLTH225
     name: "Introduction to Health Behaviors"
     description: >-
@@ -8421,6 +8817,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: HLTH250
     name: "Emergency Medical Responder Refresher"
     description: >-
@@ -8475,6 +8872,7 @@ courses:
     prereqs: { all_of: [HLTH160, HLTH225] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: HLTH299
     name: "Capstone in Public Health Sciences"
     description: >-
@@ -8522,6 +8920,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
+    grad_tags: [elective]
   - id: HMGT105
     name: "Food Service Sanitation"
     description: >-
@@ -8550,6 +8949,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
+    grad_tags: [elective]
   - id: HMGT110
     name: "Principles of Food Production- Lecture"
     description: >-
@@ -8587,6 +8987,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
+    grad_tags: [elective]
   - id: HMGT201
     name: "Lodging and Food Service Law"
     description: >-
@@ -8602,6 +9003,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
+    grad_tags: [elective]
   - id: HMGT204
     name: "Catering and Banquets"
     description: >-
@@ -8616,6 +9018,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
+    grad_tags: [elective]
   - id: HMGT207
     name: "Legal Issues in Labor Management"
     description: >-
@@ -8633,6 +9036,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
+    grad_tags: [elective]
   - id: HMGT208
     name: "Food and Beverage Cost Controls"
     description: >-
@@ -8647,6 +9051,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
+    grad_tags: [elective]
   - id: HMGT211
     name: "Supervision and Leadership in the Hospitality Industry"
     description: >-
@@ -8662,6 +9067,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
+    grad_tags: [elective]
   - id: HMGT212
     name: "Managing Hospitality Human Resources"
     description: >-
@@ -8677,6 +9083,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
+    grad_tags: [elective]
   - id: HMGT220
     name: "Hotel Operations"
     description: >-
@@ -8698,6 +9105,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
+    grad_tags: [elective]
   - id: HMGT240
     name: "Lodging and Food Service Sales and Advertising"
     description: >-
@@ -8713,6 +9121,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
+    grad_tags: [elective]
   - id: HMGT250
     name: "Meeting, Conference, and Event Planning"
     description: >-
@@ -8729,6 +9138,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
+    grad_tags: [elective]
   - id: HMGT290
     name: "Hospitality Practicum"
     description: >-
@@ -8743,6 +9153,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
+    grad_tags: [elective]
   - id: HMGT299
     name: "Special Topics in Hospitality Management"
     description: >-
@@ -8776,6 +9187,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: HMLS202
     name: "Introduction to Terrorism"
     description: >-
@@ -8790,6 +9202,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: HMLS210
     name: "Critical Infrastructure Protection"
     description: >-
@@ -8805,6 +9218,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: HMLS211
     name: "Introduction to Intelligence Studies"
     description: >-
@@ -8822,6 +9236,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: HMLS212
     name: "Current Issues in Homeland Security"
     description: >-
@@ -8836,6 +9251,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   # --- HONR ----------------------------------------------------------------
   - id: HONR101
     name: "Fundamental Concepts of Inquiry in Literature and the Arts"
@@ -9021,6 +9437,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AGB5118, CE Adv Landscape" }
+    grad_tags: [elective]
   - id: HORT105
     name: "Introduction to Sustainable Landscaping"
     description: >-
@@ -9295,6 +9712,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   # --- IDES ----------------------------------------------------------------
   - id: IDES101
     name: "Interior Design I"
@@ -9311,6 +9729,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: IDES107
     name: "Interiors: Design Principles"
     description: >-
@@ -9326,6 +9745,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: IDES110
     name: "Interiors: Technical Drawing and Drafting"
     description: >-
@@ -9340,6 +9760,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: IDES111
     name: "Interior Design II"
     description: >-
@@ -9356,6 +9777,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: IDES118
     name: "Interior Design Visualization & Presentation"
     description: >-
@@ -9371,6 +9793,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: IDES123
     name: "CAD Drafting for Interior Design"
     description: >-
@@ -9388,6 +9811,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: IDES221
     name: "Interior Design: Residential"
     description: >-
@@ -9404,6 +9828,7 @@ courses:
     prereqs: { all_of: [IDES111, IDES118], any_of: [IDES123, ARCH183] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: IDES222
     name: "Interior Design: Commercial/Contract"
     description: >-
@@ -9421,6 +9846,7 @@ courses:
     prereqs: { all_of: [IDES111, IDES118], any_of: [ARCH183, IDES123] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: IDES234
     name: "Textiles"
     description: >-
@@ -9584,6 +10010,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: IDES275
     name: "Interiors: Professional Practicum/Internship"
     description: >-
@@ -9693,6 +10120,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Fine Art", synergy: "ART5117, CE Adv Integrated Arts" }
+    grad_tags: [fine_arts]
   # --- ITAL ----------------------------------------------------------------
   - id: ITAL101
     name: "Elementary Italian I"
@@ -9710,6 +10138,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Italian", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   - id: ITAL102
     name: "Elementary Italian II"
     description: >-
@@ -9724,7 +10153,9 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Italian", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_ITALIAN_LANG]
+    prereqs: { all_of: [ITAL101], any_of: [] }
   - id: ITAL201
     name: "Intermediate Italian I"
     description: >-
@@ -9740,8 +10171,10 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Italian", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_ITALIAN_LANG]
   # --- JAPN ----------------------------------------------------------------
+    prereqs: { all_of: [ITAL102], any_of: [] }
   - id: JAPN101
     name: "Elementary Japanese I"
     description: >-
@@ -9757,6 +10190,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Japanese", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_JAPANESE_LANG]
   - id: JAPN102
     name: "Elementary Japanese II"
@@ -9774,6 +10208,7 @@ courses:
     prereqs: { all_of: [JAPN101] }
     approved: true
     hs_credit: { category: "World Languages: Japanese", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_JAPANESE_LANG]
   - id: JAPN201
     name: "Intermediate Japanese I"
@@ -9791,8 +10226,10 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Japanese", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_JAPANESE_LANG]
   # --- KORA ----------------------------------------------------------------
+    prereqs: { all_of: [JAPN102], any_of: [] }
   - id: KORA101
     name: "Elementary Korean I"
     description: >-
@@ -9809,6 +10246,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Korean", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   - id: KORA102
     name: "Elementary Korean II"
     description: >-
@@ -9823,6 +10261,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Korean", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   - id: KORA201
     name: "Intermediate Korean I"
     description: >-
@@ -9839,6 +10278,7 @@ courses:
     prereqs: { all_of: [KORA102] }
     approved: true
     hs_credit: { category: "World Languages: Korean", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   - id: KORA202
     name: "Intermediate Korean II"
     description: >-
@@ -9854,6 +10294,7 @@ courses:
     prereqs: { all_of: [KORA201] }
     approved: true
     hs_credit: { category: "World Languages: Korean", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   # --- LATN ----------------------------------------------------------------
   - id: LATN101
     name: "Elementary Latin I"
@@ -9868,6 +10309,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Latin", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_LATIN]
   - id: LATN102
     name: "Elementary Latin II"
@@ -9884,6 +10326,7 @@ courses:
     prereqs: { all_of: [LATN101] }
     approved: true
     hs_credit: { category: "World Languages: Latin", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_LATIN]
   # --- LGST ----------------------------------------------------------------
   - id: LGST101
@@ -9905,6 +10348,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST102
     name: "Legal Research"
     description: >-
@@ -9922,6 +10366,7 @@ courses:
     prereqs: { all_of: [LGST101] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST103
     name: "Legal Writing"
     description: >-
@@ -9938,6 +10383,7 @@ courses:
     prereqs: { all_of: [LGST101] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST104
     name: "Interviewing, Investigating, and Communication Techniques"
     description: >-
@@ -9953,6 +10399,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST106
     name: "Legal Ethics"
     description: >-
@@ -9969,6 +10416,7 @@ courses:
     prereqs: { all_of: [LGST101] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST122
     name: "Law Office Administration"
     description: >-
@@ -9987,6 +10435,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST200
     name: "Cyber Law"
     description: >-
@@ -10002,6 +10451,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST205
     name: "Alternative Dispute Resolution"
     description: >-
@@ -10019,6 +10469,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST210
     name: "Torts"
     description: >-
@@ -10035,6 +10486,7 @@ courses:
     prereqs: { all_of: [LGST101] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST211
     name: "Maryland Contract Law"
     description: >-
@@ -10053,6 +10505,7 @@ courses:
     prereqs: { all_of: [LGST101] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST212
     name: "Immigration Law"
     description: >-
@@ -10068,6 +10521,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST214
     name: "Domestic Relations"
     description: >-
@@ -10085,6 +10539,7 @@ courses:
     prereqs: { all_of: [LGST101] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST216
     name: "Real Property"
     description: >-
@@ -10103,6 +10558,7 @@ courses:
     prereqs: { all_of: [LGST101] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST218
     name: "Civil Litigation"
     description: >-
@@ -10120,6 +10576,7 @@ courses:
     prereqs: { all_of: [LGST101] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST220
     name: "Wills and Estate Administration in Maryland"
     description: >-
@@ -10137,6 +10594,7 @@ courses:
     prereqs: { all_of: [LGST101] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST230
     name: "Criminal Law and Procedure for Paralegals"
     description: >-
@@ -10154,6 +10612,7 @@ courses:
     prereqs: { all_of: [LGST101] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST250
     name: "Paralegal Internship"
     description: >-
@@ -10190,6 +10649,7 @@ courses:
     prereqs: { all_of: [LGST101, LGST122] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: LGST265
     name: "eDiscovery Software Applications"
     description: >-
@@ -10209,6 +10669,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   # --- LIBR ----------------------------------------------------------------
   - id: LIBR110
     name: "Fundamentals of Library Research"
@@ -10239,6 +10700,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   # --- MATH ----------------------------------------------------------------
   - id: MATH017
     name: "Elements of Statistics Support"
@@ -10422,6 +10884,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
     exam_equivalent: [AP_STATISTICS]
   - id: MATH120
     name: "Survey of College Mathematics"
@@ -10440,6 +10903,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
     exam_equivalent: [AP_PRECALCULUS]
   - id: MATH130
     name: "Mathematical Reasoning and Number Systems"
@@ -10457,6 +10921,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
   - id: MATH131
     name: "Geometry and Algebra"
     description: >-
@@ -10473,6 +10938,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Geometry/Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [elective]
   - id: MATH132
     name: "Probability, Statistics, and Problem Solving Techniques"
     description: >-
@@ -10488,6 +10954,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
   - id: MATH150
     name: "Elementary Applied Calculus I"
     description: >-
@@ -10508,6 +10975,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
   - id: MATH165
     name: "Precalculus"
     description: >-
@@ -10524,6 +10992,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
     exam_equivalent: [AP_CALC_AB, AP_CALC_BC, AP_PRECALCULUS]
   - id: MATH170
     name: "Calculus for Life Sciences I"
@@ -10545,6 +11014,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
   - id: MATH171
     name: "Calculus for Life Sciences II"
     description: >-
@@ -10565,6 +11035,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
   - id: MATH181
     name: "Calculus I"
     description: >-
@@ -10581,6 +11052,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
     exam_equivalent: [AP_CALC_AB, AP_CALC_BC]
   - id: MATH182
     name: "Calculus II"
@@ -10597,6 +11069,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
     exam_equivalent: [AP_CALC_BC]
   - id: MATH207
     name: "Introduction to Discrete Structures"
@@ -10613,6 +11086,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
   - id: MATH217
     name: "Statistics for Scientists"
     description: >-
@@ -10632,6 +11106,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
   - id: MATH264
     name: "Applications in Linear Algebra"
     description: >-
@@ -10651,6 +11126,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
   - id: MATH280
     name: "Multivariable Calculus"
     description: >-
@@ -10665,6 +11141,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
   - id: MATH282
     name: "Differential Equations"
     description: >-
@@ -10679,6 +11156,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
   - id: MATH284
     name: "Linear Algebra"
     description: >-
@@ -10693,6 +11171,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
+    grad_tags: [math]
   # --- MGMT ----------------------------------------------------------------
   - id: MGMT101
     name: "Principles of Management"
@@ -10710,6 +11189,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5102, CE Adv Business" }
+    grad_tags: [elective]
   - id: MGMT110
     name: "Small Business Management"
     description: >-
@@ -10724,6 +11204,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5102, CE Adv Business" }
+    grad_tags: [elective]
   - id: MGMT140
     name: "Foundations of Entrepreneurship"
     description: >-
@@ -10745,6 +11226,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5102, CE Adv Business" }
+    grad_tags: [elective]
   - id: MGMT201
     name: "Business Law"
     description: >-
@@ -10761,6 +11243,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5102, CE Adv Business" }
+    grad_tags: [elective]
   - id: MGMT210
     name: "Entrepreneurial Opportunity Analysis and Decision-Making in Technology Ventures"
     description: >-
@@ -10792,6 +11275,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5102, CE Adv Business" }
+    grad_tags: [elective]
   - id: MGMT214
     name: "Human Resources Management"
     description: >-
@@ -10820,6 +11304,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: MHLT102
     name: "Introduction to Mental Health II"
     description: >-
@@ -10833,6 +11318,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: MHLT112
     name: "Group Dynamics I"
     description: >-
@@ -10846,6 +11332,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: MHLT200
     name: "Practicum I, Fieldwork in Mental Health/Human Services"
     description: >-
@@ -10859,6 +11346,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: MHLT201
     name: "Practicum II, Fieldwork in Mental Health/Human Services"
     description: >-
@@ -10872,6 +11360,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: MHLT213
     name: "Group Dynamics II"
     description: >-
@@ -10885,6 +11374,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   # --- MUSC ----------------------------------------------------------------
   - id: MUSC110
     name: "Listening to Music"
@@ -10901,6 +11391,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Fine Art", synergy: "SOC5121, CE Adv Music" }
+    grad_tags: [fine_arts]
     exam_equivalent: [AP_MUSIC_LIT]
   - id: MUSC117
     name: "World Music"
@@ -10917,6 +11408,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Fine Art", synergy: "SOC5121, CE Adv Music" }
+    grad_tags: [fine_arts]
   - id: MUSC125
     name: "History of Jazz"
     description: >-
@@ -10931,6 +11423,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Fine Art", synergy: "SOC5121, CE Adv Music" }
+    grad_tags: [fine_arts]
   - id: MUSC131
     name: "American Popular Music"
     description: >-
@@ -10943,6 +11436,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Fine Art", synergy: "SOC5121, CE Adv Music" }
+    grad_tags: [fine_arts]
   - id: MUSC137
     name: "Class Voice"
     description: >-
@@ -11155,6 +11649,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Fine Art", synergy: "SOC5121, CE Adv Music" }
+    grad_tags: [fine_arts]
   - id: MUSC178
     name: "Advanced Applications in Music Technology"
     description: >-
@@ -11170,6 +11665,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5121, CE Adv Music" }
+    grad_tags: [elective]
   - id: MUSC181
     name: "Musical Recording Techniques"
     description: >-
@@ -11184,6 +11680,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5121, CE Adv Music" }
+    grad_tags: [elective]
   - id: MUSC184
     name: "Introduction to Music Theory"
     description: >-
@@ -11199,6 +11696,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Fine Art", synergy: "SOC5121, CE Adv Music" }
+    grad_tags: [fine_arts]
     exam_equivalent: [AP_MUSIC_THEORY]
   - id: MUSC188
     name: "Performing Arts Production"
@@ -11228,6 +11726,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Fine Art", synergy: "SOC5121, CE Adv Music" }
+    grad_tags: [fine_arts]
   - id: MUSC191
     name: "Music Theory II"
     description: >-
@@ -11243,6 +11742,7 @@ courses:
     prereqs: { all_of: [MUSC190] }
     approved: true
     hs_credit: { category: "Fine Art", synergy: "SOC5121, CE Adv Music" }
+    grad_tags: [fine_arts]
     exam_equivalent: [AP_MUSIC_THEORY]
   - id: MUSC194
     name: "Ear Training and Sightsinging I"
@@ -11286,6 +11786,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Fine Art", synergy: "SOC5121, CE Adv Music" }
+    grad_tags: [fine_arts]
   - id: MUSC199
     name: "Class Guitar II"
     description: >-
@@ -11345,6 +11846,7 @@ courses:
     prereqs: { all_of: [MUSC191] }
     approved: true
     hs_credit: { category: "Fine Art", synergy: "SOC5121, CE Adv Music" }
+    grad_tags: [fine_arts]
   - id: MUSC234
     name: "Music Theory IV"
     description: >-
@@ -11360,6 +11862,7 @@ courses:
     prereqs: { all_of: [MUSC233] }
     approved: true
     hs_credit: { category: "Fine Art", synergy: "SOC5121, CE Adv Music" }
+    grad_tags: [fine_arts]
   - id: MUSC237
     name: "Ear Training and Sightsinging III"
     description: >-
@@ -11617,6 +12120,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: NURS114
     name: "Professionalism and Communication in Nursing"
     description: >-
@@ -11676,6 +12180,7 @@ courses:
     prereqs: { all_of: [NURS113, NURS114, NURS121, NURS129] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: NURS126
     name: "Nursing Care of Special Populations I: Psychiatric and Mental Health Nursing"
     description: >-
@@ -11691,6 +12196,7 @@ courses:
     prereqs: { all_of: [NURS113, NURS114, NURS121, NURS129] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: NURS129
     name: "Pathophysiology and Pharmacology in Nursing"
     description: >-
@@ -11780,6 +12286,7 @@ courses:
     prereqs: { all_of: [NURS125, NURS126] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: NURS226
     name: "Nursing Care of Special Populations II: Maternal/Child Nursing"
     description: >-
@@ -11796,6 +12303,7 @@ courses:
     prereqs: { all_of: [NURS125, NURS126] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: NURS240
     name: "Nursing in Health and Illness III"
     description: >-
@@ -11812,6 +12320,7 @@ courses:
     prereqs: { all_of: [NURS225, NURS226] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   # --- NUTR ----------------------------------------------------------------
   - id: NUTR101
     name: "Introduction to Nutrition"
@@ -11831,6 +12340,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: NUTR202
     name: "Nutrition Through the Life Cycle"
     description: >-
@@ -11848,6 +12358,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: NUTR212
     name: "Food Science and Technology"
     description: >-
@@ -11862,6 +12373,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   # --- NWIT ----------------------------------------------------------------
   - id: NWIT101
     name: "Introduction to the Internet of Things (IoT)"
@@ -11881,6 +12393,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT105
     name: "Introduction to Cloud Computing"
     description: >-
@@ -11895,6 +12408,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT127
     name: "Microcomputer Essentials"
     description: >-
@@ -11912,6 +12426,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT130
     name: "Network Cabling Technology"
     description: >-
@@ -11928,6 +12443,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT151
     name: "Introduction to Networking"
     description: >-
@@ -11946,6 +12462,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT170
     name: "Network and Cloud Infrastructure"
     description: >-
@@ -11964,6 +12481,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT173
     name: "Network Security"
     description: >-
@@ -11980,6 +12498,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT200
     name: "Microsoft Modern Desktops"
     description: >-
@@ -11997,6 +12516,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT203
     name: "Microsoft Windows Server"
     description: >-
@@ -12014,6 +12534,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT204
     name: "Network Virtualization and System Administrator"
     description: >-
@@ -12031,6 +12552,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT208
     name: "Cloud Architecting"
     description: >-
@@ -12049,6 +12571,7 @@ courses:
     prereqs: { all_of: [NWIT105], any_of: [NWIT151, NWIT170] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT209
     name: "Cloud Administration"
     description: >-
@@ -12066,6 +12589,7 @@ courses:
     prereqs: { all_of: [NWIT105], any_of: [NWIT151, NWIT170] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT230
     name: "Intro to Cyber Ops"
     description: >-
@@ -12085,6 +12609,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT245
     name: "Defending the Network"
     description: >-
@@ -12101,6 +12626,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT246
     name: "Attacker Tools and Techniques"
     description: >-
@@ -12116,6 +12642,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT247
     name: "Introduction to Incident Response"
     description: >-
@@ -12134,6 +12661,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT252
     name: "Cisco Networking 2"
     description: >-
@@ -12154,6 +12682,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT253
     name: "Cisco Networking 3"
     description: >-
@@ -12171,6 +12700,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT254
     name: "Cisco Networking 4"
     description: >-
@@ -12188,6 +12718,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT261
     name: "CCNA SECURITY"
     description: >-
@@ -12210,6 +12741,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT263
     name: "Introduction to Digital Forensics"
     description: >-
@@ -12228,6 +12760,7 @@ courses:
     prereqs: { all_of: [NWIT127] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT264
     name: "Network and Cloud Forensics"
     description: >-
@@ -12247,6 +12780,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT269
     name: "Network and Wireless Technologies Internship"
     description: >-
@@ -12297,6 +12831,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: NWIT290
     name: "Information Security Capstone"
     description: >-
@@ -12583,6 +13118,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Physical Education", synergy: "HPE5122, CE Adv Physical Education" }
+    grad_tags: [pe]
   - id: PHED204
     name: "Foundations of Elementary School Physical Education"
     description: >-
@@ -12602,6 +13138,7 @@ courses:
     prereqs: { all_of: [PHED201] }
     approved: true
     hs_credit: { category: "Physical Education", synergy: "HPE5122, CE Adv Physical Education" }
+    grad_tags: [pe]
   - id: PHED206
     name: "Principles and Practices of Health-Related Fitness"
     description: >-
@@ -12623,6 +13160,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Physical Education", synergy: "HPE5122, CE Adv Physical Education" }
+    grad_tags: [pe]
   - id: PHED225
     name: "Invasion Games: a Tactical Games Approach"
     description: >-
@@ -12642,6 +13180,7 @@ courses:
     prereqs: { all_of: [PHED201] }
     approved: true
     hs_credit: { category: "Physical Education", synergy: "HPE5122, CE Adv Physical Education" }
+    grad_tags: [pe]
   - id: PHED226
     name: "Net-Wall Games: a Tactical Games Approach"
     description: >-
@@ -12679,6 +13218,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Physical Education", synergy: "HPE5122, CE Adv Physical Education" }
+    grad_tags: [pe]
   - id: PHED230
     name: "Advanced Weight Training: Theory and Program Design"
     description: >-
@@ -12699,6 +13239,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Physical Education", synergy: "HPE5122, CE Adv Physical Education" }
+    grad_tags: [pe]
   - id: PHED232
     name: "Health Fitness/PE Major Practicum"
     description: >-
@@ -12731,6 +13272,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Physical Education", synergy: "HPE5122, CE Adv Physical Education" }
+    grad_tags: [pe]
   - id: PHED240
     name: "Personal Training Techniques"
     description: >-
@@ -12752,6 +13294,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Physical Education", synergy: "HPE5122, CE Adv Physical Education" }
+    grad_tags: [pe]
   - id: PHED250
     name: "Prevention and Management of Exercise Injuries"
     description: >-
@@ -12771,6 +13314,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Physical Education", synergy: "HPE5122, CE Adv Physical Education" }
+    grad_tags: [pe]
   # --- PHIL ----------------------------------------------------------------
   - id: PHIL101
     name: "Introduction to Philosophy"
@@ -12790,6 +13334,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PHIL140
     name: "Introduction to the Study of Ethics"
     description: >-
@@ -12806,6 +13351,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PHIL143
     name: "Introduction to the Study of Religion"
     description: >-
@@ -12820,6 +13366,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PHIL190
     name: "Elementary Logic and Semantics"
     description: >-
@@ -12834,6 +13381,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PHIL201
     name: "Morality and Contemporary Law"
     description: >-
@@ -12852,6 +13400,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PHIL205
     name: "Philosophy in Literature"
     description: >-
@@ -12866,6 +13415,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PHIL212
     name: "Women in Philosophy I"
     description: >-
@@ -12881,6 +13431,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PHIL218
     name: "Women in Philosophy II"
     description: >-
@@ -12895,6 +13446,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PHIL222
     name: "Asian Thought"
     description: >-
@@ -12912,6 +13464,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PHIL231
     name: "Western Religions"
     description: >-
@@ -12925,6 +13478,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   # --- PHOT ----------------------------------------------------------------
   - id: PHOT110
     name: "Contemporary Topics in Photography"
@@ -12958,6 +13512,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: PHOT201
     name: "Photography II"
     description: >-
@@ -12976,6 +13531,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: PHOT210
     name: "Photojournalism"
     description: >-
@@ -12993,6 +13549,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: PHOT214
     name: "Photoshop for Graphics and Photography"
     description: >-
@@ -13012,6 +13569,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: PHOT230
     name: "Photoshop: Advanced Image Editing"
     description: >-
@@ -13030,6 +13588,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: PHOT251
     name: "Portrait and Fashion Photography"
     description: >-
@@ -13045,6 +13604,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: PHOT265
     name: "Advanced Color/Black and White Imaging"
     description: >-
@@ -13063,6 +13623,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: PHOT269
     name: "Special Photography Assignment"
     description: >-
@@ -13102,6 +13663,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: PHOT277
     name: "Advanced Concepts in Digital Capture"
     description: >-
@@ -13173,6 +13735,7 @@ courses:
     prereqs: { all_of: [PHTH101, PHTH102, PHTH104, PHTH112] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: PHTH104
     name: "Surface Anatomy, Palpation, and Soft Tissue"
     description: >-
@@ -13325,6 +13888,7 @@ courses:
     prereqs: { all_of: [PHTH106, PHTH201] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: PHTH215
     name: "Seminar"
     description: >-
@@ -13371,6 +13935,7 @@ courses:
     prereqs: { all_of: [PHTH106, PHTH201] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: PHTH224
     name: "Clinical Practicum II"
     description: >-
@@ -13392,6 +13957,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   # --- PHYS ----------------------------------------------------------------
   - id: PHYS103
     name: "Introduction to Physics"
@@ -13426,6 +13992,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [science]
   - id: PHYS110
     name: "Sound and Light in the Arts"
     description: >-
@@ -13444,6 +14011,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: PHYS161
     name: "General Physics I: Mechanics and Heat"
     description: >-
@@ -13461,6 +14029,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [science]
     exam_equivalent: [AP_PHYSICS_C_MECH]
   - id: PHYS203
     name: "General Physics I (Non-Engineering)"
@@ -13480,6 +14049,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [science]
     exam_equivalent: [AP_PHYSICS_1, AP_PHYSICS_C_MECH]
   - id: PHYS204
     name: "General Physics II (Non-Engineering)"
@@ -13499,6 +14069,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [science]
     exam_equivalent: [AP_PHYSICS_2, AP_PHYSICS_C_EM]
   - id: PHYS233
     name: "Physics for the Life Sciences I"
@@ -13516,6 +14087,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [science]
   - id: PHYS234
     name: "Physics for the Life Sciences II"
     description: >-
@@ -13531,6 +14103,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [science]
   - id: PHYS262
     name: "General Physics II: Electricity and Magnetism"
     description: >-
@@ -13549,6 +14122,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [science]
     exam_equivalent: [AP_PHYSICS_C_EM]
   - id: PHYS263
     name: "General Physics III: Waves, Optics, and Modern Physics"
@@ -13566,6 +14140,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [science]
   # --- POLI ----------------------------------------------------------------
   - id: POLI101
     name: "American Government"
@@ -13582,6 +14157,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
     exam_equivalent: [AP_US_GOV]
   - id: POLI105
     name: "Introduction to Political Science"
@@ -13597,6 +14173,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: POLI201
     name: "Fundamentals of Public Policy"
     description: >-
@@ -13615,6 +14192,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: POLI203
     name: "International Relations"
     description: >-
@@ -13630,6 +14208,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: POLI205
     name: "Introduction to Human Rights"
     description: >-
@@ -13646,6 +14225,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: POLI206
     name: "Political Ideologies"
     description: >-
@@ -13662,6 +14242,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: POLI211
     name: "Comparative Politics and Governments"
     description: >-
@@ -13678,6 +14259,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
     exam_equivalent: [AP_COMP_GOV]
   - id: POLI221
     name: "Western Political Thought"
@@ -13695,6 +14277,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: POLI230
     name: "Introduction to International Conflict Resolution"
     description: >-
@@ -13709,6 +14292,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: POLI242
     name: "State and Local Government"
     description: >-
@@ -13722,6 +14306,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: POLI252
     name: "Race and Ethnicity in U.S. Politics"
     description: >-
@@ -13738,6 +14323,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: POLI256
     name: "Politics of the Developing World"
     description: >-
@@ -13754,6 +14340,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: POLI270
     name: "Politics in Action"
     description: >-
@@ -13769,6 +14356,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   # --- PORT ----------------------------------------------------------------
   - id: PORT101
     name: "Elementary Portuguese I"
@@ -13783,6 +14371,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Portuguese", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   - id: PORT102
     name: "Elementary Portuguese II"
     description: >-
@@ -13796,7 +14385,9 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Portuguese", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   # --- PSCI ----------------------------------------------------------------
+    prereqs: { all_of: [PORT101], any_of: [] }
   - id: PSCI101
     name: "Physical Science I"
     description: >-
@@ -13815,6 +14406,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Earth Space Science", synergy: "BHP5124, CE Adv Earth Space Sci" }
+    grad_tags: [science]
   - id: PSCI102
     name: "Physical Science II"
     description: >-
@@ -13833,6 +14425,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "NGSS Earth Space Science", synergy: "BHP5124, CE Adv Earth Space Sci" }
+    grad_tags: [science]
   # --- PSYC ----------------------------------------------------------------
   - id: PSYC100
     name: "General Psychology"
@@ -13848,6 +14441,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
     exam_equivalent: [AP_PSYCHOLOGY]
   - id: PSYC202
     name: "The Science and Profession of Psychology"
@@ -13866,6 +14460,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PSYC203
     name: "Human Growth and Development During the Life Span"
     description: >-
@@ -13880,6 +14475,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PSYC204
     name: "Introduction to the Psychology of Personality"
     description: >-
@@ -13894,6 +14490,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PSYC206
     name: "Psychology of Human Sexuality"
     description: >-
@@ -13909,6 +14506,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PSYC207
     name: "Psychology of Women"
     description: >-
@@ -13924,6 +14522,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PSYC211
     name: "Social Psychology"
     description: >-
@@ -13940,6 +14539,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PSYC213
     name: "Criminal and Legal Psychology"
     description: >-
@@ -13955,6 +14555,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PSYC215
     name: "Child Psychology"
     description: >-
@@ -13969,6 +14570,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PSYC216
     name: "Adolescent Psychology"
     description: >-
@@ -13983,6 +14585,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PSYC221
     name: "Introduction to Psychopathology"
     description: >-
@@ -14000,6 +14603,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PSYC224
     name: "Cultural Psychology"
     description: >-
@@ -14015,6 +14619,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PSYC227
     name: "Educational Psychology"
     description: >-
@@ -14030,6 +14635,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: PSYC228
     name: "The Psychology of Learning"
     description: >-
@@ -14046,6 +14652,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   # --- RADT ----------------------------------------------------------------
   - id: RADT101
     name: "Radiologic Technology I"
@@ -14067,6 +14674,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: RADT102
     name: "Radiologic Technology II"
     description: >-
@@ -14089,6 +14697,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: RADT111
     name: "Radiographic Positioning I"
     description: >-
@@ -14107,6 +14716,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: RADT112
     name: "Radiographic Positioning II"
     description: >-
@@ -14149,6 +14759,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: RADT120
     name: "Clinical Radiology II"
     description: >-
@@ -14206,6 +14817,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: RADT200
     name: "Independent Study in Radiologic Technology"
     description: >-
@@ -14298,6 +14910,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: RADT225
     name: "Clinical Radiology VI"
     description: >-
@@ -14319,6 +14932,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: RADT240
     name: "Radiologic Technology V"
     description: >-
@@ -14352,6 +14966,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: READ239
     name: "Literacy in the Content Area Part II"
     description: >-
@@ -14368,6 +14983,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   # --- RUSS ----------------------------------------------------------------
   - id: RUSS101
     name: "Elementary Russian I"
@@ -14385,6 +15001,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Russian", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   - id: RUSS102
     name: "Elementary Russian II"
     description: >-
@@ -14399,6 +15016,8 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Russian", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
+    prereqs: { all_of: [RUSS101], any_of: [] }
   - id: RUSS201
     name: "Intermediate Russian I"
     description: >-
@@ -14414,6 +15033,8 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Russian", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
+    prereqs: { all_of: [RUSS102], any_of: [] }
   - id: RUSS202
     name: "Intermediate Russian II"
     description: >-
@@ -14429,7 +15050,9 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Russian", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   # --- SCIR ----------------------------------------------------------------
+    prereqs: { all_of: [RUSS201], any_of: [] }
   - id: SCIR297
     name: "Fundamentals of Scientific Research I"
     description: >-
@@ -14465,6 +15088,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: SOCY105
     name: "Social Problems and Issues"
     description: >-
@@ -14480,6 +15104,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: SOCY208
     name: "Sociology of Gender"
     description: >-
@@ -14495,6 +15120,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: SOCY214
     name: "Sociology of the Family"
     description: >-
@@ -14510,6 +15136,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: SOCY230
     name: "Sociology of Personality"
     description: >-
@@ -14525,6 +15152,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: SOCY233
     name: "Race and Ethnic Relations"
     description: >-
@@ -14540,6 +15168,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: SOCY240
     name: "Sociology of Age and Aging"
     description: >-
@@ -14555,6 +15184,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: SOCY243
     name: "The Sociology of Sport"
     description: >-
@@ -14569,6 +15199,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   - id: SOCY246
     name: "Sociology of Religion"
     description: >-
@@ -14598,6 +15229,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]
   # --- SONO ----------------------------------------------------------------
   - id: SONO101
     name: "Orientation to Diagnostic Medical Sonography"
@@ -14618,6 +15250,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: SONO105
     name: "Acoustical Physics I"
     description: >-
@@ -14650,6 +15283,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: SONO123
     name: "Obstetric/Gynecology Sonography I"
     description: >-
@@ -14666,6 +15300,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: SONO200
     name: "Independent Study in Diagnostic Medical Sonography"
     description: >-
@@ -14697,6 +15332,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: SONO205
     name: "Acoustical Physics and Instrumentation II"
     description: >-
@@ -14755,6 +15391,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: SONO232
     name: "Abdominal Sonography II"
     description: >-
@@ -14771,6 +15408,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: SONO243
     name: "Obstetric/Gynecology Sonography II"
     description: >-
@@ -14787,6 +15425,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: SONO245
     name: "Adult Echocardiography I"
     description: >-
@@ -14803,6 +15442,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: SONO246
     name: "Vascular Sonography I"
     description: >-
@@ -14820,6 +15460,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: SONO248
     name: "Adult Echocardiography II"
     description: >-
@@ -14834,6 +15475,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: SONO256
     name: "Vascular Sonography II"
     description: >-
@@ -14848,6 +15490,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: SONO261
     name: "Sonography Practicum I"
     description: >-
@@ -14949,6 +15592,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Spanish", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   - id: SPAN102
     name: "Elementary Spanish II"
     description: >-
@@ -14963,6 +15607,8 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Spanish", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
+    prereqs: { all_of: [SPAN101], any_of: [] }
   - id: SPAN103
     name: "Intensive Elementary Spanish"
     description: >-
@@ -14985,6 +15631,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Spanish", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   - id: SPAN106
     name: "Spanish for Heritage Speakers"
     description: >-
@@ -15003,6 +15650,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Spanish", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
   - id: SPAN201
     name: "Intermediate Spanish I"
     description: >-
@@ -15019,7 +15667,9 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Spanish", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_SPANISH_LANG]
+    prereqs: { all_of: [SPAN102], any_of: [] }
   - id: SPAN202
     name: "Intermediate Spanish II"
     description: >-
@@ -15035,7 +15685,9 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Spanish", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_SPANISH_LANG]
+    prereqs: { all_of: [SPAN201], any_of: [] }
   - id: SPAN215
     name: "Advanced Spanish Conversation and Composition"
     description: >-
@@ -15051,6 +15703,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Spanish", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_SPANISH_LIT]
   - id: SPAN216
     name: "Advanced Readings in Spanish: Introduction to Latin American Literature"
@@ -15069,6 +15722,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "World Languages: Spanish", synergy: "WLG5130, CE Adv World Language" }
+    grad_tags: [world_language]
     exam_equivalent: [AP_SPANISH_LIT]
   # --- STBR ----------------------------------------------------------------
   - id: STBR200
@@ -15242,6 +15896,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: SURG101
     name: "Surgical Technology I"
     description: >-
@@ -15259,6 +15914,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
+    grad_tags: [elective]
   - id: SURG102
     name: "Surgical Technology II"
     description: >-
@@ -15374,6 +16030,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5103, CE Adv Computer Apps" }
+    grad_tags: [elective]
   - id: TECH225
     name: "Game Programming"
     description: >-
@@ -15390,6 +16047,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: TECH272
     name: "Website Development"
     description: >-
@@ -15406,6 +16064,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5103, CE Adv Computer Apps" }
+    grad_tags: [elective]
   - id: TECH273
     name: "Advanced Website Development"
     description: >-
@@ -15422,6 +16081,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5103, CE Adv Computer Apps" }
+    grad_tags: [elective]
   - id: TECH274
     name: "Web Content Management Systems and Strategy"
     description: >-
@@ -15440,6 +16100,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: TECH276
     name: "JavaScript Fundamentals"
     description: >-
@@ -15456,6 +16117,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
+    grad_tags: [elective]
   - id: TECH277
     name: "Advanced JavaScript"
     description: >-
@@ -15473,6 +16135,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: TECH278
     name: "Web Application Development Using ColdFusion"
     description: >-
@@ -15489,6 +16152,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: TECH282
     name: "Web Application Development Using PHP and MySQL"
     description: >-
@@ -15503,6 +16167,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: TECH288
     name: "Advanced Web Application Development Using ColdFusion"
     description: >-
@@ -15520,6 +16185,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: TECH290
     name: "Building Game Worlds"
     description: >-
@@ -15535,6 +16201,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: TECH295
     name: "Tabletop and Mixed Media Game Design"
     description: >-
@@ -15553,6 +16220,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
+    grad_tags: [elective]
   - id: TECH299
     name: "Web Certificate/Degree Portfolio"
     description: >-
@@ -15585,6 +16253,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "Fine Art", synergy: "ART5117, CE Adv Integrated Arts" }
+    grad_tags: [fine_arts]
   - id: THET110
     name: "Fundamentals of Acting"
     description: >-
@@ -15598,6 +16267,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5127, CE Adv Theater" }
+    grad_tags: [elective]
   - id: THET114
     name: "Stagecraft I"
     description: >-
@@ -15614,6 +16284,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5127, CE Adv Theater" }
+    grad_tags: [elective]
   - id: THET118
     name: "Theatrical Makeup Techniques"
     description: >-
@@ -15629,6 +16300,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5127, CE Adv Theater" }
+    grad_tags: [elective]
   - id: THET122
     name: "Performance Production"
     description: >-
@@ -15660,6 +16332,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5127, CE Adv Theater" }
+    grad_tags: [elective]
   - id: THET188
     name: "Performing Arts Production"
     description: >-
@@ -15687,6 +16360,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5127, CE Adv Theater" }
+    grad_tags: [elective]
   - id: THET205
     name: "Movement for the Performer"
     description: >-
@@ -15701,6 +16375,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5127, CE Adv Theater" }
+    grad_tags: [elective]
   - id: THET208
     name: "Drafting/Painting for the Performing Arts"
     description: >-
@@ -15716,6 +16391,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5127, CE Adv Theater" }
+    grad_tags: [elective]
   - id: THET216
     name: "Stage Lighting for the Performing Arts"
     description: >-
@@ -15735,6 +16411,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5127, CE Adv Theater" }
+    grad_tags: [elective]
   - id: THET225
     name: "Acting for Film and Television"
     description: >-
@@ -15750,6 +16427,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5127, CE Adv Theater" }
+    grad_tags: [elective]
   - id: THET230
     name: "Costuming Crafts for the Performing Arts"
     description: >-
@@ -15765,6 +16443,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5127, CE Adv Theater" }
+    grad_tags: [elective]
   - id: THET237
     name: "Fundamentals of Play Directing"
     description: >-
@@ -15781,6 +16460,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5127, CE Adv Theater" }
+    grad_tags: [elective]
   - id: THET295
     name: "Theatre Internship"
     description: >-
@@ -15811,6 +16491,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   # --- TVRA ----------------------------------------------------------------
   - id: TVRA100
     name: "Introduction to New Media"
@@ -15826,6 +16507,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   - id: TVRA120
     name: "Video Production I"
     description: >-
@@ -15842,6 +16524,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   - id: TVRA125
     name: "Audio Production Techniques"
     description: >-
@@ -15857,6 +16540,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   - id: TVRA129
     name: "Concept and Story"
     description: >-
@@ -15871,6 +16555,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   - id: TVRA134
     name: "Media Appreciation"
     description: >-
@@ -15887,6 +16572,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   - id: TVRA140
     name: "Video Editing"
     description: >-
@@ -15902,6 +16588,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   - id: TVRA210
     name: "Audio and Video Podcasting"
     description: >-
@@ -15918,6 +16605,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   - id: TVRA220
     name: "Radio Production"
     description: >-
@@ -15935,6 +16623,7 @@ courses:
     prereqs: { all_of: [TVRA125] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   - id: TVRA227
     name: "Broadcast Journalism"
     description: >-
@@ -15950,6 +16639,7 @@ courses:
     prereqs: { all_of: [TVRA129], any_of: [TVRA120, TVRA125] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   - id: TVRA230
     name: "Video Production II"
     description: >-
@@ -15968,6 +16658,7 @@ courses:
     prereqs: { all_of: [TVRA120, TVRA140] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   - id: TVRA234
     name: "Television Directing"
     description: >-
@@ -15984,6 +16675,7 @@ courses:
     prereqs: { all_of: [TVRA230] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   - id: TVRA236
     name: "Video Production Portfolio"
     description: >-
@@ -16016,6 +16708,7 @@ courses:
     prereqs: { any_of: [TVRA120, TVRA125] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   - id: TVRA260
     name: "Radio Station Operation"
     description: >-
@@ -16031,6 +16724,7 @@ courses:
     prereqs: { all_of: [TVRA220] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   - id: TVRA275
     name: "Digital Media Professional Internship"
     description: >-
@@ -16046,6 +16740,7 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
+    grad_tags: [elective]
   - id: TVRA280
     name: "Digital Media Special Assignment"
     description: >-
@@ -16076,3 +16771,4 @@ courses:
     offered_terms: [fall, spring]
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
+    grad_tags: [elective]

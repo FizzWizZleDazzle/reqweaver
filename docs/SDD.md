@@ -237,20 +237,43 @@ table carries the college's own exam articulation (exam id, minimum
 score, credits awarded, courses satisfied), one entry per score tier;
 `exam_equivalent` on a course names the exams that duplicate it.
 
-Merging happens per profile and only when the profile opts in
-(`dualEnrollment: true`). A merged course banks its own college
-credits but counts the partner's fixed `grad_credit_per_course`
-toward graduation requirements and school credit caps, opens at the
-partner's minimum grade, and gains the college's optional terms
-(summer sessions) unless the course is term-restricted. School course
-ids win a collision. A college course with `exam_equivalent` matching
-a school course's exam gets mutual excludes with it, either satisfies
-a prerequisite naming the other, the variant filter resolves the
-conflict toward the exam-bearing course (the AP course is free and
-its credit transfers more broadly), and any plan that schedules the
-college counterpart carries a warning: it does not register the
-student for the AP exam, and school courses assuming the district
-credit need counselor confirmation.
+Merging happens per profile and only when the profile opts in:
+`dualEnrollment: true` takes every partner, or a list of partner ids
+takes just those (a partner is any sheet the school names, a
+community college, a university, another high school). A merged
+course banks its own college credits but counts the partner's fixed
+`grad_credit_per_course` toward graduation requirements and school
+credit caps, opens at the partner's minimum grade, and gains the
+partner's optional terms (summer sessions) unless the course is
+term-restricted. School course ids win a collision. `grad_tags`,
+derived from the district's own credit category, are what satisfy
+requirement predicates; a course's subject tags serve search,
+grouping, and interests only, so a behavioral-health elective cannot
+cover the state health requirement by tag accident.
+
+The partner's `funded_per_term` is the allowance the district pays
+for; planning past it is legal and the plan says who pays ("2 per
+term are funded, the rest are out of pocket"). A hard per-term cap
+exists only where a sheet declares `max_courses_per_term`. How many
+college courses one term carries also follows the rigor appetite
+(`collegeFullLoad`, scaled by the profile's rigor: four college
+classes alone is about a 0.9 appetite).
+
+A college course with `exam_equivalent` matching a school course's
+exam gets mutual excludes with it, and either satisfies a
+prerequisite naming the other. The AP course is the preferred way to
+earn that material's credit (free, and its exam credit transfers
+almost everywhere), so the college counterpart is a fallback: it is
+not even a candidate while any remaining term could still hold the
+AP twin, except under early_grad, where the student trades transfer
+breadth for leaving sooner. A pin always overrides, and any plan
+that schedules the counterpart carries a warning: it does not
+register the student for the AP exam, and school courses assuming
+the district credit need counselor confirmation. With a stated goal,
+a college course below the catalog's mean goal affinity that serves
+no requirement loses its banked-credit attraction in the ranking and
+takes a penalty: paid filler does not displace what the student
+asked for.
 
 Rules:
 
@@ -627,7 +650,11 @@ Expanding one state:
    (a course whose prerequisite was taken in the immediately
    preceding term ranks up, so semester halves stay consecutive), and
    closeness to the student's rigor target; keep the top K
-   (default 14). Unlock
+   (default 14). The requirement bonus is budgeted: each unmet
+   requirement grants it to just enough top matchers to cover 1.5x
+   its remaining need, and further matchers rank as ordinary courses,
+   because a bonus for every matcher stacked four same-requirement
+   courses into one term. Unlock
    value is the gateway rule: a course that many later courses
    require ranks ahead of an equal-credit leaf, so the most-required
    courses clear as early as possible and each term keeps the most
@@ -760,7 +787,11 @@ candidate priority steers free capacity toward goal-relevant courses
 (a physics AP over a music elective for a physics-bound student), and
 a goal-match scorer feature ranks whole plans. Both are inert when a
 school has no embeddings or a profile no goal, and neither can affect
-feasibility.
+feasibility. The affinity is the cosine centered against the
+catalog's mean: sentence-embedding cosines cluster in a narrow band
+(any two course descriptions sit near 0.6), so the raw value barely
+separates on-topic from off-topic; centered, an off-topic course
+scores negative and the goal weight means what it says.
 
 ## 8. Frontend application
 
@@ -840,9 +871,10 @@ UI shows the phase rather than a partial plan.
 Each returned plan carries its explanation: the worker runs the
 engine's `explain` per plan and ships the reasons and the necessity
 score with the assignments. A chip in the grid shows the strongest
-reason as a colored dot with the full wording in its tooltip, and the
-word itself where the screen is wide; a course the engine scored as
-filler is drawn to invite replacement. The course dialog spells every
+reason as a colored dot with the full wording in its tooltip; outside
+the grid the word itself appears beside the dot where the screen is
+wide. A course the engine scored as filler is drawn to invite
+replacement. The course dialog spells every
 reason out in a sentence. Advisory hints follow the plans in a second
 message, because measuring them means re-solving nearby profiles; they
 render as advice, apart from the warnings the engine raised. The

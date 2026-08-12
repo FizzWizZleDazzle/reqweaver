@@ -6,6 +6,9 @@ search:
   topK: 14         # ranked candidates considered per state
   subsets: 40      # per-term course subsets explored per state
   keepPlans: 20    # complete plans handed to the scorer
+  collegeFullLoad: 5  # college courses per term at rigor 1, scaled
+                      # down by rigor: four college classes alone is
+                      # about a 0.9 appetite
 objective:
   gradWeight: 20        # per missing graduation credit; must exceed the
                         # richest course's banked value per half credit
@@ -15,7 +18,10 @@ priority:
                         # any other candidate's full priority
   continuation: 5       # prereq taken in the immediately preceding term
   interest: 2           # course carries a profile interest tag
-  goal: 4               # embedding similarity to the free-text goal
+  goal: 12              # embedding similarity to the free-text goal,
+                        # centered against the catalog mean, so the
+                        # value is roughly -0.15 to 0.15 and off-topic
+                        # courses score negative
   usefulBanked: 2       # banked credit reachable within remaining terms
   unlocks: 0.5          # reachable descendants
   banked: 4             # the course's own banked-credit estimate
@@ -26,3 +32,7 @@ priority:
                         # such a root also loses its unlocks reward
   pairGap: 3            # per-term penalty for separating the halves of
                         # an A/B year course
+  collegeFiller: 15     # penalty for a dual-enrollment course below the
+                        # catalog's mean goal affinity that serves no
+                        # requirement; paid filler should not displace
+                        # what the student asked for

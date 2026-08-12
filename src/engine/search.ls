@@ -9,12 +9,15 @@
 # Built-in tuning; weights/engine.yaml carries the same values and wins
 # when passed in (search options.tuning). Tune there, not here.
 DEFAULT_TUNING =
-  search: { beam: 100, topK: 14, subsets: 40, keepPlans: 20 }
+  # collegeFullLoad: college courses a full-rigor student carries per
+  # term; scaled by the profile's rigor (four college classes alone is
+  # about a 0.9 appetite)
+  search: { beam: 100, topK: 14, subsets: 40, keepPlans: 20, collegeFullLoad: 5 }
   objective: { gradWeight: 20, eagernessScale: 0.0001 }
   priority: {
-    requirement: 40, continuation: 5, interest: 2, goal: 4,
+    requirement: 40, continuation: 5, interest: 2, goal: 12,
     usefulBanked: 2, unlocks: 0.5, banked: 4, rigor: 3, eagerRigor: 2,
-    newSequence: 6, pairGap: 3
+    newSequence: 6, pairGap: 3, collegeFiller: 15
   }
 
 mergeTuning = (given) ->
@@ -50,11 +53,28 @@ cosine = (a, b) ->
 
 # Semantic closeness of a course to the student's stated free-text goal,
 # via precomputed description embeddings. Zero (inert) when the school
-# has no embeddings or the profile no goal.
+# has no embeddings or the profile no goal. Centered against the
+# catalog's mean cosine: sentence-embedding cosines cluster in a narrow
+# band (any two course descriptions sit near 0.6), so the raw value
+# barely separates on-topic from off-topic and banked credit steamrolls
+# it; centered, an off-topic course scores negative and the goal weight
+# means what it says.
+goalMean = (model) ->
+  return model.goalMeanMemo if model.goalMeanMemo?
+  total = 0
+  n = 0
+  for id, course of model.courses
+    vec = model.embeddings?.courses?[id]
+    continue unless vec?
+    total += cosine model.goalVec, vec
+    n += 1
+  model.goalMeanMemo = if n > 0 then total / n else 0
+  model.goalMeanMemo
+
 goalAffinity = (model, course) ->
   vec = model.embeddings?.courses?[course.id]
   return 0 unless model.goalVec? and vec?
-  cosine model.goalVec, vec
+  (cosine model.goalVec, vec) - goalMean model
 
 # The intensity tier the student is aiming for. rigor is a 0..1 profile
 # preference: 0 prefers regular-track variants, 1 prefers the most intense
@@ -119,11 +139,13 @@ staticScores = (model, course) ->
 isSequenceRoot = (model, course) ->
   (prereqIds course).length is 0 and (model.unlocks[course.id] or 0) >= 2
 
-priorityFor = (model, course, unmet, prevTerm, remaining, doneTags) ->
+priorityFor = (model, course, unmet, prevTerm, remaining, doneTags, hasBonus) ->
   w = model.tuning.priority
-  reqBonus = 0
-  for req in unmet when reqMatches req, course
-    reqBonus := w.requirement
+  # the requirement bonus is granted by rankCandidates to just enough
+  # top candidates to cover each requirement's remaining need; giving
+  # it to every matcher stacked four same-requirement courses into one
+  # term
+  reqBonus = if hasBonus then w.requirement else 0
   fixed = staticScores model, course
   continuation = 0
   for id in fixed.preIds when prevTerm.has id
@@ -143,7 +165,16 @@ priorityFor = (model, course, unmet, prevTerm, remaining, doneTags) ->
   # of requirement-diverse combinations (the cap explores ranking
   # prefixes), which hides the earliest covering plans
   bankedScale = if model.objective is 'early_grad' then 0 else 1
-  reqBonus + continuation + interestBonus - rootPenalty +
+  # a stated goal makes off-topic dual enrollment poor filler: it
+  # costs money and displaces nothing the student asked for. Such a
+  # course loses its banked-credit attraction in the ranking (the
+  # credit is exactly why it would otherwise win) and takes a penalty,
+  # so it ranks below a plain school elective.
+  collegeFiller = 0
+  if course.college? and model.goalVec? and fixed.goal <= 0 and reqBonus is 0
+    collegeFiller = w.collegeFiller
+    bankedScale = 0
+  reqBonus + continuation + interestBonus - rootPenalty - collegeFiller +
     w.goal * fixed.goal +
     bankedScale * w.usefulBanked * (usefulBanked model, course.id, remaining) +
     w.unlocks * (model.unlocks[course.id] or 0) +
@@ -167,6 +198,43 @@ duplicatesContent = (course, state) ->
 # Every course that is legal in this term for this state. Hard rules,
 # with one opening for real-world exceptions: a waiver stands in for a
 # course's prerequisites.
+# Optimistic terms-to-takeable for a course given what is done: 0 when
+# its prerequisites are already met, else one term per chain link along
+# the easiest branch. Optimistic on purpose: it feeds the AP-fallback
+# rule below, and overestimating reachability suppresses the college
+# counterpart more, which is the stated preference.
+unmetDepth = (model, id, done, guard) ->
+  return 0 if done.has id
+  course = model.courses[id]
+  return 0 unless course?
+  return 0 if prereqsMet course, done, model.contentEquiv
+  guard ?= new Set!
+  return 9 if guard.has id
+  guard.add id
+  best = 9
+  for pid in (staticScores model, course).preIds
+    d = unmetDepth model, pid, done, guard
+    best := d if d < best
+  guard.delete id
+  1 + best
+
+# The AP course is the preferred way to earn its material's credit
+# (free, and its exam credit transfers almost everywhere); the college
+# counterpart is the fallback. So the counterpart is only admissible
+# once no remaining term can still hold the AP twin. A dragged-out or
+# already-taken twin does not block, and a pin always overrides.
+apStillReachable = (model, state, term, twinId) ->
+  return false if state.done.has twinId
+  return false if model.avoid.has twinId
+  twin = model.courses[twinId]
+  return false unless twin?
+  depth = unmetDepth model, twinId, state.done
+  for t in model.terms when t.index >= term.index
+    continue unless t.grade in (twin.grade_levels or [])
+    continue unless offeredIn twin, t
+    return true if t.index - term.index >= depth
+  false
+
 # Availability (offering, grade window, avoid list) is the same for
 # every state expanding a term; compute the pool once per term.
 eligibleFor = (model, term) ->
@@ -192,6 +260,13 @@ candidatesFor = (model, state, term) ->
       continue if reachable.has course.id
       continue if duplicatesContent course, state
       continue unless model.waivers.has(course.id) or prereqsMet course, doneSet, model.contentEquiv
+      # under early_grad the student trades the AP course's broader
+      # transfer for leaving sooner, so the fallback rule stands down
+      if course.college? and model.objective isnt 'early_grad' and (model.apTwins or {})[course.id]?
+        blocked = false
+        for twinId in model.apTwins[course.id]
+          blocked := true if apStillReachable model, state, term, twinId
+        continue if blocked
       out.push course
       reachable.add course.id
       grew := true
@@ -257,14 +332,30 @@ filterVariants = (model, candidates) ->
         dominated.add other.id
   [c for c in candidates when not dominated.has c.id]
 
-# Score once per candidate, then sort by the cached score: scoring
-# inside the comparator re-evaluates the priority O(n log n) times per
-# state, which is what made merged-catalog solves crawl.
-rankCandidates = (model, candidates, unmet, prevTerm, remaining, doneTags) ->
-  scored = [{ c: c, p: priorityFor model, c, unmet, prevTerm, remaining, doneTags } for c in candidates]
+bySlotScore = (scored) ->
   scored.sort (a, b) ->
     diff = b.p - a.p
     if diff isnt 0 then diff else (if a.c.id < b.c.id then -1 else 1)
+  scored
+
+# Score once per candidate, then sort by the cached score: scoring
+# inside the comparator re-evaluates the priority O(n log n) times per
+# state, which is what made merged-catalog solves crawl. Ranking runs
+# twice: a base pass orders candidates, then each unmet requirement
+# grants its bonus to the best matchers up to 1.5x its remaining need,
+# and the final pass sorts with the bonuses placed.
+rankCandidates = (model, candidates, unmet, prevTerm, remaining, doneTags, coverage) ->
+  base = bySlotScore [{ c: c, p: priorityFor model, c, unmet, prevTerm, remaining, doneTags, false } for c in candidates]
+  marked = new Set!
+  for req in unmet
+    need = req.credits - ((coverage or {})[req.id] or 0)
+    continue unless need > 0
+    budget = need * 1.5 + 0.01
+    got = 0
+    for entry in base when got < budget and reqMatches req, entry.c
+      marked.add entry.c.id
+      got += if entry.c.grad_credits? then entry.c.grad_credits else (entry.c.credits or 0)
+  scored = bySlotScore [{ c: e.c, p: priorityFor model, e.c, unmet, prevTerm, remaining, doneTags, (marked.has e.c.id) } for e in base]
   [entry.c for entry in scored]
 
 # Pins are overrides: the student knows about exceptions the engine
@@ -577,7 +668,7 @@ expandState = (model, state, term, pinnedIds, caps, params, warnings) ->
   for id in Array.from(state.done)
     for tag in (model.courses[id]?.tags or [])
       doneTags.add tag
-  candidates = rankCandidates model, candidates, unmet, previousTermCourses(state), remaining, doneTags
+  candidates = rankCandidates model, candidates, unmet, previousTermCourses(state), remaining, doneTags, state.coverage
   ranked = [c for c in candidates.slice(0, params.topK) when c.id not in pinnedIds]
   injectUnmetReqs ranked, candidates, unmet, pinnedIds
   effCaps = caps
@@ -613,12 +704,26 @@ collectPlans = (model, beam, keep, warnings) ->
   kept = covered.slice 0, keep
   # a scheduled college counterpart of an AP course carries two catches
   # the student must hear about
+  fundedBy = {}
+  nameOf = {}
+  for partner in ((model.school.dual_enrollment or {}).partners or [])
+    fundedBy[partner.college] = partner.funded_per_term if partner.funded_per_term?
+    nameOf[partner.college] = (model.colleges[partner.college] or {}).name or partner.college
   for state in kept
     for entry in state.plan
+      counts = {}
       for id in entry.courses
         course = model.courses[id]
-        continue unless course? and course.college? and course.exam_equivalent?
-        warnings.add "#{id} (#{course.college}) covers AP course material but does not register you for the AP exam, and school courses that assume the district credit need counselor confirmation"
+        continue unless course? and course.college?
+        counts[course.college] = (counts[course.college] or 0) + 1
+        if course.exam_equivalent?
+          warnings.add "#{id} (#{nameOf[course.college] or course.college}) covers AP course material but does not register you for the AP exam, and school courses that assume the district credit need counselor confirmation"
+      # dual enrollment beyond the funded allowance is legal; the
+      # family pays for the rest
+      for college, n of counts
+        funded = fundedBy[college]
+        continue unless funded? and n > funded
+        warnings.add "#{n} courses at #{nameOf[college] or college} in grade #{entry.grade} #{entry.term}: #{funded} per term are funded, the rest are out of pocket"
   kept
 
 minDefined = (a, b) ->
@@ -627,8 +732,15 @@ minDefined = (a, b) ->
 
 loadCaps = (model) ->
   college = null
-  for partner in ((model.school.dual_enrollment or {}).partners or [])
+  partners = (model.school.dual_enrollment or {}).partners or []
+  for partner in partners
     college = minDefined college, partner.max_courses_per_term
+  # college courses are a heavier load than their period count shows;
+  # how many one term can carry follows the rigor appetite
+  if partners.length
+    rigor = if model.profile.rigor? then model.profile.rigor else 0.5
+    full = model.tuning?.search?.collegeFullLoad or 5
+    college = minDefined college, Math.max(1, Math.round(full * rigor))
   {
     courses: minDefined model.school.max_courses_per_term, model.profile.maxCoursesPerTerm
     credits: model.school.max_credits_per_term

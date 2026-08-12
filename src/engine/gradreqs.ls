@@ -12,7 +12,11 @@
 #   satisfied_by: { any: [pred, pred] }   alternatives, e.g. a content
 #     group or the partner college's approved stand-ins
 matchPred = (sb, course) ->
-  return sb.tag in (course.tags or []) if sb.tag?
+  # grad_tags, when present, are the district's own word on what a
+  # course earns credit as (a partner college's approved list); plain
+  # tags carry subject vocabulary for search and interests, which must
+  # not satisfy graduation requirements by accident
+  return sb.tag in (course.grad_tags or course.tags or []) if sb.tag?
   return course.id in sb.courses if sb.courses?
   return course.content? and course.content in sb.content if sb.content?
   if sb.any?
