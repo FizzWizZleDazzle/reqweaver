@@ -73,6 +73,10 @@ check 'early_grad covers requirements and prefers a short horizon', ->
   result = search model, {}
   best = result.plans[0]
   assert best.gradRemaining is 0, "grad requirements not covered: #{best.gradRemaining} remaining"
+  # 5 required credits at 1.5 credits per term cover inside 4 terms;
+  # the plan must end there, not fill the remaining horizon
+  assert best.coveredAt <= 3, "requirements covered only at term #{best.coveredAt}"
+  assert best.plan.length is best.coveredAt + 1, 'early_grad plan kept scheduling after coverage'
 
 check 'optional summer term joins only when opted in', ->
   base = buildModel school, freshProfile!, levels, exams

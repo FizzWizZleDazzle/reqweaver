@@ -310,13 +310,17 @@ initialState = (model) ->
     contentTaken.add course.content if course.content?
     for e in (course.excludes or [])
       excluded.add e
+  coverage = initialCoverage model.school, model.profile, model.courses
   {
     done: model.done0
     contentTaken: contentTaken
     excluded: excluded
     plan: []
     banked: 0
-    coverage: initialCoverage model.school, model.profile, model.courses
+    coverage: coverage
+    # the first term index at which every graduation requirement is
+    # covered; -1 when the profile already covers them all
+    coveredAt: if (creditsRemaining model.school, coverage) is 0 then -1 else null
   }
 
 # One search state extended by one term's course subset.
@@ -336,12 +340,16 @@ successorState = (model, state, term, subset) ->
     banked += estBanked course, model.levels, model.exams
     ids.push course.id
   ids.sort!
+  coveredAt = state.coveredAt
+  if not coveredAt? and (creditsRemaining model.school, coverage) is 0
+    coveredAt = term.index
   {
     done: done
     contentTaken: contentTaken
     excluded: excluded
     coverage: coverage
     banked: banked
+    coveredAt: coveredAt
     plan: state.plan ++ [{ grade: term.grade, term: term.term, courses: ids }]
   }
 
@@ -407,7 +415,9 @@ objectiveScore = (model, state, objective) ->
   missing = creditsRemaining model.school, state.coverage
   base = state.banked   # max_credits and default
   if objective is 'early_grad'
-    base = if missing is 0 then 1000 - state.plan.length else 0
+    # every term of earlier coverage outweighs anything banked credit
+    # can add; banked breaks ties among equally short paths
+    base = if state.coveredAt? then 1000 - 200 * state.coveredAt + state.banked else 0
   base - model.tuning.objective.gradWeight * missing + eagerness model, state
 
 planSignature = (state) ->
@@ -526,6 +536,12 @@ search = (model, options) ->
     pinnedIds = pins["#{term.grade}:#{term.term}"] or []
     successors = []
     for state in beam
+      # early graduation means leaving: once a state covers every
+      # requirement, its plan ends rather than filling the remaining
+      # terms
+      if objective is 'early_grad' and state.coveredAt?
+        successors.push state
+        continue
       for next in expandState model, state, term, pinnedIds, caps, params, warnings
         successors.push next
     beam = scoreAndPrune model, successors, objective, params.beam
