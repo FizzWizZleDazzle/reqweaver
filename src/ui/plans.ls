@@ -87,6 +87,21 @@ create = (ctx) ->
     return [] unless shown?
     (latest.past or []) ++ shown.terms
 
+  # The plan on screen as plain data: what a save stores and a shared
+  # link shows.
+  snapshot = ->
+    shown = plan!
+    return null unless shown?
+    {
+      terms: terms!
+      coverage: {} <<< shown.coverage
+      banked: (shown.banked or 0) + (latest.bankedPast or 0)
+      gradRemaining: shown.gradRemaining
+      objective: latest.objective
+      soft: shown.soft
+      objectiveScore: shown.objectiveScore
+    }
+
   courseChip = (id) -> chips.chip id
 
   warningItem = (warning) -> el 'li', { text: warning }
@@ -523,7 +538,8 @@ create = (ctx) ->
   idle!
   {
     el: root, idle: idle, running: running, show: show, failed: failed,
-    markStale: markStale, hints: setHints, whyFor: whyFor, terms: terms
+    markStale: markStale, hints: setHints, whyFor: whyFor, terms: terms,
+    snapshot: snapshot
   }
 
 module.exports = { create, diffText }

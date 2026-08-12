@@ -16,7 +16,7 @@ EXAMS = 'data/registry/exams.yaml'
 SCORER = 'data/weights/scorer-weights.yaml'
 TUNING = 'data/weights/engine.yaml'
 
-NO_ENCODER = 'This build has no goal encoding service configured, and this school precompiled no vector for that wording, so the plans below are not steered toward your goal.'
+NO_ENCODER = 'This build names no goal encoding endpoint, and this school precompiled no vector for that wording, so the plans below are not steered toward your goal.'
 
 # Fetched files never change during a session, so cache the promises. The
 # worker outlives a solve, so an encoder loaded for one run is still in

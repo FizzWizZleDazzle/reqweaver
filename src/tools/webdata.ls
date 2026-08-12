@@ -37,13 +37,13 @@ embeddingsBeside = (file) ->
   if fs.existsSync candidate then candidate else null
 
 # siteconfig.yaml carries the settings that differ between deployments,
-# today just the goal-encoding endpoint. It is staged as JSON because the
-# app reads it as compiled output, not as a specsheet.
+# today just where the API lives. It is staged as JSON because the app
+# reads it as compiled output, not as a specsheet.
 siteConfig = ->
   file = path.join ROOT, 'siteconfig.yaml'
   loaded = if fs.existsSync file then yaml.load fs.readFileSync(file, 'utf8') else null
   config = loaded or {}
-  config.encode_api = (config.encode_api or '')
+  config.api_base = (config.api_base or '')
   config
 
 main = !->
@@ -92,8 +92,8 @@ main = !->
   fs.writeFileSync (path.join OUT, 'data', 'siteconfig.json'), JSON.stringify(config, null, 2) + '\n'
 
   console.log "staged #{entries.length} school sheets (#{embedded} with course vectors) into public/data"
-  console.log if config.encode_api
-    then "goal encoding through #{config.encode_api}"
-    else 'no encode_api in siteconfig.yaml; only precompiled goals steer plans'
+  console.log if config.api_base
+    then "API at #{config.api_base}"
+    else 'API on the same origin as the page (api_base is empty)'
 
 main!
