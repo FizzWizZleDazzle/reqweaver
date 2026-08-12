@@ -1,0 +1,22 @@
+specsheet: school
+schema_version: 1
+catalog_year: 2026
+id: test/two-langs
+kind: high_school
+name: Two Languages Test School
+credit_unit: carnegie
+terms_per_year:
+  - { id: fall,   sequence: 1 }
+  - { id: spring, sequence: 2 }
+grade_levels: [9, 10]
+max_courses_per_term: 1
+grad_requirements: []
+courses:
+  - { id: SPA1A, name: Spanish 1 A, description: Spanish 1 A, credits: 0.5, tags: [language], level: regular, offered_terms: [fall],   grade_levels: [9, 10], prereqs: { all_of: [],      any_of: [] } }
+  - { id: SPA1B, name: Spanish 1 B, description: Spanish 1 B, credits: 0.5, tags: [language], level: regular, offered_terms: [spring], grade_levels: [9, 10], prereqs: { all_of: [SPA1A], any_of: [] } }
+  - { id: SPA2A, name: Spanish 2 A, description: Spanish 2 A, credits: 0.5, tags: [language], level: regular, offered_terms: [fall],   grade_levels: [9, 10], prereqs: { all_of: [SPA1B], any_of: [] } }
+  - { id: SPA2B, name: Spanish 2 B, description: Spanish 2 B, credits: 0.5, tags: [language], level: regular, offered_terms: [spring], grade_levels: [9, 10], prereqs: { all_of: [SPA2A], any_of: [] } }
+  - { id: CHI1A, name: Chinese 1 A, description: Chinese 1 A, credits: 0.5, tags: [language], level: regular, offered_terms: [fall],   grade_levels: [9, 10], prereqs: { all_of: [],      any_of: [] } }
+  - { id: CHI1B, name: Chinese 1 B, description: Chinese 1 B, credits: 0.5, tags: [language], level: regular, offered_terms: [spring], grade_levels: [9, 10], prereqs: { all_of: [CHI1A], any_of: [] } }
+  - { id: CHI2A, name: Chinese 2 A, description: Chinese 2 A, credits: 0.5, tags: [language], level: regular, offered_terms: [fall],   grade_levels: [9, 10], prereqs: { all_of: [CHI1B], any_of: [] } }
+  - { id: CHI2B, name: Chinese 2 B, description: Chinese 2 B, credits: 0.5, tags: [language], level: regular, offered_terms: [spring], grade_levels: [9, 10], prereqs: { all_of: [CHI2A], any_of: [] } }

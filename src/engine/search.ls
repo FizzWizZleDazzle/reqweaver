@@ -317,6 +317,8 @@ successorState = (model, state, term, subset) ->
 eagerness = (model, state) ->
   horizon = model.terms.length
   affinityWeight = model.tuning.priority.eagerRigor
+  rootWeight = model.tuning.priority.newSequence
+  tagsSoFar = new Set(model.done0Tags)
   total = 0
   for entry, i in state.plan
     weight = 0
@@ -324,7 +326,17 @@ eagerness = (model, state) ->
       course = model.courses[id]
       continue unless course?
       affinity = rigorAffinity model, course
-      weight += (1 + (model.unlocks[id] or 0) + affinityWeight * affinity) * (course.credits or 0)
+      # continuity in the tie-break too: a sequence root opened in a
+      # family already underway counts against the plan, or unlock-rich
+      # breadth beats continuation whenever the objective ties
+      dampen = 0
+      if isSequenceRoot model, course
+        for tag in (course.tags or []) when tagsSoFar.has tag
+          dampen := rootWeight
+      weight += (1 + (model.unlocks[id] or 0) + affinityWeight * affinity - dampen) * (course.credits or 0)
+    for id in entry.courses
+      for tag in (model.courses[id]?.tags or [])
+        tagsSoFar.add tag
     total += (horizon - i) * weight
   total * model.tuning.objective.eagernessScale
 
