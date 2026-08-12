@@ -5,8 +5,9 @@
 #
 # One-time setup:
 #   npx wrangler kv namespace create PLANS   # put the id below
-# Deploy (after npm run build:web):
-#   npx wrangler deploy -c workers/api/wrangler.toml
+# Deploy (after npm run build:web), from this directory so the crate
+# build runs where Cargo.toml lives:
+#   cd workers/api && npx wrangler deploy
 # The app and API share an origin, so siteconfig api_base stays empty.
 name = "reqweaver"
 main = "build/worker/shim.mjs"
