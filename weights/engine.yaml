@@ -36,3 +36,7 @@ priority:
                         # catalog's mean goal affinity that serves no
                         # requirement; paid filler should not displace
                         # what the student asked for
+  goalBank: 6           # with a goal, banked credit scales with
+                        # alignment (x1.9 at strong alignment, x0.4
+                        # when misaligned), so credit in the student's
+                        # field outranks raw credit quantity

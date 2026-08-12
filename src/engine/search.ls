@@ -17,7 +17,7 @@ DEFAULT_TUNING =
   priority: {
     requirement: 40, continuation: 5, interest: 2, goal: 12,
     usefulBanked: 2, unlocks: 0.5, banked: 4, rigor: 3, eagerRigor: 2,
-    newSequence: 6, pairGap: 3, collegeFiller: 15
+    newSequence: 6, pairGap: 3, collegeFiller: 15, goalBank: 6
   }
 
 mergeTuning = (given) ->
@@ -174,11 +174,17 @@ priorityFor = (model, course, unmet, prevTerm, remaining, doneTags, hasBonus) ->
   if course.college? and model.goalVec? and fixed.goal <= 0 and reqBonus is 0
     collegeFiller = w.collegeFiller
     bankedScale = 0
+  # with a stated goal, banked credit is worth more when it aligns:
+  # otherwise a 4-credit off-topic course out-points a 3-credit course
+  # in the student's field, and alignment never beats raw quantity
+  align = 1
+  if model.goalVec?
+    align = Math.max 0.25, 1 + w.goalBank * fixed.goal
   reqBonus + continuation + interestBonus - rootPenalty - collegeFiller +
     w.goal * fixed.goal +
-    bankedScale * w.usefulBanked * (usefulBanked model, course.id, remaining) +
+    align * bankedScale * w.usefulBanked * (usefulBanked model, course.id, remaining) +
     w.unlocks * (model.unlocks[course.id] or 0) +
-    bankedScale * w.banked * fixed.banked +
+    align * bankedScale * w.banked * fixed.banked +
     w.rigor * fixed.rigorAff
 
 # --- per-term candidate handling -------------------------------------------
