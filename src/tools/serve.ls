@@ -28,6 +28,42 @@ TYPES =
 
 RELOAD_TAG = '<script>new EventSource("/__reload").onmessage=function(){location.reload()}</script>'
 
+# Local stand-in for the deployed Worker's POST /encode: the pure
+# LiveScript encoder over the data/encoder export (npm run
+# export-model), so a typed goal steers plans on localhost too. Lazy;
+# absent export answers 503 and the app degrades the same way it does
+# offline.
+encoderState = null
+loadEncoder = ->
+  return encoderState if encoderState?
+  dir = path.join BASE, 'data', 'encoder'
+  return null unless fs.existsSync path.join(dir, 'manifest.json')
+  mod = require path.join(BASE, 'lib', 'scoring', 'encoder.js')
+  manifest = JSON.parse fs.readFileSync path.join(dir, 'manifest.json'), 'utf8'
+  vocab = JSON.parse fs.readFileSync path.join(dir, 'vocab.json'), 'utf8'
+  buf = fs.readFileSync path.join(dir, 'model.bin')
+  ab = buf.buffer.slice buf.byteOffset, buf.byteOffset + buf.byteLength
+  encoderState := {
+    mod: mod
+    model: mod.loadModel manifest, ab, vocab
+    name: manifest.model or 'bge-small-en-v1.5'
+  }
+  encoderState
+
+handleEncode = (request, response) !->
+  enc = loadEncoder!
+  unless enc?
+    return send response, 503, 'application/json', JSON.stringify { error: 'no local encoder export; run npm run export-model' }
+  chunks = []
+  request.on 'data', (chunk) !-> chunks.push chunk
+  request.on 'end', !->
+    try
+      text = String(JSON.parse(Buffer.concat(chunks).toString('utf8')).text or '')
+      vector = enc.mod.encode enc.model, text
+      send response, 200, 'application/json', JSON.stringify { model: enc.name, vector: Array.from(vector) }
+    catch e
+      send response, 400, 'application/json', JSON.stringify { error: String(e.message or e) }
+
 clients = []
 
 broadcast = !->
@@ -52,6 +88,8 @@ sendFile = (response, target, fallback) !->
 # matches what the deployed Worker does.
 handle = (request, response) !->
   requested = decodeURIComponent (request.url.split '?')[0]
+  if requested is '/encode' and request.method is 'POST'
+    return handleEncode request, response
   if watching and requested is '/__reload'
     response.writeHead 200, {
       'content-type': 'text/event-stream'
