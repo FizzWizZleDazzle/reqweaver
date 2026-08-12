@@ -17,6 +17,10 @@ priority:
   requirement: 40       # unmet-graduation-requirement bonus; must beat
                         # any other candidate's full priority
   continuation: 5       # prereq taken in the immediately preceding term
+  familyContinuation: 10  # prereq completed anywhere behind the student:
+                          # the next level of a started family (Spanish 4
+                          # after middle-school Spanish 1-3) outranks an
+                          # interchangeable elective
   interest: 2           # course carries a profile interest tag
   goal: 12              # embedding similarity to the free-text goal,
                         # centered against the catalog mean, so the

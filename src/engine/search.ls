@@ -15,7 +15,7 @@ DEFAULT_TUNING =
   search: { beam: 100, topK: 14, subsets: 40, keepPlans: 20, collegeFullLoad: 5 }
   objective: { gradWeight: 20, eagernessScale: 0.0001 }
   priority: {
-    requirement: 40, continuation: 5, interest: 2, goal: 12,
+    requirement: 40, continuation: 5, familyContinuation: 10, interest: 2, goal: 12,
     usefulBanked: 2, unlocks: 0.5, banked: 4, rigor: 3, eagerRigor: 2,
     newSequence: 6, pairGap: 3, collegeFiller: 15, goalBank: 6,
     goalStrong: 0.5
@@ -144,19 +144,20 @@ staticScores = (model, course) ->
     banked: estBanked course, model.levels, model.exams
     rigorAff: rigorAffinity model, course
     preIds: preIds
-    root: preIds.length is 0 and (model.unlocks[course.id] or 0) >= 2
+    root: preIds.length is 0 and (model.unlocks[course.id] or 0) >= 1
   }
 
-# A sequence root is a course with no prerequisites that opens a chain.
-# Starting a second sequence in a tag family the student is already
-# partway through (Chinese 1 alongside Spanish, or with Spanish 1-3
-# already on record) is penalized: continuity beats breadth. The
-# requirement bonus dwarfs the penalty, so a root that covers an unmet
-# graduation requirement is never suppressed.
+# A sequence root is a course with no prerequisites that opens a chain
+# (even a two-course ladder: Elementary Arabic II makes Elementary
+# Arabic I a root). Starting a second sequence in a tag family the
+# student is already partway through (Chinese 1 alongside Spanish, or
+# with Spanish 1-3 already on record) is penalized: continuity beats
+# breadth. The requirement bonus dwarfs the penalty, so a root that
+# covers an unmet graduation requirement is never suppressed.
 isSequenceRoot = (model, course) ->
-  (prereqIds course).length is 0 and (model.unlocks[course.id] or 0) >= 2
+  (prereqIds course).length is 0 and (model.unlocks[course.id] or 0) >= 1
 
-priorityFor = (model, course, unmet, prevTerm, remaining, doneTags, hasBonus) ->
+priorityFor = (model, course, unmet, prevTerm, remaining, doneTags, hasBonus, done) ->
   w = model.tuning.priority
   # the requirement bonus is granted by rankCandidates to just enough
   # top candidates to cover each requirement's remaining need; giving
@@ -164,9 +165,16 @@ priorityFor = (model, course, unmet, prevTerm, remaining, doneTags, hasBonus) ->
   # term
   reqBonus = if hasBonus then w.requirement else 0
   fixed = staticScores model, course
+  # continuation of a started family is a value of its own, stronger
+  # than the last-term chase: a student three years into Spanish gets
+  # Spanish 4 over an interchangeable AP elective, which is worth more
+  # than its credits (continuity is what colleges read)
   continuation = 0
-  for id in fixed.preIds when prevTerm.has id
-    continuation := w.continuation
+  for id in fixed.preIds
+    if prevTerm.has id
+      continuation := Math.max continuation, w.continuation
+    else if done? and done.has id
+      continuation := Math.max continuation, w.familyContinuation
   interestBonus = 0
   for tag in (course.tags or []) when model.interests.has tag
     interestBonus := w.interest
@@ -174,9 +182,14 @@ priorityFor = (model, course, unmet, prevTerm, remaining, doneTags, hasBonus) ->
   # too: on a real catalog a language chain unlocks more than any flat
   # penalty, so the penalty alone cannot hold the line.
   rootPenalty = 0
+  secondFamily = false
   if fixed.root
     for tag in (course.tags or []) when doneTags.has tag
-      rootPenalty := w.newSequence + w.unlocks * (model.unlocks[course.id] or 0)
+      # the full strip: penalty, unlock reward, and the rigor pull (a
+      # college-level second language otherwise outranks free school
+      # electives on intensity alone)
+      rootPenalty := w.newSequence + w.unlocks * (model.unlocks[course.id] or 0) + w.rigor * fixed.rigorAff
+      secondFamily := true
   # under early_grad, banked credit is only the objective's tie-break;
   # letting it drive candidate ranking starves the subset enumeration
   # of requirement-diverse combinations (the cap explores ranking
@@ -191,6 +204,10 @@ priorityFor = (model, course, unmet, prevTerm, remaining, doneTags, hasBonus) ->
   if course.college? and model.goalVec? and reqBonus is 0 and fixed.goal < goalStrongBar(model)
     collegeFiller = w.collegeFiller
     bankedScale = 0
+  # a second-family root also loses its banked attraction: with no
+  # goal stated, banked credit was re-buying Elementary Arabic past
+  # the continuity penalty
+  bankedScale = 0 if secondFamily and reqBonus is 0
   # with a stated goal, banked credit is worth more when it aligns:
   # otherwise a 4-credit off-topic course out-points a 3-credit course
   # in the student's field, and alignment never beats raw quantity
@@ -384,7 +401,8 @@ bySlotScore = (scored) ->
 # grants its bonus to the best matchers up to 1.5x its remaining need,
 # and the final pass sorts with the bonuses placed.
 rankCandidates = (model, candidates, unmet, prevTerm, remaining, doneTags, coverage, state, term) ->
-  base = bySlotScore [{ c: c, p: priorityFor model, c, unmet, prevTerm, remaining, doneTags, false } for c in candidates]
+  done = state?.done
+  base = bySlotScore [{ c: c, p: priorityFor model, c, unmet, prevTerm, remaining, doneTags, false, done } for c in candidates]
   marked = new Set!
   for req in unmet
     need = req.credits - ((coverage or {})[req.id] or 0)
@@ -398,7 +416,7 @@ rankCandidates = (model, candidates, unmet, prevTerm, remaining, doneTags, cover
         continue if schoolPath
       marked.add entry.c.id
       got += if entry.c.grad_credits? then entry.c.grad_credits else (entry.c.credits or 0)
-  scored = bySlotScore [{ c: e.c, p: priorityFor model, e.c, unmet, prevTerm, remaining, doneTags, (marked.has e.c.id) } for e in base]
+  scored = bySlotScore [{ c: e.c, p: priorityFor model, e.c, unmet, prevTerm, remaining, doneTags, (marked.has e.c.id), done } for e in base]
   [entry.c for entry in scored]
 
 # Pins are overrides: the student knows about exceptions the engine
