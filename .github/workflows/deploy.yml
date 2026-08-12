@@ -52,3 +52,10 @@ jobs:
             sleep 20
           done
           exit 1
+      - name: Deploy the Pages site from the same build
+        if: steps.creds.outputs.present == 'true'
+        env:
+          SITE_API_BASE: https://reqweaver-prod.arturmisiurev.workers.dev
+        run: |
+          node lib/tools/webdata.js
+          npx wrangler pages deploy public --project-name reqweaver-site --branch main
