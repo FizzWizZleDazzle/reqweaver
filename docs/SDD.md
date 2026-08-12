@@ -478,7 +478,10 @@ Until that repository exists, `npm run build:web` stages the
 specs, registries, and weights files of this repository under
 `public/data/` with a generated school index, and the client parses the
 YAML. The index is what the app offers in its school picker, so adding
-a sheet under `specs/` is enough to make it selectable.
+a sheet under `specs/` is enough to make it selectable. College sheets
+are staged but left out of the index: a college is a dual-enrollment
+partner fetched through the school that names it, and planning on a
+college directly is not a feature yet (section 14.1).
 
 ## 6. Core planning engine
 
@@ -778,7 +781,7 @@ src/engine/search.ls    # beam search, objectives, heuristics
 src/scoring/features.ls # feature extraction
 src/scoring/scorer.ls   # weight-file forward pass
 src/tools/webdata.ls    # stages public/, generates the school index
-src/tools/serve.ls      # static server; --watch rebuilds and reloads tabs
+src/tools/serve.ls      # static server; --watch reloads tabs; local /encode
 siteconfig.yaml         # per-deployment settings, staged as JSON
 ```
 
