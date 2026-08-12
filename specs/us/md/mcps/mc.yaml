@@ -26,10 +26,12 @@ notes:
     at all, the course keeps the name from the approved list and is recorded at 3 credits as a
     placeholder; each such course says so in its description.
   - >-
-    Prerequisites are recorded in prereqs only when MC states them purely as MC courses. Where
-    the catalog offers alternatives such as an assessment or placement score, departmental
-    consent, or an equivalent course, the prerequisite is left out of prereqs and the catalog
-    prose stays in the description.
+    Prerequisites are recorded in prereqs as the MC courses the catalog names. Non-course
+    alternatives (an assessment or placement score, departmental consent, an equivalent course)
+    are not encoded; a student who placed out uses the app's waiver mechanism. A requirement
+    that carries such an alternative keeps its named course in an any_of group. Corequisites
+    and pre- or corequisites are not encoded; their prose stays in the description. A few
+    prerequisites that vary by studio track (ARTT255, ARTT256) are prose only.
   - >-
     Variable-credit courses are recorded at the minimum of their credit range; the description
     states the range.
@@ -195,6 +197,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ACCT221]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5100, CE Adv Accounting" }
     grad_tags: [elective]
@@ -263,6 +266,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ACCT221]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5100, CE Adv Accounting" }
     grad_tags: [elective]
@@ -298,6 +302,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ACCT231]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5100, CE Adv Accounting" }
     grad_tags: [elective]
@@ -313,6 +318,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ACCT222]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5100, CE Adv Accounting" }
     grad_tags: [elective]
@@ -485,6 +491,7 @@ courses:
     tags: [social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ANTH201, ANTH215, ANTH240, ANTH256]] }
     approved: false
   # --- AOSC ----------------------------------------------------------------
   - id: AOSC100
@@ -559,11 +566,11 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ARAB101]] }
     approved: true
     hs_credit: { category: "World Languages: Arabic", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
   # --- ARCH ----------------------------------------------------------------
-    prereqs: { all_of: [ARAB101], any_of: [] }
   - id: ARCH101
     name: "Introduction to Architecture and the Built Environment"
     description: >-
@@ -612,7 +619,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
-    prereqs: { all_of: [ARCH103], any_of: [ARCH101, IDES101] }
+    prereqs: { all_of: [ARCH103], any_of: [[ARCH101, IDES101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
     grad_tags: [elective]
@@ -629,6 +636,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ARCH103]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
     grad_tags: [elective]
@@ -646,6 +654,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ARCH183]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
     grad_tags: [elective]
@@ -682,6 +691,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ARCH103]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
     grad_tags: [elective]
@@ -917,6 +927,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ARTT100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
     grad_tags: [elective]
@@ -932,6 +943,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ARTT100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
     grad_tags: [elective]
@@ -949,6 +961,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ARTT205]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
     grad_tags: [elective]
@@ -965,6 +978,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ARTT100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
     grad_tags: [elective]
@@ -981,6 +995,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ARTT211]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
     grad_tags: [elective]
@@ -996,6 +1011,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ARTT112]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
     grad_tags: [elective]
@@ -1013,6 +1029,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ARTT120]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
     grad_tags: [elective]
@@ -1028,6 +1045,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [ARTT102, ARTT103] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
     grad_tags: [elective]
@@ -1043,6 +1061,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ARTT221]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
     grad_tags: [elective]
@@ -1179,6 +1198,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ARTT152]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5128, CE Adv Visual Art" }
     grad_tags: [elective]
@@ -1264,6 +1284,7 @@ courses:
     tags: [fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [GDES116], any_of: [[ARTT204, ARTT205], [ARTT102, ARTT103]] }
     approved: false
   - id: ARTT265
     name: "Architectural History: Ancient to 1400"
@@ -1503,6 +1524,7 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ASLP100]] }
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
     grad_tags: [world_language]
@@ -1536,6 +1558,7 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ASLP110]] }
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
     grad_tags: [world_language]
@@ -1555,6 +1578,7 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [ASLP105, ASLP106, ASLP110] }
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
     grad_tags: [world_language]
@@ -1572,6 +1596,7 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ASLP205]] }
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
     grad_tags: [world_language]
@@ -1590,6 +1615,7 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [ASLP200, ASLP205] }
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
     grad_tags: [world_language]
@@ -1607,6 +1633,7 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ASLP200]] }
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
     grad_tags: [world_language]
@@ -1625,6 +1652,7 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [ASLP121, ASLP200] }
     approved: true
     hs_credit: { category: "World Languages: American Sign Language", synergy: "WLG5129, CE Adv WL Am Sign Lang" }
     grad_tags: [world_language]
@@ -1642,6 +1670,7 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ASLP207]] }
     approved: false
   - id: ASLP285
     name: "Practicum in ASL"
@@ -1699,6 +1728,7 @@ courses:
     tags: [elective, science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ASTR101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -1981,6 +2011,7 @@ courses:
     tags: [elective, health]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [PSYC100] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -2002,6 +2033,7 @@ courses:
     tags: [elective, health]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BEHE100, HLTH225, PSYC100] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -2148,6 +2180,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [MATH117] }
     approved: true
     hs_credit: { category: "NGSS Biology", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [science]
@@ -2166,6 +2199,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [MATH165] }
     approved: true
     hs_credit: { category: "NGSS Biology", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [science]
@@ -2181,6 +2215,7 @@ courses:
     tags: [elective, science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [MATH165] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -2271,6 +2306,7 @@ courses:
     tags: [elective, science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BIOL150, CHEM131, MATH117] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -2301,6 +2337,7 @@ courses:
     tags: [elective, science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BIOL212] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -2336,6 +2373,7 @@ courses:
     tags: [elective, science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BIOL150, BIOL151] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -2413,6 +2451,7 @@ courses:
     tags: [elective, science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[BIOL150, CHEM131]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -2451,6 +2490,7 @@ courses:
     tags: [elective, science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[BIOT200]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -2470,6 +2510,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BIOT201] }
     approved: false
   - id: BIOT240
     name: "Principles of Nucleic Acid Methods"
@@ -2485,6 +2526,7 @@ courses:
     tags: [elective, science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BIOL150, CHEM131, BIOT200] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -2500,6 +2542,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BIOT201] }
     approved: false
   - id: BIOT250
     name: "Principles of Biomanufacturing"
@@ -2517,6 +2560,7 @@ courses:
     tags: [elective, science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BIOT120, BIOT200] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -2538,6 +2582,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BIOT121, BIOT201] }
     approved: false
   - id: BIOT260
     name: "Introduction to the Principles of Cell and Gene Therapy"
@@ -2572,6 +2617,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BIOT121, BIOT201, BIOT241] }
     approved: false
   # --- BLDG ----------------------------------------------------------------
   - id: BLDG130
@@ -2761,6 +2807,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BLDG130, BLDG133] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
     grad_tags: [elective]
@@ -2837,6 +2884,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[BLDG150]] }
     approved: false
   - id: BLDG270
     name: "Commercial Refrigeration"
@@ -2924,6 +2972,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[BLDG184]] }
     approved: false
   # --- BSAD ----------------------------------------------------------------
   - id: BSAD101
@@ -2978,6 +3027,7 @@ courses:
     tags: [math, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MATH050, MATH092]] }
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
@@ -3023,6 +3073,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BSAD268] }
     approved: false
   # --- BSAN ----------------------------------------------------------------
   - id: BSAN101
@@ -3042,6 +3093,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ELAI990]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5102, CE Adv Business" }
     grad_tags: [elective]
@@ -3058,6 +3110,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[DATA110]] }
     approved: false
   # --- CCJS ----------------------------------------------------------------
   - id: CCJS110
@@ -3089,6 +3142,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SOCY100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
     grad_tags: [elective]
@@ -3104,6 +3158,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CCJS110]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
     grad_tags: [elective]
@@ -3119,6 +3174,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CCJS110]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
     grad_tags: [elective]
@@ -3134,6 +3190,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CCJS110]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
     grad_tags: [elective]
@@ -3150,6 +3207,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [CCJS110, CCJS201] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
     grad_tags: [elective]
@@ -3165,6 +3223,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CCJS110]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
     grad_tags: [elective]
@@ -3179,6 +3238,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CCJS110]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
     grad_tags: [elective]
@@ -3194,6 +3254,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CCJS110]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
     grad_tags: [elective]
@@ -3209,6 +3270,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CCJS110]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
     grad_tags: [elective]
@@ -3230,6 +3292,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [CCJS201, CCJS230] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
     grad_tags: [elective]
@@ -3244,6 +3307,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CCJS110]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
     grad_tags: [elective]
@@ -3274,6 +3338,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [CCJS110, SOCY100] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "PGS5106, CE Adv Criminal Justice" }
     grad_tags: [elective]
@@ -3289,6 +3354,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CCJS110, ENGL102, ENGL103]] }
     approved: false
   # --- CHEM ----------------------------------------------------------------
   - id: CHEM031
@@ -3361,6 +3427,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [MATH050] }
     approved: false
   - id: CHEM131
     name: "Principles of Chemistry I"
@@ -3379,6 +3446,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CHEM099]] }
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [science]
@@ -3395,6 +3463,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CHEM131]] }
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [science]
@@ -3414,6 +3483,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MATH165]] }
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [science]
@@ -3433,6 +3503,7 @@ courses:
     tags: [elective, science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [CHEM131] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -3452,6 +3523,7 @@ courses:
     tags: [elective, science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CHEM132]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -3470,6 +3542,7 @@ courses:
     tags: [elective, science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CHEM203]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -3521,11 +3594,11 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CHIN101]] }
     approved: true
     hs_credit: { category: "World Languages: Chinese", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
     exam_equivalent: [AP_CHINESE_LANG]
-    prereqs: { all_of: [CHIN101], any_of: [] }
   - id: CHIN201
     name: "Intermediate Chinese I"
     description: >-
@@ -3539,11 +3612,11 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CHIN102]] }
     approved: true
     hs_credit: { category: "World Languages: Chinese", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
     exam_equivalent: [AP_CHINESE_LANG]
-    prereqs: { all_of: [CHIN102], any_of: [] }
   - id: CHIN202
     name: "Intermediate Chinese II"
     description: >-
@@ -3558,12 +3631,12 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CHIN201]] }
     approved: true
     hs_credit: { category: "World Languages: Chinese", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
     exam_equivalent: [AP_CHINESE_LANG]
   # --- CMAP ----------------------------------------------------------------
-    prereqs: { all_of: [CHIN201], any_of: [] }
   - id: CMAP106
     name: "Computer Literacy"
     description: >-
@@ -3732,6 +3805,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMGT135]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
     grad_tags: [elective]
@@ -3752,6 +3826,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [MATH098], any_of: [[CMGT100, CMGT135]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
     grad_tags: [elective]
@@ -3773,6 +3848,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [CMGT100, CMGT110, CMGT190] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
     grad_tags: [elective]
@@ -3790,6 +3866,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [CMGT100, CMGT190, CMGT210] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "CON5105, CE Adv Construction" }
     grad_tags: [elective]
@@ -3932,6 +4009,7 @@ courses:
     tags: [computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC140]] }
     approved: false
   - id: CMSC201
     name: "Java Programming Language"
@@ -3945,6 +4023,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC140]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -3964,6 +4043,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC140]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4004,6 +4084,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC140, DATA101, DATA110]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4021,6 +4102,7 @@ courses:
     tags: [math, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [MATH182], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "Math", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [math]
@@ -4037,6 +4119,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC201]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4073,6 +4156,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC201]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4089,6 +4173,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC140]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4104,6 +4189,7 @@ courses:
     tags: [computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC140]] }
     approved: false
   - id: CMSC226
     name: "Introduction to Object-Oriented Programming with C++"
@@ -4118,6 +4204,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC140]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4133,6 +4220,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC226]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4149,6 +4237,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC201]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4166,6 +4255,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC234]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4182,6 +4272,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC110]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4216,6 +4307,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC140]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4233,6 +4325,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC110, NWIT127]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4250,6 +4343,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC110]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4267,6 +4361,7 @@ courses:
     tags: [computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMSC135, CMSC140]] }
     approved: false
   - id: CMSC269
     name: "Computer Science and Technologies Internship"
@@ -4425,7 +4520,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
-    prereqs: { any_of: [COMM108, COMM112] }
+    prereqs: { all_of: [], any_of: [[COMM108, COMM112]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENG5125, CE Adv Speech" }
     grad_tags: [elective]
@@ -4458,6 +4553,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENG5125, CE Adv Speech" }
     grad_tags: [elective]
@@ -4476,6 +4572,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101, COMM108]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENG5125, CE Adv Speech" }
     grad_tags: [elective]
@@ -4523,6 +4620,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[DANC101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5107, CE Adv Dance" }
     grad_tags: [elective]
@@ -4553,6 +4651,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[DANC103]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5107, CE Adv Dance" }
     grad_tags: [elective]
@@ -4582,6 +4681,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[DANC105]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5107, CE Adv Dance" }
     grad_tags: [elective]
@@ -4627,6 +4727,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[DANC102]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5107, CE Adv Dance" }
     grad_tags: [elective]
@@ -4645,6 +4746,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[DANC104]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5107, CE Adv Dance" }
     grad_tags: [elective]
@@ -4661,6 +4763,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[DANC203]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5107, CE Adv Dance" }
     grad_tags: [elective]
@@ -4677,6 +4780,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[DANC106]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5107, CE Adv Dance" }
     grad_tags: [elective]
@@ -4722,6 +4826,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MATH117, MATH217, BSAD210]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4738,6 +4843,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MATH117, MATH217, BSAD210]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4756,6 +4862,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[DATA101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4772,6 +4879,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[DATA110]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -4974,6 +5082,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[EDUC135]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
     grad_tags: [elective]
@@ -5059,7 +5168,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
-    prereqs: { any_of: [EDUC101, EDUC102, EDUC135, PSYC215] }
+    prereqs: { all_of: [], any_of: [[EDUC101, EDUC102, EDUC135, PSYC215]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
     grad_tags: [elective]
@@ -5143,6 +5252,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[EDUC136]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
     grad_tags: [elective]
@@ -5159,6 +5269,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [EDUC136] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
     grad_tags: [elective]
@@ -5182,6 +5293,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[EDUC201]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
     grad_tags: [elective]
@@ -5205,6 +5317,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[EDUC243]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
     grad_tags: [elective]
@@ -5226,6 +5339,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[EDUC243]] }
     approved: false
   - id: EDUC246
     name: "Assessment of Literacy"
@@ -5244,6 +5358,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[EDUC243]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "EDU5109, CE Adv Education" }
     grad_tags: [elective]
@@ -5321,6 +5436,7 @@ courses:
     tags: [eml]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [ELAW980, ELAR980, ELAS980] }
     approved: false
   # --- ELAR ----------------------------------------------------------------
   - id: ELAR970
@@ -5357,6 +5473,7 @@ courses:
     tags: [eml]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ELAR970]] }
     approved: false
   # --- ELAS ----------------------------------------------------------------
   - id: ELAS970
@@ -5394,6 +5511,7 @@ courses:
     tags: [eml]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ELAS970]] }
     approved: false
   # --- ELAW ----------------------------------------------------------------
   - id: ELAW970
@@ -5430,6 +5548,7 @@ courses:
     tags: [eml]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ELAW970]] }
     approved: false
   # --- EMGT ----------------------------------------------------------------
   - id: EMGT101
@@ -5463,6 +5582,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[EMGT101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -5479,6 +5599,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[EMGT101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -5497,6 +5618,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[EMGT101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -5513,6 +5635,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[EMGT101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -5565,6 +5688,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[EMGT101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -5598,6 +5722,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [EMGT101] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -5631,6 +5756,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [MATH181], any_of: [[ENEE140]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
     grad_tags: [elective]
@@ -5650,6 +5776,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [PHYS262] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
     grad_tags: [elective]
@@ -5668,7 +5795,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
-    prereqs: { all_of: [ENEE290], any_of: [ENEE140, CMSC140, CMSC203] }
+    prereqs: { all_of: [ENEE290], any_of: [[ENEE140, CMSC140, CMSC203]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
     grad_tags: [elective]
@@ -5683,6 +5810,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENES100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
     grad_tags: [elective]
@@ -5700,6 +5828,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [ENEE244, PHYS262] }
     approved: false
   - id: ENEE269
     name: "Electrical and Computer Engineering Internship/Practicum"
@@ -5785,6 +5914,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [MATH181] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
     grad_tags: [elective]
@@ -5821,6 +5951,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [MATH181], any_of: [[CHEM132, CHEM135]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
     grad_tags: [elective]
@@ -5854,6 +5985,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [ENES102] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ENR5110, CE Adv Engineering" }
     grad_tags: [elective]
@@ -5945,6 +6077,7 @@ courses:
     tags: [english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[IERW001, IERW002, ELAI990]] }
     approved: false
   - id: ENGL101
     name: "Introduction to College Writing"
@@ -5964,6 +6097,7 @@ courses:
     tags: [english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[IERW002, ELAI990]] }
     approved: true
     hs_credit: { category: "English", synergy: "ENG5111, CE Adv English" }
     grad_tags: [english]
@@ -5986,6 +6120,7 @@ courses:
     tags: [english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "English", synergy: "ENG5111, CE Adv English" }
     grad_tags: [english]
@@ -6011,6 +6146,7 @@ courses:
     tags: [english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "English", synergy: "ENG5111, CE Adv English" }
     grad_tags: [english]
@@ -6089,6 +6225,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6107,6 +6244,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6123,6 +6261,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6140,6 +6279,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6158,6 +6298,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6177,6 +6318,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6195,6 +6337,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6214,6 +6357,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6233,6 +6377,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6252,6 +6397,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6276,6 +6422,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101, ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6293,6 +6440,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6309,6 +6457,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6328,6 +6477,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6345,6 +6495,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6361,6 +6512,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6377,6 +6529,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [ENGL101, ENGL110] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6395,6 +6548,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6434,6 +6588,7 @@ courses:
     tags: [english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL264]] }
     approved: true
     hs_credit: { category: "English", synergy: "ENG5111, CE Adv English" }
     grad_tags: [english]
@@ -6452,6 +6607,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6503,6 +6659,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[FILM200]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
     grad_tags: [elective]
@@ -6519,6 +6676,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [FILM200, TVRA120] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
     grad_tags: [elective]
@@ -6536,6 +6694,7 @@ courses:
     tags: [fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [FILM200, FILM210, FILM220] }
     approved: false
   - id: FILM240
     name: "Movie Making Independent Study: Production"
@@ -6551,6 +6710,7 @@ courses:
     tags: [fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [FILM200, FILM210, FILM220, FILM230] }
     approved: false
   # --- FIRE ----------------------------------------------------------------
   - id: FIRE101
@@ -6675,6 +6835,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[FIRE202]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6689,6 +6850,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[FIRE101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -6737,10 +6899,10 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[FREN101]] }
     approved: true
     hs_credit: { category: "World Languages: French", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
-    prereqs: { all_of: [FREN101], any_of: [] }
   - id: FREN201
     name: "Intermediate French I"
     description: >-
@@ -6755,11 +6917,11 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[FREN102]] }
     approved: true
     hs_credit: { category: "World Languages: French", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
     exam_equivalent: [AP_FRENCH_LANG]
-    prereqs: { all_of: [FREN102], any_of: [] }
   - id: FREN202
     name: "Intermediate French II"
     description: >-
@@ -6773,11 +6935,11 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[FREN201]] }
     approved: true
     hs_credit: { category: "World Languages: French", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
     exam_equivalent: [AP_FRENCH_LANG]
-    prereqs: { all_of: [FREN201], any_of: [] }
   - id: FREN207
     name: "Readings in French Literature"
     description: >-
@@ -6791,6 +6953,7 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[FREN202]] }
     approved: true
     hs_credit: { category: "World Languages: French", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
@@ -6811,6 +6974,7 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[FREN202]] }
     approved: true
     hs_credit: { category: "World Languages: French", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
@@ -6866,6 +7030,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[GDES121]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
     grad_tags: [elective]
@@ -6883,6 +7048,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ARTT100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
     grad_tags: [elective]
@@ -6899,6 +7065,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[GDES134]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
     grad_tags: [elective]
@@ -6950,6 +7117,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [GDES116, GDES210, GDES220] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
     grad_tags: [elective]
@@ -6967,6 +7135,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[GDES116]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
     grad_tags: [elective]
@@ -7021,6 +7190,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[GDES116, GDES214, PHOT214]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
     grad_tags: [elective]
@@ -7039,6 +7209,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [ARTT100, ARTT102, GDES116] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
     grad_tags: [elective]
@@ -7056,6 +7227,7 @@ courses:
     tags: [fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [GDES116, GDES210, GDES220] }
     approved: false
   - id: GDES223
     name: "Applied Graphic Design"
@@ -7069,6 +7241,7 @@ courses:
     tags: [fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[GDES210]] }
     approved: false
   - id: GDES224
     name: "Visual Identity Design + Portfolio"
@@ -7100,6 +7273,7 @@ courses:
     tags: [fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [GDES218], any_of: [[GDES214, PHOT214]] }
     approved: false
   - id: GDES230
     name: "Photoshop: Advanced Image Editing"
@@ -7117,6 +7291,7 @@ courses:
     tags: [fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[GDES214, PHOT214]] }
     approved: false
   - id: GDES234
     name: "Illustration III"
@@ -7129,6 +7304,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[GDES135]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
     grad_tags: [elective]
@@ -7180,6 +7356,7 @@ courses:
     tags: [fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [GDES121] }
     approved: false
   - id: GDES285
     name: "Graphic Design Internship"
@@ -7372,6 +7549,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[GEOG240]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -7390,6 +7568,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [GEOG240, GEOG250] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -7407,6 +7586,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[GEOG240]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -7426,6 +7606,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[GEOG240]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -7462,6 +7643,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[GEOG260]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -7532,10 +7714,10 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[GERM101]] }
     approved: true
     hs_credit: { category: "World Languages: German", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
-    prereqs: { all_of: [GERM101], any_of: [] }
   - id: GERM201
     name: "Intermediate German I"
     description: >-
@@ -7549,11 +7731,11 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[GERM102]] }
     approved: true
     hs_credit: { category: "World Languages: German", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
     exam_equivalent: [AP_GERMAN_LANG]
-    prereqs: { all_of: [GERM102], any_of: [] }
   - id: GERM202
     name: "Intermediate German II"
     description: >-
@@ -7708,6 +7890,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BIOL130], any_of: [[BIOL131, HINM115]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -7801,6 +7984,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [HINM120, BIOL131], any_of: [[HINM115, BIOL130]] }
     approved: false
   - id: HINM165
     name: "ICD-10 Coding"
@@ -7815,6 +7999,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [HINM120, BIOL130], any_of: [[BIOL131, HINM115]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -7884,6 +8069,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [HINM155, HINM165] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -7899,6 +8085,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[HINM155]] }
     approved: false
   - id: HINM230
     name: "Revenue Cycle and Reimbursement Management"
@@ -7928,6 +8115,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [HINM120, HINM155, HINM165] }
     approved: false
   - id: HINM272
     name: "Professional Practice Experience III"
@@ -7958,6 +8146,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[CMAP120, MATH117, MATH120]] }
     approved: false
   - id: HINM285
     name: "Independent Study Health Information Management"
@@ -8850,6 +9039,7 @@ courses:
     tags: [health]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [HLTH105] }
     approved: false
   - id: HLTH298
     name: "Global Health Capstone"
@@ -8890,6 +9080,7 @@ courses:
     tags: [health]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [HLTH160, HLTH225] }
     approved: false
   # --- HMGT ----------------------------------------------------------------
   - id: HMGT100
@@ -9016,6 +9207,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [HMGT110, HMGT111] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
     grad_tags: [elective]
@@ -9034,6 +9226,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[HMGT211]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
     grad_tags: [elective]
@@ -9049,6 +9242,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[HMGT107]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
     grad_tags: [elective]
@@ -9081,6 +9275,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[HMGT211]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "CHT5115, CE Adv Hospitality Mngt" }
     grad_tags: [elective]
@@ -9388,6 +9583,7 @@ courses:
     tags: [elective]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: false
   - id: HONR275
     name: "Honors Internship"
@@ -9775,6 +9971,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [IDES101, IDES107, IDES110] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -9791,6 +9988,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [IDES101, IDES110] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -9809,6 +10007,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [IDES101], any_of: [[IDES110, ARCH103]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -9825,7 +10024,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
-    prereqs: { all_of: [IDES111, IDES118], any_of: [IDES123, ARCH183] }
+    prereqs: { all_of: [IDES111, IDES118], any_of: [[IDES123, ARCH183]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -9843,7 +10042,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
-    prereqs: { all_of: [IDES111, IDES118], any_of: [ARCH183, IDES123] }
+    prereqs: { all_of: [IDES111, IDES118], any_of: [[ARCH183, IDES123]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -9888,6 +10087,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [IDES101, IDES110] }
     approved: false
   - id: IDES244
     name: "Bath Design"
@@ -9902,6 +10102,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [IDES101, IDES110] }
     approved: false
   - id: IDES245
     name: "Kitchen and Bath Appliances and Equipment"
@@ -9917,6 +10118,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[IDES101, IDES110]] }
     approved: false
   - id: IDES246
     name: "Interior Systems"
@@ -9930,6 +10132,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[IDES111]] }
     approved: false
   - id: IDES247
     name: "Codes for Interiors"
@@ -9947,6 +10150,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[IDES101, IDES110]] }
     approved: false
   - id: IDES248
     name: "Interior Materials and Finishes"
@@ -9977,6 +10181,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [IDES101, IDES110] }
     approved: false
   - id: IDES262
     name: "Interiors: Professional Experience"
@@ -10102,6 +10307,7 @@ courses:
     tags: [english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [IERW001] }
     approved: false
   # --- ISTD ----------------------------------------------------------------
   - id: ISTD173
@@ -10151,11 +10357,11 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ITAL101]] }
     approved: true
     hs_credit: { category: "World Languages: Italian", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
     exam_equivalent: [AP_ITALIAN_LANG]
-    prereqs: { all_of: [ITAL101], any_of: [] }
   - id: ITAL201
     name: "Intermediate Italian I"
     description: >-
@@ -10169,12 +10375,12 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ITAL102]] }
     approved: true
     hs_credit: { category: "World Languages: Italian", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
     exam_equivalent: [AP_ITALIAN_LANG]
   # --- JAPN ----------------------------------------------------------------
-    prereqs: { all_of: [ITAL102], any_of: [] }
   - id: JAPN101
     name: "Elementary Japanese I"
     description: >-
@@ -10224,12 +10430,12 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[JAPN102]] }
     approved: true
     hs_credit: { category: "World Languages: Japanese", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
     exam_equivalent: [AP_JAPANESE_LANG]
   # --- KORA ----------------------------------------------------------------
-    prereqs: { all_of: [JAPN102], any_of: [] }
   - id: KORA101
     name: "Elementary Korean I"
     description: >-
@@ -10259,6 +10465,7 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[KORA101]] }
     approved: true
     hs_credit: { category: "World Languages: Korean", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
@@ -10449,6 +10656,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[LGST101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -10467,6 +10675,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[LGST101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -10519,6 +10728,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[LGST101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -10630,6 +10840,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [LGST101, LGST102, LGST103, LGST104, LGST106, LGST122] }
     approved: false
   - id: LGST260
     name: "Law Office Technology"
@@ -10667,6 +10878,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[LGST218]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -10698,6 +10910,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -10831,6 +11044,7 @@ courses:
     tags: [math]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MATH050]] }
     approved: false
   - id: MATH092
     name: "Foundations of Mathematical Reasoning"
@@ -10865,6 +11079,7 @@ courses:
     tags: [math]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MATH050]] }
     approved: false
   - id: MATH117
     name: "Elements of Statistics"
@@ -10936,6 +11151,7 @@ courses:
     tags: [math]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MATH130]] }
     approved: true
     hs_credit: { category: "Geometry/Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [elective]
@@ -10952,6 +11168,7 @@ courses:
     tags: [math]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MATH130]] }
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
@@ -11012,6 +11229,7 @@ courses:
     tags: [math]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MATH165]] }
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
@@ -11033,6 +11251,7 @@ courses:
     tags: [math]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MATH170, MATH181]] }
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
@@ -11050,6 +11269,7 @@ courses:
     tags: [math]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MATH165]] }
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
@@ -11067,6 +11287,7 @@ courses:
     tags: [math]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MATH181]] }
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
@@ -11084,6 +11305,7 @@ courses:
     tags: [math]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [MATH182], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
@@ -11124,6 +11346,7 @@ courses:
     tags: [math]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MATH150, MATH181]] }
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
@@ -11139,6 +11362,7 @@ courses:
     tags: [math]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MATH182]] }
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
@@ -11154,6 +11378,7 @@ courses:
     tags: [math]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MATH182]] }
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
@@ -11169,6 +11394,7 @@ courses:
     tags: [math]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MATH182]] }
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
@@ -11241,6 +11467,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5102, CE Adv Business" }
     grad_tags: [elective]
@@ -11491,6 +11718,7 @@ courses:
     tags: [fine_arts]
     grade_levels: [11, 12]
     offered_terms: [spring]
+    prereqs: { all_of: [], any_of: [[MUSC141]] }
     approved: false
   - id: MUSC145
     name: "Applied Music Elective"
@@ -11663,6 +11891,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MUSC174]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5121, CE Adv Music" }
     grad_tags: [elective]
@@ -11798,6 +12027,7 @@ courses:
     tags: [fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[MUSC138]] }
     approved: false
   - id: MUSC215
     name: "Applied Music"
@@ -11905,6 +12135,7 @@ courses:
     tags: [fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [MUSC216] }
     approved: false
   - id: MUSC246
     name: "Advanced Applied Music"
@@ -11919,6 +12150,7 @@ courses:
     tags: [fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [MUSC245] }
     approved: false
   - id: MUSC285
     name: "Music Internship"
@@ -12229,6 +12461,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BIOL212, BIOL213], any_of: [[ENGL102, ENGL103]] }
     approved: false
   - id: NURS140
     name: "Independent Study in Nursing"
@@ -12356,6 +12589,7 @@ courses:
     tags: [elective, science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BIOL226, NUTR101] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -12371,6 +12605,7 @@ courses:
     tags: [elective, science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[BIOL226, NUTR101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -12514,6 +12749,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[NWIT151, NWIT170]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -12532,6 +12768,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[NWIT151, NWIT170]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -12550,6 +12787,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[NWIT200, NWIT203]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -12568,7 +12806,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
-    prereqs: { all_of: [NWIT105], any_of: [NWIT151, NWIT170] }
+    prereqs: { all_of: [NWIT105], any_of: [[NWIT151, NWIT170]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -12586,7 +12824,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
-    prereqs: { all_of: [NWIT105], any_of: [NWIT151, NWIT170] }
+    prereqs: { all_of: [NWIT105], any_of: [[NWIT151, NWIT170]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -12607,6 +12845,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [NWIT127, NWIT245, CMSC253] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -12624,6 +12863,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[NWIT173]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -12640,6 +12880,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [CMSC253, NWIT245] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -12659,6 +12900,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[NWIT246]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -12680,6 +12922,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[NWIT151]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -12698,6 +12941,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[NWIT252]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -12716,6 +12960,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[NWIT253]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -12739,6 +12984,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[NWIT254]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -12778,6 +13024,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[NWIT151, NWIT170]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -12829,6 +13076,7 @@ courses:
     tags: [elective, computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [CMSC253, NWIT245] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -12850,6 +13098,7 @@ courses:
     tags: [computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[NWIT246]] }
     approved: false
   - id: NWIT291
     name: "Cybersecurity Capstone"
@@ -12866,6 +13115,7 @@ courses:
     tags: [computer_science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[NWIT246]] }
     approved: false
   # --- PHED ----------------------------------------------------------------
   - id: PHED101
@@ -12904,6 +13154,7 @@ courses:
     tags: [pe]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PHED111]] }
     approved: false
   - id: PHED120
     name: "Beginner Swimming"
@@ -13072,6 +13323,7 @@ courses:
     tags: [pe]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PHED170]] }
     approved: false
   - id: PHED174
     name: "Circuit Fitness"
@@ -13237,6 +13489,7 @@ courses:
     tags: [pe]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PHED206]] }
     approved: true
     hs_credit: { category: "Physical Education", synergy: "HPE5122, CE Adv Physical Education" }
     grad_tags: [pe]
@@ -13270,6 +13523,7 @@ courses:
     tags: [pe]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PHED206]] }
     approved: true
     hs_credit: { category: "Physical Education", synergy: "HPE5122, CE Adv Physical Education" }
     grad_tags: [pe]
@@ -13292,6 +13546,7 @@ courses:
     tags: [pe]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [PHED230, PHED237, HLTH220] }
     approved: true
     hs_credit: { category: "Physical Education", synergy: "HPE5122, CE Adv Physical Education" }
     grad_tags: [pe]
@@ -13312,6 +13567,7 @@ courses:
     tags: [pe]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [HLTH220, PHED230, PHED237] }
     approved: true
     hs_credit: { category: "Physical Education", synergy: "HPE5122, CE Adv Physical Education" }
     grad_tags: [pe]
@@ -13529,6 +13785,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PHOT161]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -13547,6 +13804,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PHOT161]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -13586,6 +13844,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[GDES214, PHOT214]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -13602,6 +13861,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PHOT201]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -13621,6 +13881,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PHOT201]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -13661,6 +13922,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PHOT201]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -13903,6 +14165,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [PHTH203, PHTH206, PHTH223] }
     approved: false
   - id: PHTH220
     name: "Therapeutic Procedures II"
@@ -13918,6 +14181,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [PHTH206, PHTH223] }
     approved: false
   - id: PHTH223
     name: "Clinical Practicum I"
@@ -13955,6 +14219,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [PHTH206, PHTH223] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -14027,6 +14292,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [MATH181] }
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [science]
@@ -14067,6 +14333,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PHYS203]] }
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [science]
@@ -14085,6 +14352,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BIOL150, CHEM131, MATH181] }
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [science]
@@ -14101,6 +14369,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PHYS233]] }
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [science]
@@ -14120,6 +14389,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [MATH182, PHYS161] }
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [science]
@@ -14138,6 +14408,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PHYS262]] }
     approved: true
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [science]
@@ -14190,6 +14461,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [ENGL101] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -14458,6 +14730,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PSYC100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -14473,6 +14746,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PSYC100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -14488,6 +14762,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PSYC100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -14504,6 +14779,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PSYC100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -14520,6 +14796,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PSYC100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -14537,6 +14814,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PSYC100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -14553,6 +14831,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PSYC100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -14568,6 +14847,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PSYC100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -14583,6 +14863,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PSYC100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -14601,6 +14882,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PSYC100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -14617,6 +14899,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PSYC100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -14633,6 +14916,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PSYC100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -14650,6 +14934,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PSYC100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -14672,6 +14957,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[RADT119]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -14695,6 +14981,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[RADT101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -14714,6 +15001,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[RADT119]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -14735,6 +15023,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [RADT101, RADT111, RADT120] }
     approved: false
   - id: RADT119
     name: "Clinical Radiology I"
@@ -14778,6 +15067,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[RADT119]] }
     approved: false
   - id: RADT124
     name: "Clinical Radiology III"
@@ -14796,6 +15086,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [RADT101, RADT111, RADT120] }
     approved: false
   - id: RADT125
     name: "Clinical Radiology IV"
@@ -14815,6 +15106,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [RADT102, RADT112, RADT124] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -14853,6 +15145,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[RADT102]] }
     approved: false
   - id: RADT207
     name: "Radiologic Technology IV"
@@ -14872,6 +15165,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[RADT206]] }
     approved: false
   - id: RADT211
     name: "Radiographic Positioning III"
@@ -14888,6 +15182,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[RADT112]] }
     approved: false
   - id: RADT224
     name: "Clinical Radiology V"
@@ -14908,6 +15203,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[RADT125]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -14930,6 +15226,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [RADT206, RADT211, RADT224] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -14981,6 +15278,7 @@ courses:
     tags: [elective, english]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[READ238]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -15014,10 +15312,10 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[RUSS101]] }
     approved: true
     hs_credit: { category: "World Languages: Russian", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
-    prereqs: { all_of: [RUSS101], any_of: [] }
   - id: RUSS201
     name: "Intermediate Russian I"
     description: >-
@@ -15031,10 +15329,10 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[RUSS102]] }
     approved: true
     hs_credit: { category: "World Languages: Russian", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
-    prereqs: { all_of: [RUSS102], any_of: [] }
   - id: RUSS202
     name: "Intermediate Russian II"
     description: >-
@@ -15048,11 +15346,11 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[RUSS201]] }
     approved: true
     hs_credit: { category: "World Languages: Russian", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
   # --- SCIR ----------------------------------------------------------------
-    prereqs: { all_of: [RUSS201], any_of: [] }
   - id: SCIR297
     name: "Fundamentals of Scientific Research I"
     description: >-
@@ -15071,6 +15369,7 @@ courses:
     tags: [science]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BIOL150, CHEM131, MATH165] }
     approved: false
   # --- SOCY ----------------------------------------------------------------
   - id: SOCY100
@@ -15134,6 +15433,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [ANTH201, SOCY100] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -15150,6 +15450,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [PSYC100, SOCY100] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -15166,6 +15467,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [ANTH201, SOCY100] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -15213,6 +15515,7 @@ courses:
     tags: [social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ANTH201, SOCY100]] }
     approved: false
   - id: SOCY250
     name: "Globalization Issues"
@@ -15227,6 +15530,7 @@ courses:
     tags: [elective, social_studies]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[ANTH201, SOCY100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "SOC5124, CE Adv Social Studies" }
     grad_tags: [elective]
@@ -15267,6 +15571,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[PHYS103]] }
     approved: false
   - id: SONO112
     name: "Abdominal Sonography I"
@@ -15281,6 +15586,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BIOL212, BIOL213, SONO204] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -15298,6 +15604,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SONO204]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -15330,6 +15637,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[BIOL212]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -15360,6 +15668,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SONO204]] }
     approved: false
   - id: SONO224
     name: "Seminar-Diagnostic Medical Sonography"
@@ -15389,6 +15698,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SONO204]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -15406,6 +15716,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SONO112]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -15423,6 +15734,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SONO123]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -15440,6 +15752,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SONO204]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -15458,6 +15771,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SONO204]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -15473,6 +15787,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SONO245]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -15488,6 +15803,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SONO246]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -15504,6 +15820,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SONO101]] }
     approved: false
   - id: SONO262
     name: "Sonography Practicum II"
@@ -15519,6 +15836,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SONO204]] }
     approved: false
   - id: SONO263
     name: "Sonography Practicum III"
@@ -15533,6 +15851,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SONO262]] }
     approved: false
   - id: SONO264
     name: "Sonography Practicum IV"
@@ -15546,6 +15865,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SONO263]] }
     approved: false
   - id: SONO265
     name: "Sonography Practicum V"
@@ -15560,6 +15880,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SONO264]] }
     approved: false
   - id: SONO266
     name: "Sonography Practicum VI"
@@ -15574,6 +15895,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SONO265]] }
     approved: false
   # --- SPAN ----------------------------------------------------------------
   - id: SPAN101
@@ -15605,10 +15927,10 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SPAN101]] }
     approved: true
     hs_credit: { category: "World Languages: Spanish", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
-    prereqs: { all_of: [SPAN101], any_of: [] }
   - id: SPAN103
     name: "Intensive Elementary Spanish"
     description: >-
@@ -15665,11 +15987,11 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SPAN102, SPAN103, SPAN106]] }
     approved: true
     hs_credit: { category: "World Languages: Spanish", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
     exam_equivalent: [AP_SPANISH_LANG]
-    prereqs: { all_of: [SPAN102], any_of: [] }
   - id: SPAN202
     name: "Intermediate Spanish II"
     description: >-
@@ -15683,11 +16005,11 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SPAN201]] }
     approved: true
     hs_credit: { category: "World Languages: Spanish", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
     exam_equivalent: [AP_SPANISH_LANG]
-    prereqs: { all_of: [SPAN201], any_of: [] }
   - id: SPAN215
     name: "Advanced Spanish Conversation and Composition"
     description: >-
@@ -15701,6 +16023,7 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SPAN202]] }
     approved: true
     hs_credit: { category: "World Languages: Spanish", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
@@ -15720,6 +16043,7 @@ courses:
     tags: [world_language]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SPAN202]] }
     approved: true
     hs_credit: { category: "World Languages: Spanish", synergy: "WLG5130, CE Adv World Language" }
     grad_tags: [world_language]
@@ -15877,6 +16201,7 @@ courses:
     tags: [elective]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[STSU100, STSU101]] }
     approved: false
   # --- SURG ----------------------------------------------------------------
   - id: SURG100
@@ -15894,6 +16219,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [MATH117, BIOL212], any_of: [[ENGL101]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -15912,6 +16238,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [SURG100] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
@@ -15929,6 +16256,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SURG101]] }
     approved: false
   - id: SURG103
     name: "Pharmacology and Anesthesia"
@@ -15942,6 +16270,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [BIOL212, MATH117] }
     approved: false
   - id: SURG201
     name: "Surgical Technology III"
@@ -15960,6 +16289,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[SURG101]] }
     approved: false
   - id: SURG205
     name: "Clinical Practicum I"
@@ -15995,6 +16325,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [SURG201, SURG205] }
     approved: false
   - id: SURG215
     name: "Clinical Practicum II"
@@ -16009,6 +16340,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [SURG201, SURG205] }
     approved: false
   # --- TECH ----------------------------------------------------------------
   - id: TECH190
@@ -16045,6 +16377,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[TECH190]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -16079,6 +16412,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[TECH272]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "BMF5103, CE Adv Computer Apps" }
     grad_tags: [elective]
@@ -16098,6 +16432,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[TECH272]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -16115,6 +16450,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[TECH272]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -16133,6 +16469,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[TECH276]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -16150,6 +16487,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[TECH272]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -16165,6 +16503,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[TECH272]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -16183,6 +16522,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[TECH278]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -16199,6 +16539,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[TECH190]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [elective]
@@ -16358,6 +16699,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[THET110]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5127, CE Adv Theater" }
     grad_tags: [elective]
@@ -16389,6 +16731,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[THET114]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5127, CE Adv Theater" }
     grad_tags: [elective]
@@ -16458,6 +16801,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[THET100]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "ART5127, CE Adv Theater" }
     grad_tags: [elective]
@@ -16553,6 +16897,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [ENGL101] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
     grad_tags: [elective]
@@ -16603,6 +16948,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [], any_of: [[TVRA125]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
     grad_tags: [elective]
@@ -16636,7 +16982,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
-    prereqs: { all_of: [TVRA129], any_of: [TVRA120, TVRA125] }
+    prereqs: { all_of: [TVRA129], any_of: [[TVRA120, TVRA125]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
     grad_tags: [elective]
@@ -16690,6 +17036,7 @@ courses:
     tags: [cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    prereqs: { all_of: [TVRA120, TVRA140] }
     approved: false
   - id: TVRA239
     name: "Broadcast Management"
@@ -16705,7 +17052,7 @@ courses:
     tags: [elective, cte]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
-    prereqs: { any_of: [TVRA120, TVRA125] }
+    prereqs: { all_of: [], any_of: [[TVRA120, TVRA125]] }
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5120, CE Adv Media" }
     grad_tags: [elective]
