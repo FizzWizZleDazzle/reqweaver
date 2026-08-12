@@ -9,8 +9,9 @@ base = (config) -> String((config or {}).api_base or '').replace /\/+$/, ''
 url = (config, path) -> "#{base config}#{path}"
 
 # The goal encoder, resolved for the worker: it runs off the page, so
-# it is handed the finished URL rather than the config.
-encodeUrl = (config) -> url config, '/encode'
+# it is handed the finished URL rather than the config. Everything the
+# API serves lives under /api, so one route covers it on any domain.
+encodeUrl = (config) -> url config, '/api/encode'
 
 # Where a saved plan is read: an absolute link, because it is meant to
 # be copied and sent to someone.
