@@ -8,3 +8,4 @@ waivers: []                 # course ids whose prereqs the school excused (place
 optionalTerms: []           # e.g. ['10:summer'] to opt into summer after grade 10
 rigor: 0.5                  # 0 = gentlest track that meets requirements, 1 = most intense variants
 objective: max_credits      # max_credits | early_grad
+avoid: []                  # dragged-out courses; never planned, a pin overrides

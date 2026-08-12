@@ -459,6 +459,8 @@ Hard constraints:
 - A profile waiver stands in for a course's prerequisites (placement
   test, teacher recommendation); the other rules still apply to the
   waived course.
+- Courses on the profile's avoid list never enter candidate sets (the
+  student dragged them out of a plan); a pin overrides even that.
 - At most one course per `content` group (section 4.1), and explicit
   `excludes` pairs never co-occur; variants of the same material
   never both earn credit.
