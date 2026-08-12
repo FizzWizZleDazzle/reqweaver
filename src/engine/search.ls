@@ -13,7 +13,8 @@ DEFAULT_TUNING =
   objective: { gradWeight: 20, eagernessScale: 0.0001 }
   priority: {
     requirement: 40, continuation: 5, interest: 2, goal: 4,
-    usefulBanked: 2, unlocks: 0.5, banked: 4, rigor: 3, eagerRigor: 2
+    usefulBanked: 2, unlocks: 0.5, banked: 4, rigor: 3, eagerRigor: 2,
+    newSequence: 6
   }
 
 mergeTuning = (given) ->
@@ -93,7 +94,16 @@ usefulBanked = (model, id, remaining) ->
   model.bankedMemo[key] = value
   value
 
-priorityFor = (model, course, unmet, prevTerm, remaining) ->
+# A sequence root is a course with no prerequisites that opens a chain.
+# Starting a second sequence in a tag family the student is already
+# partway through (Chinese 1 alongside Spanish, or with Spanish 1-3
+# already on record) is penalized: continuity beats breadth. The
+# requirement bonus dwarfs the penalty, so a root that covers an unmet
+# graduation requirement is never suppressed.
+isSequenceRoot = (model, course) ->
+  (prereqIds course).length is 0 and (model.unlocks[course.id] or 0) >= 2
+
+priorityFor = (model, course, unmet, prevTerm, remaining, doneTags) ->
   w = model.tuning.priority
   reqBonus = 0
   for req in unmet when reqMatches req, course
@@ -104,7 +114,11 @@ priorityFor = (model, course, unmet, prevTerm, remaining) ->
   interestBonus = 0
   for tag in (course.tags or []) when model.interests.has tag
     interestBonus := w.interest
-  reqBonus + continuation + interestBonus +
+  rootPenalty = 0
+  if isSequenceRoot model, course
+    for tag in (course.tags or []) when doneTags.has tag
+      rootPenalty := w.newSequence
+  reqBonus + continuation + interestBonus - rootPenalty +
     w.goal * (goalAffinity model, course) +
     w.usefulBanked * (usefulBanked model, course.id, remaining) +
     w.unlocks * (model.unlocks[course.id] or 0) +
@@ -174,9 +188,9 @@ filterVariants = (model, candidates) ->
     keep.push c unless dominated
   keep
 
-rankCandidates = (model, candidates, unmet, prevTerm, remaining) ->
+rankCandidates = (model, candidates, unmet, prevTerm, remaining, doneTags) ->
   candidates.sort (a, b) ->
-    diff = (priorityFor model, b, unmet, prevTerm, remaining) - (priorityFor model, a, unmet, prevTerm, remaining)
+    diff = (priorityFor model, b, unmet, prevTerm, remaining, doneTags) - (priorityFor model, a, unmet, prevTerm, remaining, doneTags)
     if diff isnt 0 then diff else (if a.id < b.id then -1 else 1)
   candidates
 
@@ -369,7 +383,11 @@ expandState = (model, state, term, pinnedIds, caps, params, warnings) ->
   candidates = filterVariants model, candidatesFor(model, state, term)
   unmet = unmetReqs model.school, state.coverage
   remaining = model.terms.length - term.index
-  rankCandidates model, candidates, unmet, previousTermCourses(state), remaining
+  doneTags = new Set!
+  for id in Array.from(state.done)
+    for tag in (model.courses[id]?.tags or [])
+      doneTags.add tag
+  rankCandidates model, candidates, unmet, previousTermCourses(state), remaining, doneTags
   ranked = [c for c in candidates.slice(0, params.topK) when c.id not in pinnedIds]
   injectUnmetReqs ranked, candidates, unmet, pinnedIds
   effCaps = caps

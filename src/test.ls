@@ -199,6 +199,36 @@ check 'explanations mark requirements, prereqs, banked, and filler', ->
   for id in ids when id.slice(0, 4) is 'ELEC'
     assert why[id].necessity < 0.2, "elective #{id} not marked swappable"
 
+check 'continuity beats breadth: one language sequence, not two roots', ->
+  langCourse = (id, name, terms, prereqs) ->
+    { id: id, name: name, description: name, credits: 0.5, tags: ['language'],
+      level: 'regular', offered_terms: terms, grade_levels: [9, 10],
+      prereqs: { all_of: prereqs, any_of: [] } }
+  twoLangs = {
+    specsheet: 'school', schema_version: 1, catalog_year: 2026,
+    id: 'test/two-langs', kind: 'high_school', credit_unit: 'carnegie',
+    terms_per_year: [{ id: 'fall', sequence: 1 }, { id: 'spring', sequence: 2 }],
+    grade_levels: [9, 10], max_courses_per_term: 1, grad_requirements: [],
+    courses: [
+      langCourse('SPA1A', 'Spanish 1 A', ['fall'], []),
+      langCourse('SPA1B', 'Spanish 1 B', ['spring'], ['SPA1A']),
+      langCourse('SPA2A', 'Spanish 2 A', ['fall'], ['SPA1B']),
+      langCourse('SPA2B', 'Spanish 2 B', ['spring'], ['SPA2A']),
+      langCourse('CHI1A', 'Chinese 1 A', ['fall'], []),
+      langCourse('CHI1B', 'Chinese 1 B', ['spring'], ['CHI1A']),
+      langCourse('CHI2A', 'Chinese 2 A', ['fall'], ['CHI1B']),
+      langCourse('CHI2B', 'Chinese 2 B', ['spring'], ['CHI2A'])
+    ]
+  }
+  model = buildModel twoLangs, freshProfile!, levels, exams
+  result = search model, {}
+  best = result.plans[0]
+  ids = planCourseIds best
+  startedBoth = 'SPA1A' in ids and 'CHI1A' in ids
+  assert not startedBoth, 'started two language sequences instead of continuing one'
+  finished = ('SPA2B' in ids) or ('CHI2B' in ids)
+  assert finished, 'did not carry the started sequence through level 2'
+
 check 'a high-rigor plan stuck on the gentle track earns a rigor hint', ->
   { hints } = require './engine/hints'
   gentle = cloneSchool!

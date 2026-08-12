@@ -126,7 +126,7 @@ grad_requirements:
     satisfied_by: { content: [modern_world_history_a, modern_world_history_b] }
   - id: health
     label: Health
-    credits: 0.5
+    credits: 1.0
     satisfied_by: { tag: health }
     notes: >-
       The Health and Physical Education file states a requirement for physical education only. 0.5 credits of health is the standard MSDE requirement, recorded here so that plans do not skip health, and should be verified against the school policy.
