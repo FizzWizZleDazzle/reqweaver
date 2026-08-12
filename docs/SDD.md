@@ -367,12 +367,16 @@ prompts the student to contribute it upstream as a pull request.
 
 ## 5. Community data pipeline
 
-Repository layout:
+Repository layout: one geographic tree under `specs/`, no split by
+institution kind - a sheet's path is exactly its id plus `.yaml`, and
+the `kind` and `specsheet` fields inside the file say what it is.
+Majors share the tree under their institution.
 
 ```
-schools/us/tx/austin/westlake-hs.yaml
-schools/us/tx/austin/austin-cc.yaml     # colleges are schools with kind: college
-majors/us/tx/ut-austin/cs-bs.yaml
+specs/us/md/mcps/wchs.yaml              # high school
+specs/us/md/mcps/mc.yaml                # college (kind: college)
+specs/us/md/mcps/embeddings.wchs.json   # compiled, CI-committed
+specs/us/tx/ut-austin/cs-bs.yaml        # major (specsheet: major)
 registry/exams.yaml
 registry/tags.yaml
 registry/levels.yaml
@@ -423,10 +427,10 @@ freshness on the order of hours, which is acceptable for course
 catalogs.
 
 Until that repository exists, `npm run build:web` stages the
-specsheets, registries, and weights files of this repository under
+specs, registries, and weights files of this repository under
 `public/data/` with a generated school index, and the client parses the
 YAML. The index is what the app offers in its school picker, so adding
-a sheet under `specsheets/schools/` is enough to make it selectable.
+a sheet under `specs/` is enough to make it selectable.
 
 ## 6. Core planning engine
 
@@ -867,7 +871,7 @@ Key `plan:{planId}`:
     "name": "My four years",
     "savedAt": "2026-08-11T00:00:00Z",
     "specsheetPins": [
-      { "id": "us/md/mcps/wchs", "catalogYear": 2026, "path": "data/schools/us/md/mcps/wchs.yaml" }
+      { "id": "us/md/mcps/wchs", "catalogYear": 2026, "path": "data/specs/us/md/mcps/wchs.yaml" }
     ],
     "profile": {
       "completed": ["MAT2000A", "MAT2000B"],

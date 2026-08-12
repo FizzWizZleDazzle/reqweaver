@@ -45,7 +45,7 @@ def profile_goals():
 
 def main():
     goals = profile_goals()
-    pattern = os.path.join(ROOT, "specsheets", "schools", "**", "*.yaml")
+    pattern = os.path.join(ROOT, "specs", "**", "*.yaml")
     for sheet_path in glob.glob(pattern, recursive=True):
         name = os.path.basename(sheet_path)
         if name.startswith("embeddings."):
