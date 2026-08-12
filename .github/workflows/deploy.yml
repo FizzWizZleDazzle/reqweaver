@@ -35,5 +35,6 @@ jobs:
           targets: wasm32-unknown-unknown
       - run: npm ci && npm run build:web
         if: steps.creds.outputs.present == 'true'
-      - run: npx wrangler deploy -c workers/api/wrangler.toml
+      - run: npx wrangler deploy
         if: steps.creds.outputs.present == 'true'
+        working-directory: workers/api
