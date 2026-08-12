@@ -6,6 +6,7 @@ assert = require 'assert'
 { school, levels, exams, loadYaml, check, freshProfile, cloneSchool, planCourseIds, verifyFeasible } = require './helpers'
 { buildModel, prereqsMet } = require '../engine/dag'
 { search, eagerness, mergeTuning } = require '../engine/search'
+{ reqMatches } = require '../engine/gradreqs'
 
 check 'course-list requirement predicates pull the sequence, not tag filler', ->
   seq = cloneSchool!
@@ -31,6 +32,12 @@ check 'content-group requirement predicates accept any variant tier', ->
   tookRegular = 'GEOA' in ids and 'GEOB' in ids
   tookHonors = 'GEOHA' in ids and 'GEOHB' in ids
   assert (tookRegular or tookHonors), 'no geometry variant satisfied the content requirement'
+
+check 'grad_tags override subject tags for requirement matching', ->
+  req = { id: 'health', credits: 1.0, satisfied_by: { tag: 'health' } }
+  college = { id: 'X', tags: ['elective', 'health'], grad_tags: ['elective'] }
+  assert not (reqMatches req, college), 'subject tag satisfied a requirement despite grad_tags'
+  assert (reqMatches req, { id: 'Y', tags: ['health'] }), 'plain tags stopped matching'
 
 check 'nested requires trees evaluate a or (c and (b or d))', ->
   course = { id: 'X', requires: { any: ['A', { all: ['C', { any: ['B', 'D'] }] }] } }
@@ -80,6 +87,27 @@ check 'continuity beats breadth: one language sequence, not two roots', ->
   assert not startedBoth, 'started two language sequences instead of continuing one'
   finished = ('SPA2B' in ids) or ('CHI2B' in ids)
   assert finished, 'did not carry the started sequence through level 2'
+
+check 'dedication carries a started chain past richer electives', ->
+  twoLangs = loadYaml ['test', 'fixtures', 'two-langs.yaml']
+  profile = freshProfile!
+  profile.preHsCompleted = ['SPA1A', 'SPA1B']
+  profile.maxCoursesPerTerm = 1   # one slot: the chain must beat the AP electives outright
+  model = buildModel twoLangs, profile, levels, exams
+  result = search model, {}
+  ids = planCourseIds result.plans[0]
+  assert ('SPA2A' in ids and 'SPA3B' in ids), "started chain not carried: #{ids.join ','}"
+
+check 'a disliked subject covers with the lightest variant, never as filler', ->
+  profile = freshProfile!
+  profile.rigor = 1
+  profile.dislikes = ['math']
+  model = buildModel school, profile, levels, exams
+  result = search model, {}
+  ids = planCourseIds result.plans[0]
+  assert 'GEOA' in ids, 'regular geometry expected in a disliked subject'
+  assert 'GEOHA' not in ids, 'honors variant taken despite the dislike'
+  assert 'APCALCA' not in ids, 'AP filler taken in a disliked subject'
 
 check 'two roots in one term score below one root plus filler', ->
   twoLangs = loadYaml ['test', 'fixtures', 'two-langs.yaml']

@@ -29,10 +29,14 @@ check 'rule-breaking pin is an override: honored with a warning', ->
 check 'a waiver stands in for prerequisites', ->
   profile = freshProfile!
   profile.waivers = ['GEOA']   # e.g. placement test; GEOA normally needs ALG1B
+  # pinned into the first term: legal only because of the waiver, so
+  # the pin must be honored silently, with no override warning
+  profile.pinned = [{ grade: 9, term: 'fall', courses: ['GEOA'] }]
   model = buildModel school, profile, levels, exams
   result = search model, {}
-  best = result.plans[0]
-  assert 'GEOA' in best.plan[0].courses, 'waived course not scheduled ahead of its prereq'
+  overrides = [w for w in result.warnings when w.indexOf('override') >= 0]
+  assert overrides.length is 0, "waived pin still warned: #{overrides.join '; '}"
+  assert 'GEOA' in result.plans[0].plan[0].courses, 'waived pin not scheduled'
   for state in result.plans
     verifyFeasible model, state
 

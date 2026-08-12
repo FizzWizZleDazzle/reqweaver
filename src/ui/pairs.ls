@@ -1,19 +1,10 @@
-# A/B halves. A catalog often splits a year-long course into two ids
-# whose names differ only in the trailing letter, where the second half
-# names the first as a direct prerequisite. Those two are one course a
-# student cannot take half of, so the app shows them linked and moves
-# them together. Which courses pair is read from the catalog; no id or
-# name is ever hard-coded here.
-
-# The last whitespace-separated word of a name, when it is a single
-# letter: "Algebra 1 A" -> { stem: 'Algebra 1', letter: 'A' }.
-trailingLetter = (text) ->
-  parts = String(text or '').trim!.split /\s+/
-  last = parts[parts.length - 1] or ''
-  return null unless last.length is 1
-  { stem: parts.slice(0, -1).join(' '), letter: last }
-
-directPrereqs = (course) -> ((course.prereqs or {}).all_of or [])
+# A/B halves. A catalog splits a year-long course into two ids that
+# differ only in a trailing A/B letter, where the B half's only direct
+# prerequisite is the A half. Those two are one course a student cannot
+# take half of, so the app shows them linked and moves them together.
+# The rule matches the engine's derivePairs and reads ids, not names:
+# names carry suffixes ("AP Biology A Double Period") that broke a
+# name-based rule, and unrelated courses can share a name stem.
 
 # partnerOf: id -> the other half. halfOf: id -> 'a' or 'b'. stemOf:
 # id -> the first half's id, which orders a pair inside a term.
@@ -27,10 +18,9 @@ index = (school) ->
   for id, second of byId when id.slice(-1) is 'B' and id.length > 1
     first = byId[id.slice(0, -1) + 'A']
     continue unless first?
-    continue unless first.id in directPrereqs second
-    a = trailingLetter first.name
-    b = trailingLetter second.name
-    continue unless a? and b? and a.stem is b.stem and a.letter isnt b.letter
+    p = second.prereqs or {}
+    only = (p.all_of or []).length is 1 and (p.any_of or []).length is 0
+    continue unless only and (p.all_of or [])[0] is first.id
     partnerOf[first.id] = second.id
     partnerOf[second.id] = first.id
     halfOf[first.id] = 'a'
@@ -45,4 +35,4 @@ unit = (pairs, id) ->
   partner = pairs.partnerOf[id]
   if partner? then [id, partner] else [id]
 
-module.exports = { index, unit, trailingLetter }
+module.exports = { index, unit }

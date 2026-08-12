@@ -55,6 +55,15 @@ struct EncodeRequest {
     text: String,
 }
 
+// worker 0.8 hands ai.run inputs to serde_wasm_bindgen, which turns a
+// serde_json::Value object into a JS Map that the AI binding rejects
+// ("required properties at '/' are 'text'"); a struct serializes to a
+// plain object.
+#[derive(Serialize)]
+struct EmbedInput {
+    text: Vec<String>,
+}
+
 #[derive(Serialize, Deserialize)]
 struct PlanRecord {
     v: u32,
@@ -111,10 +120,38 @@ async fn handle_encode(mut req: Request, env: &Env) -> Result<Response> {
         .expiration_ttl(120)
         .execute()
         .await?;
-    let ai = env.ai("AI")?;
-    let output: serde_json::Value = ai
-        .run(EMBED_MODEL, serde_json::json!({ "text": [text] }))
+    // Global daily budget: the hard stop that keeps model spend inside
+    // the plan's included allocation no matter how many addresses call.
+    // Cached texts never reach this point.
+    let daily_limit: u64 = env
+        .var("AI_DAILY_LIMIT")
+        .map(|v| v.to_string())
+        .ok()
+        .and_then(|v| v.parse().ok())
+        .unwrap_or(5000);
+    let day_key = format!("ai:{}", now_ms() / 86_400_000);
+    let today: u64 = kv
+        .get(&day_key)
+        .text()
+        .await?
+        .and_then(|t| t.parse().ok())
+        .unwrap_or(0);
+    if today >= daily_limit {
+        return json_error(503, "daily encoding budget reached; goal steering resumes tomorrow");
+    }
+    kv.put(&day_key, (today + 1).to_string())?
+        .expiration_ttl(2 * 86_400)
+        .execute()
         .await?;
+    let ai = match env.ai("AI") {
+        Ok(a) => a,
+        Err(e) => return json_error(502, &format!("AI binding: {e}")),
+    };
+    let input = EmbedInput { text: vec![text.clone()] };
+    let output: serde_json::Value = match ai.run(EMBED_MODEL, input).await {
+        Ok(o) => o,
+        Err(e) => return json_error(502, &format!("model call failed: {e}")),
+    };
     let raw = output["data"][0]
         .as_array()
         .ok_or_else(|| Error::RustError("unexpected model output".into()))?;
@@ -248,6 +285,8 @@ async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
     let path = url.path().to_string();
     let segments: Vec<&str> = path.trim_matches('/').split('/').collect();
     match (req.method(), segments.as_slice()) {
+        (Method::Post, ["api", "encode"]) => handle_encode(req, &env).await,
+        // the pre-/api location, kept while old clients linger
         (Method::Post, ["encode"]) => handle_encode(req, &env).await,
         (Method::Post, ["api", "plans"]) => create_plan(req, &env).await,
         (Method::Get, ["api", "plans", id]) => read_plan(&env, id).await,

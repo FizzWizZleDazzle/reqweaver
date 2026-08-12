@@ -134,6 +134,29 @@ computeUnlocks = (courses) ->
     counts[id] = reachable(id, new Set!).size
   counts
 
+# Length of the prerequisite chain BEHIND a course: Spanish 4A stands
+# seven half-course levels up its ladder, an elective stands at one.
+# Deep continuation is what dedication rewards.
+computeChainDepth = (courses) ->
+  memo = {}
+  depth = (id, visiting) ->
+    return memo[id] if memo[id]?
+    return 1 if visiting.has id
+    course = courses[id]
+    return 1 unless course?
+    visiting.add id
+    best = 0
+    for pid in prereqIds course when courses[pid]?
+      d = depth pid, visiting
+      best := d if d > best
+    visiting.delete id
+    memo[id] = 1 + best
+    memo[id]
+  depths = {}
+  for id of courses
+    depths[id] = depth id, new Set!
+  depths
+
 # Longest downstream prerequisite chain per course. A long chain means the
 # course must land early or its descendants fall out of the horizon.
 computeCritPath = (courses) ->
@@ -195,16 +218,25 @@ initialDone = (profile) ->
       done.add id
   done
 
-# Dual enrollment: fold a partner college's approved courses into the
-# course map when the profile opts in. Each merged course banks its own
-# college credits but contributes the partner's fixed graduation credit
-# (MCPS grants 1.0 HS credit per approved course), opens at the
-# partner's minimum grade, and, when the college runs optional terms
-# (summer sessions) and the course is not term-restricted, is offered
-# in those too. School ids win a collision.
+# Dual enrollment: fold a partner's approved courses into the course
+# map when the profile opts in. A partner is any sheet the school
+# names, a community college, a university, another high school; the
+# profile's dualEnrollment is true (all partners) or a list of partner
+# ids. Each merged course banks its own credits but contributes the
+# partner's fixed graduation credit (MCPS grants 1.0 HS credit per
+# approved course), opens at the partner's minimum grade, and, when
+# the partner runs optional terms (summer sessions) and the course is
+# not term-restricted, is offered in those too. School ids win a
+# collision.
+optedInto = (profile, partner) ->
+  opted = profile.dualEnrollment
+  return false unless opted
+  return true if opted is true
+  Array.isArray(opted) and partner.college in opted
+
 mergeColleges = (school, profile, courses, colleges) ->
-  return unless profile.dualEnrollment
   for partner in ((school.dual_enrollment or {}).partners or [])
+    continue unless optedInto profile, partner
     sheet = (colleges or {})[partner.college]
     continue unless sheet?
     gradCredit = if partner.grad_credit_per_course? then partner.grad_credit_per_course else 1.0
@@ -234,17 +266,20 @@ mergeColleges = (school, profile, courses, colleges) ->
 # downstream because the school may not honor the swap.
 linkExamEquivalents = (courses, equiv) ->
   byExam = {}
+  apTwins = {}
   for id, course of courses when course.exam? and not course.college?
     (byExam[course.exam] ?= []).push id
   for id, course of courses when course.college? and course.exam_equivalent?
     for exam in course.exam_equivalent
       for schoolId in (byExam[exam] or [])
+        (apTwins[id] ?= []).push schoolId
         continue if course.excludes? and schoolId in course.excludes
         course.excludes = (course.excludes or []) ++ [schoolId]
         sc = courses[schoolId]
         courses[schoolId] = {} <<< sc <<< { excludes: (sc.excludes or []) ++ [id] }
         (equiv[schoolId] ?= []).push id
         (equiv[id] ?= []).push schoolId
+  apTwins
 
 # The model: everything the search needs, computed once per profile.
 # waivers lists courses whose prerequisites the school has excused for
@@ -264,8 +299,9 @@ buildModel = (school, profile, levels, exams, colleges) ->
       done0Tags.add tag
   pairs = derivePairs courses
   contentEquiv = contentEquivalents courses
-  linkExamEquivalents courses, contentEquiv
+  apTwins = linkExamEquivalents courses, contentEquiv
   {
+    apTwins: apTwins
     pairA: pairs.pairA
     pairB: pairs.pairB
     colleges: colleges or {}
@@ -280,8 +316,12 @@ buildModel = (school, profile, levels, exams, colleges) ->
     waivers: new Set(profile.waivers or [])
     avoid: new Set(profile.avoid or [])
     interests: new Set(profile.interests or [])
+    # disliked topics still cover their requirements, but with the
+    # lightest sufficient variant, never as filler
+    dislikes: new Set(profile.dislikes or [])
     unlocks: computeUnlocks courses
     critPath: computeCritPath courses
+    chainDepth: computeChainDepth courses
     forward: forwardEdges courses
     contentEquiv: contentEquiv
     bankedMemo: {}

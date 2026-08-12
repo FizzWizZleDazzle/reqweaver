@@ -17,6 +17,15 @@ account_id = "1df5493dcedcbaa0980b3aa7687ee599"
 [build]
 command = "cargo install -q worker-build && worker-build --release"
 
+# Cost ceilings. cpu_ms bounds one request's compute; AI_DAILY_LIMIT is
+# the global model-call budget per day (cache hits are free and exempt),
+# sized well inside the plan's included Workers AI allocation.
+[limits]
+cpu_ms = 50
+
+[vars]
+AI_DAILY_LIMIT = "5000"
+
 [assets]
 directory = "../../public"
 not_found_handling = "single-page-application"
@@ -35,6 +44,13 @@ id = "a600911aba3842f4acb91505232805b6"
 # of production.
 [env.production]
 name = "reqweaver-prod"
+# The apex serves the API same-origin next to the Pages site: Workers
+# routes run in front of Pages on the same zone, so /api/* invokes the
+# worker exactly once and every other path is Pages static, which
+# invokes nothing.
+routes = [
+  { pattern = "reqweaver.com/api/*", zone_name = "reqweaver.com" }
+]
 
 [env.production.assets]
 directory = "../../public"
@@ -43,6 +59,12 @@ run_worker_first = ["/api/*", "/encode"]
 
 [env.production.ai]
 binding = "AI"
+
+[env.production.limits]
+cpu_ms = 50
+
+[env.production.vars]
+AI_DAILY_LIMIT = "5000"
 
 [[env.production.kv_namespaces]]
 binding = "PLANS"

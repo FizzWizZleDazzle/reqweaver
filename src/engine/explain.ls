@@ -5,7 +5,7 @@
 
 { prereqIds } = require './dag'
 { reqMatches, initialCoverage } = require './gradreqs'
-{ estBanked, goalAffinity } = require './search'
+{ estBanked, goalAffinity, goalStrongBar } = require './search'
 
 # Marginal requirement attribution: walk the plan in term order and give
 # each requirement's missing credits to the first matching courses. A
@@ -70,10 +70,13 @@ explain = (model, state) ->
       if banked > 0
         reasons.push { kind: 'banked', detail: banked }
         necessity = Math.max necessity, Math.min 0.7, 0.3 + banked / 8
+      # only strong alignment earns the goal badge: above the mean is a
+      # low bar, and claiming Photoshop serves a software-engineering
+      # goal reads as a mistake
       affinity = goalAffinity model, course
-      if affinity > 0.35
+      if model.goalVec? and affinity >= goalStrongBar(model) and affinity > 0
         reasons.push { kind: 'goal', detail: affinity }
-        necessity = Math.max necessity, 0.3 + 0.4 * affinity
+        necessity = Math.max necessity, Math.min 0.7, 0.3 + 2 * affinity
       interested = false
       for tag in (course.tags or []) when model.interests.has tag
         interested := true
@@ -82,6 +85,24 @@ explain = (model, state) ->
         necessity = Math.max necessity, 0.35
       reasons.push { kind: 'none' } if reasons.length is 0
       out[id] = { reasons: reasons, necessity: necessity }
+  # both halves of an A/B pair are one course a student cannot take
+  # half of, so they share the union of their reasons and the higher
+  # necessity; otherwise the half that consumed the requirement reads
+  # "requirement" while its twin reads "banked"
+  for id, info of out
+    partner = (model.pairA or {})[id] or (model.pairB or {})[id]
+    continue unless partner? and out[partner]?
+    other = out[partner]
+    merged = info.reasons.slice!
+    for r in other.reasons
+      dup = false
+      for m in merged when m.kind is r.kind
+        dup := true
+      merged.push r unless dup
+    if merged.length > 1
+      merged = [r for r in merged when r.kind isnt 'none']
+    info.reasons = merged
+    info.necessity = Math.max info.necessity, other.necessity
   out
 
 module.exports = { explain }

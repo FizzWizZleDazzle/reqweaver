@@ -88,7 +88,7 @@ sendFile = (response, target, fallback) !->
 # matches what the deployed Worker does.
 handle = (request, response) !->
   requested = decodeURIComponent (request.url.split '?')[0]
-  if requested is '/encode' and request.method is 'POST'
+  if (requested is '/api/encode' or requested is '/encode') and request.method is 'POST'
     return handleEncode request, response
   if watching and requested is '/__reload'
     response.writeHead 200, {
