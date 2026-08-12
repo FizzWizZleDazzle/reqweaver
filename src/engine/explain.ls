@@ -70,10 +70,11 @@ explain = (model, state) ->
       if banked > 0
         reasons.push { kind: 'banked', detail: banked }
         necessity = Math.max necessity, Math.min 0.7, 0.3 + banked / 8
-      # goalAffinity is centered against the catalog mean; positive
-      # means closer to the goal than the average course
+      # only strong alignment earns the goal badge: above the mean is a
+      # low bar, and claiming Photoshop serves a software-engineering
+      # goal reads as a mistake
       affinity = goalAffinity model, course
-      if affinity > 0.05
+      if model.goalVec? and affinity >= goalStrongBar(model) and affinity > 0
         reasons.push { kind: 'goal', detail: affinity }
         necessity = Math.max necessity, Math.min 0.7, 0.3 + 2 * affinity
       interested = false
