@@ -9,7 +9,10 @@ state = require './state'
 fromPlan = require '../standing'
 
 OBJECTIVES = [
-  { id: 'max_credits', label: 'Bank the most college credit' }
+  # the id predates the semantics: the default objective is dedication
+  # plus credit weighted by how well it points where you are going,
+  # not raw credit quantity
+  { id: 'max_credits', label: 'Strongest path (dedication + credit in your direction)' }
   { id: 'early_grad', label: 'Graduate high school early' }
 ]
 
