@@ -90,18 +90,19 @@ check 'two roots in one term score below one root plus filler', ->
   oneRoot = eagerness model, { plan: at ['ELEC1', 'SPA1A'] }
   assert oneRoot > bothRoots, "same-term roots not damped: #{oneRoot} <= #{bothRoots}"
 
-# Summer school compressed to one sequential term: two year-course
-# pairs are exactly the 2-slot cap, and B legally follows A inside it.
+# Summer school compressed to one sequential term: an A/B pair fills
+# one slot and exactly the 1.0-credit summer allowance, and B legally
+# follows A inside the term.
 summerSchool = ->
   seq = cloneSchool!
-  seq.terms_per_year[2] = { id: 'summer', sequence: 3, optional: true, sequential: true, max_courses: 2, offerings: ['ALG1A', 'ALG1B', 'ART1A', 'ART1B', 'ELEC1', 'ELEC2', 'ELEC3'] }
-  # algebra and art run only in summer here, so covering math and art
-  # forces the pairs through the sequential term
-  for course in seq.courses when course.id in ['ALG1A', 'ALG1B', 'ART1A', 'ART1B']
+  seq.terms_per_year[2] = { id: 'summer', sequence: 3, optional: true, sequential: true, max_courses: 2, max_credits: 1.0, offerings: ['ALG1A', 'ALG1B', 'ELEC1', 'ELEC2', 'ELEC3'] }
+  # algebra runs only in summer here, so covering math forces the pair
+  # through the sequential term
+  for course in seq.courses when course.id in ['ALG1A', 'ALG1B']
     course.offered_terms = []
   seq
 
-check 'a sequential summer holds two A/B pairs as two slots', ->
+check 'a sequential summer compresses an A/B pair into one session', ->
   profile = freshProfile!
   profile.optionalTerms = ['9:summer']
   model = buildModel summerSchool!, profile, levels, exams
@@ -112,7 +113,7 @@ check 'a sequential summer holds two A/B pairs as two slots', ->
   for entry in best.plan when entry.term is 'summer'
     summer := entry
   assert summer?, 'no summer entry in the plan'
-  for id in ['ALG1A', 'ALG1B', 'ART1A', 'ART1B']
+  for id in ['ALG1A', 'ALG1B']
     assert id in summer.courses, "#{id} missing from the summer session"
   verifyFeasible model, best
 

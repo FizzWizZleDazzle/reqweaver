@@ -71,6 +71,9 @@ validate = (model, plan) ->
   coverage = initialCoverage model.school, model.profile, model.courses
   capCourses = minDefined model.school.max_courses_per_term, model.profile.maxCoursesPerTerm
   capCredits = model.school.max_credits_per_term
+  capCollege = null
+  for partner in ((model.school.dual_enrollment or {}).partners or [])
+    capCollege = minDefined capCollege, partner.max_courses_per_term
   entries = (plan or []).slice!
   entries.sort (a, b) ->
     ta = termsByKey["#{a.grade}:#{a.term}"]
@@ -101,20 +104,32 @@ validate = (model, plan) ->
         issues.push issue(entry, id, 'duplicate', 'already taken in an earlier term')
       checkPlacement model, taken, chosen, entry, term, course, issues, prereqDone
       chosen.push course
+    # school caps bind school courses; in a sequential (summer school)
+    # term a college course is not summer school at all, and everywhere
+    # a college course counts its fixed HS grad credit, not its college
+    # credits. The partner's own per-term course cap binds separately.
+    schoolChosen = [c for c in chosen when not c.college?]
+    counted = if term? and term.sequential then schoolChosen else chosen
     periods = 0
     credits = 0
-    for course in chosen
+    for course in counted
       periods += course.periods or 1
-      credits += course.credits or 0
+      credits += if course.grad_credits? then course.grad_credits else (course.credits or 0)
     if term? and term.sequential
-      periods = pairSlots [c.id for c in chosen], model.pairA
+      periods = pairSlots [c.id for c in schoolChosen], model.pairA
     capHere = capCourses
     if term? and term.maxCourses?
       capHere = minDefined capHere, term.maxCourses
+    creditCap = capCredits
+    if term? and term.maxCredits?
+      creditCap = minDefined creditCap, term.maxCredits
     if capHere? and periods > capHere
       issues.push issue(entry, null, 'capacity', "#{periods} periods over the #{capHere}-period cap")
-    if capCredits? and credits > capCredits
-      issues.push issue(entry, null, 'capacity', "#{credits} credits over the #{capCredits}-credit cap")
+    if creditCap? and credits > creditCap
+      issues.push issue(entry, null, 'capacity', "#{credits} credits over the #{creditCap}-credit cap")
+    collegeCount = chosen.length - schoolChosen.length
+    if capCollege? and collegeCount > capCollege
+      issues.push issue(entry, null, 'capacity', "#{collegeCount} college courses over the dual-enrollment cap of #{capCollege}")
     for course in chosen
       taken.done.add course.id
       taken.contentTaken.add course.content if course.content?

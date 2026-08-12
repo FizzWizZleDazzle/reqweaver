@@ -1,0 +1,54 @@
+specsheet: school
+schema_version: 1
+catalog_year: 2026
+id: test/tiny-college
+kind: college
+name: Tiny Community College
+credit_unit: semester
+terms_per_year:
+  - { id: fall,   sequence: 1 }
+  - { id: spring, sequence: 2 }
+  - { id: summer, sequence: 3, optional: true }
+grade_levels: [11, 12]
+courses:
+  - id: MCALC1
+    name: Calculus I
+    description: College calculus, the AP Calculus counterpart.
+    credits: 4
+    tags: [math]
+    level: college
+    approved: true
+    exam_equivalent: [AP_CALC_AB]
+    offered_terms: [fall, spring]
+    grade_levels: [11, 12]
+    prereqs: { all_of: [], any_of: [] }
+  - id: MENG1
+    name: College Writing
+    description: College composition standing in for senior English.
+    credits: 3
+    tags: [english]
+    level: college
+    approved: true
+    offered_terms: [fall, spring]
+    grade_levels: [11, 12]
+    prereqs: { all_of: [], any_of: [] }
+  - id: MELEC1
+    name: College Elective
+    description: An approved elective.
+    credits: 3
+    tags: [elective]
+    level: college
+    approved: true
+    offered_terms: [fall, spring]
+    grade_levels: [11, 12]
+    prereqs: { all_of: [], any_of: [] }
+  - id: MDEV1
+    name: Developmental Math
+    description: Not approved for dual enrollment.
+    credits: 3
+    tags: [math]
+    level: college
+    approved: false
+    offered_terms: [fall, spring]
+    grade_levels: [11, 12]
+    prereqs: { all_of: [], any_of: [] }
