@@ -27,6 +27,12 @@ unrollTerms = (school, profile) ->
     t.index = i
   terms
 
+# A course is available in a term when the term's own offerings list
+# names it, the term is open, or the course's offered_terms match.
+offeredIn = (course, term) ->
+  return course.id in term.offerings if term.offerings?
+  term.open or term.term in (course.offered_terms or [])
+
 # Prerequisite expressions. The compact form (prereqs.all_of plus
 # one-level any_of groups) covers most catalogs. For the rest, a course
 # may carry `requires`, a recursive boolean tree:
@@ -186,4 +192,4 @@ buildModel = (school, profile, levels, exams) ->
     goalVec: null
   }
 
-module.exports = { buildModel, prereqsMet, prereqIds, unrollTerms, forwardEdges, contentEquivalents }
+module.exports = { buildModel, prereqsMet, prereqIds, unrollTerms, forwardEdges, contentEquivalents, offeredIn }

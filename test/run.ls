@@ -5,6 +5,7 @@ helpers = require './helpers'
 require './planner'
 require './overrides'
 require './rules'
+require './validate'
 require './scoring'
 require './encoder'
 helpers.summary!

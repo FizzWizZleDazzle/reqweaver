@@ -28,8 +28,21 @@ Glossary:
 Course catalogs, prerequisite chains, graduation requirements, and
 transfer rules together form a planning problem that students and
 counselors solve by hand, usually badly: a prerequisite skipped in
-grade 9 can silently cost an AP course in grade 12. reqweaver solves
-the problem mechanically. The student picks their high school and
+grade 9 can silently cost an AP course in grade 12.
+
+reqweaver's primary feature is a drag-and-drop planner: the full
+course catalog for the student's school on one side, the term grid on
+the other, and every hard rule checked live as courses are placed.
+A placement that breaks a rule (prerequisites, offering term, grade
+window, variant conflicts, period caps) is marked, never blocked, and
+a graduation-requirement tracker fills in as the grid does. The
+automatic planning engine is the secondary feature layered on the
+same surface: it fills the rest of the grid, optimizes what is there,
+and explains what it chose. Both run on the same rules; the manual
+planner reports a violation where the engine would refuse to generate
+it.
+
+For either mode, the student picks their high school and
 enters where they stand: courses completed (including courses taken
 before grade 9, such as a language sequence or Algebra and Geometry
 finished in middle school), courses in progress this term, exam
@@ -444,6 +457,12 @@ The engine is symbolic and exact about feasibility. It runs in a Web
 Worker and is written, like the rest of the app, in LiveScript with no
 solver dependency.
 
+The same hard rules serve two consumers. The search (this section)
+refuses to generate a violation; `validate` replays a hand-built plan
+against the identical checks and returns each violation as a typed
+issue plus the graduation-requirement tracker, which is what the
+manual planner renders live (section 8).
+
 ### 6.1 Problem framing
 
 A plan assigns courses to terms t = 1..T. The term sequence is the
@@ -701,6 +720,7 @@ src/ui/styles.css       # the whole stylesheet
 src/standing.ls         # standing read off a plan; used by app and worker
 src/worker.ls           # Web Worker entry wrapping engine + scoring
 src/engine/dag.ls       # DAG build, coreq collapse, window passes, constraints
+src/engine/validate.ls  # hand-built plan checked against every hard rule
 src/engine/search.ls    # beam search, objectives, heuristics
 src/scoring/features.ls # feature extraction
 src/scoring/scorer.ls   # weight-file forward pass
@@ -756,6 +776,16 @@ filler is drawn to invite replacement. The course dialog spells every
 reason out in a sentence. Advisory hints follow the plans in a second
 message, because measuring them means re-solving nearby profiles; they
 render as advice, apart from the warnings the engine raised.
+
+The grid is the planner, not a viewer over solver output. A student
+who never presses solve builds a schedule by dragging courses from
+the catalog into terms; on every change the worker runs the engine's
+`validate` over the grid and posts back the issues (unmet
+prerequisite, wrong term, grade window, duplicate content, excluded
+pair, over the period cap) and the graduation tracker. Issues render
+on the offending chip and never undo a placement: the student may
+know an exception the catalog does not, the same stance pins take in
+the engine.
 
 The grid is also where a plan is edited. Dragging a course off it, or
 pressing the x on its chip, adds it to the profile's avoid list and

@@ -5,7 +5,7 @@
   "description": "Schedule planner for banking college credit in high school",
   "scripts": {
     "build": "lsc -c -o lib src",
-    "test": "npm run build && lsc -c -o lib/test test/helpers.ls test/planner.ls test/overrides.ls test/rules.ls test/scoring.ls test/encoder.ls test/run.ls && node lib/test/run.js",
+    "test": "npm run build && lsc -c -o lib/test test/helpers.ls test/planner.ls test/overrides.ls test/rules.ls test/validate.ls test/scoring.ls test/encoder.ls test/run.ls && node lib/test/run.js",
     "plan": "npm run build && node lib/cli.js",
     "embed": "uv run tools/embed.py",
     "export-model": "uv run tools/export-encoder.py",
