@@ -48,6 +48,8 @@ checkPlacement = (model, taken, chosen, entry, term, course, issues, prereqDone)
       issues.push issue(entry, id, 'grade', "not open to grade #{entry.grade}")
   unless model.waivers.has(id) or prereqsMet course, prereqDone, model.contentEquiv
     issues.push issue(entry, id, 'prereq', 'prerequisites not met by earlier terms')
+  for tag in (course.tags or []) when model.placementGroups.has(tag) and not model.placements.has(tag)
+    issues.push issue(entry, id, 'placement', "placement-restricted (#{tag}); set the placement in your profile if it applies")
   if course.content? and taken.contentTaken.has course.content
     issues.push issue(entry, id, 'conflict', 'repeats content already taken')
   if taken.excluded.has id
