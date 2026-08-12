@@ -14,7 +14,7 @@ DEFAULT_TUNING =
   priority: {
     requirement: 40, continuation: 5, interest: 2, goal: 4,
     usefulBanked: 2, unlocks: 0.5, banked: 4, rigor: 3, eagerRigor: 2,
-    newSequence: 6
+    newSequence: 6, pairGap: 3
   }
 
 mergeTuning = (given) ->
@@ -114,10 +114,13 @@ priorityFor = (model, course, unmet, prevTerm, remaining, doneTags) ->
   interestBonus = 0
   for tag in (course.tags or []) when model.interests.has tag
     interestBonus := w.interest
+  # A root opened in a family already underway loses its unlock reward
+  # too: on a real catalog a language chain unlocks more than any flat
+  # penalty, so the penalty alone cannot hold the line.
   rootPenalty = 0
   if isSequenceRoot model, course
     for tag in (course.tags or []) when doneTags.has tag
-      rootPenalty := w.newSequence
+      rootPenalty := w.newSequence + w.unlocks * (model.unlocks[course.id] or 0)
   reqBonus + continuation + interestBonus - rootPenalty +
     w.goal * (goalAffinity model, course) +
     w.usefulBanked * (usefulBanked model, course.id, remaining) +
@@ -312,25 +315,49 @@ eagerness = (model, state) ->
   horizon = model.terms.length
   affinityWeight = model.tuning.priority.eagerRigor
   rootWeight = model.tuning.priority.newSequence
+  gapWeight = model.tuning.priority.pairGap
   tagsSoFar = new Set(model.done0Tags)
+  seenAt = {}   # course id -> term position, for the pair-gap penalty
+  damped = new Set!   # a damped root and its whole downstream chain
   total = 0
   for entry, i in state.plan
     weight = 0
+    termTags = new Set!
     for id in entry.courses
       course = model.courses[id]
       continue unless course?
       affinity = rigorAffinity model, course
       # continuity in the tie-break too: a sequence root opened in a
-      # family already underway counts against the plan, or unlock-rich
-      # breadth beats continuation whenever the objective ties
-      dampen = 0
-      if isSequenceRoot model, course
-        for tag in (course.tags or []) when tagsSoFar.has tag
-          dampen := rootWeight
-      weight += (1 + (model.unlocks[id] or 0) + affinityWeight * affinity - dampen) * (course.credits or 0)
-    for id in entry.courses
-      for tag in (model.courses[id]?.tags or [])
-        tagsSoFar.add tag
+      # family already underway, in an earlier term or earlier in this
+      # one, takes the penalty and loses its unlock reward, and so does
+      # everything downstream of it. Damping only the root is not
+      # enough: each continuation carries its own unlock reward, so a
+      # deep second chain recoups a one-time penalty. The damped chain
+      # scores like plain filler, no worse, so a deliberately pinned
+      # second language still continues.
+      contrib = 1 + (model.unlocks[id] or 0) + affinityWeight * affinity
+      fromDamped = false
+      for pid in (prereqIds course) when damped.has pid
+        fromDamped := true
+      if fromDamped
+        damped.add id
+        contrib := 1 + affinityWeight * affinity
+      else if isSequenceRoot model, course
+        for tag in (course.tags or []) when tagsSoFar.has(tag) or termTags.has(tag)
+          contrib := 1 + affinityWeight * affinity - rootWeight
+          damped.add id
+      # A/B halves belong in consecutive terms; every term of
+      # separation counts against the plan
+      partner = model.pairA[id]
+      if partner? and seenAt[partner]?
+        gap = i - seenAt[partner] - 1
+        contrib := contrib - gapWeight * gap if gap > 0
+      weight += contrib * (course.credits or 0)
+      seenAt[id] = i
+      for tag in (course.tags or [])
+        termTags.add tag
+    for tag in Array.from(termTags)
+      tagsSoFar.add tag
     total += (horizon - i) * weight
   total * model.tuning.objective.eagernessScale
 
@@ -462,4 +489,4 @@ search = (model, options) ->
   plans = collectPlans model, beam, params.keepPlans, warnings
   { plans: plans, warnings: Array.from(warnings), objective: objective }
 
-module.exports = { search, estBanked, courseIntensity, targetIntensity, rigorAffinity, cosine, goalAffinity }
+module.exports = { search, estBanked, courseIntensity, targetIntensity, rigorAffinity, cosine, goalAffinity, eagerness, mergeTuning }
