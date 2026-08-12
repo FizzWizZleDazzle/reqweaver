@@ -19,6 +19,8 @@ const EMBED_MODEL: &str = "@cf/baai/bge-small-en-v1.5";
 const MAX_TEXT: usize = 500;
 const MAX_PLAN_BYTES: usize = 64 * 1024;
 const SHARE_CACHE_TTL: u64 = 300; // seconds of edge caching for reads
+const ENCODE_CACHE_TTL: u64 = 90 * 86_400; // encoded vectors live 90 days
+const ENCODE_LIMIT_PER_MIN: u64 = 10; // model calls per IP per minute
 
 fn cors(mut resp: Response) -> Result<Response> {
     let headers = resp.headers_mut();
@@ -66,12 +68,49 @@ fn now_ms() -> u64 {
     Date::now().as_millis()
 }
 
+fn json_ok(body: String) -> Result<Response> {
+    let mut resp = cors(Response::ok(body)?)?;
+    resp.headers_mut()
+        .set("Content-Type", "application/json; charset=utf-8")?;
+    Ok(resp)
+}
+
+// Encoding is deterministic per (model, text), so the vector is cached
+// in KV: repeated goals, including a naive flood, cost a KV read and
+// never reach the metered model. Only a cache miss counts against the
+// per-IP limit, so an attacker must invent unique strings from one
+// address to spend model time, and the limiter caps that.
 async fn handle_encode(mut req: Request, env: &Env) -> Result<Response> {
     let body: EncodeRequest = match req.json().await {
         Ok(b) => b,
         Err(_) => return json_error(400, "expected {\"text\": ...}"),
     };
-    let text: String = body.text.chars().take(MAX_TEXT).collect();
+    let text: String = body.text.chars().take(MAX_TEXT).collect::<String>().trim().to_string();
+    let kv = env.kv("PLANS")?;
+    let cache_key = format!("enc:{}", sha256_hex(&format!("{EMBED_MODEL}\n{text}")));
+    if let Some(hit) = kv.get(&cache_key).cache_ttl(SHARE_CACHE_TTL).text().await? {
+        return json_ok(hit);
+    }
+    let ip = req
+        .headers()
+        .get("CF-Connecting-IP")
+        .ok()
+        .flatten()
+        .unwrap_or_else(|| "unknown".to_string());
+    let rl_key = format!("rl:{ip}:{}", now_ms() / 60_000);
+    let used: u64 = kv
+        .get(&rl_key)
+        .text()
+        .await?
+        .and_then(|t| t.parse().ok())
+        .unwrap_or(0);
+    if used >= ENCODE_LIMIT_PER_MIN {
+        return json_error(429, "rate limited; try again in a minute");
+    }
+    kv.put(&rl_key, (used + 1).to_string())?
+        .expiration_ttl(120)
+        .execute()
+        .await?;
     let ai = env.ai("AI")?;
     let output: serde_json::Value = ai
         .run(EMBED_MODEL, serde_json::json!({ "text": [text] }))
@@ -84,10 +123,12 @@ async fn handle_encode(mut req: Request, env: &Env) -> Result<Response> {
     for v in vector.iter_mut() {
         *v = (*v / norm * 100000.0).round() / 100000.0;
     }
-    cors(Response::from_json(&serde_json::json!({
-        "model": EMBED_MODEL,
-        "vector": vector,
-    }))?)
+    let body_json = serde_json::json!({ "model": EMBED_MODEL, "vector": vector }).to_string();
+    kv.put(&cache_key, body_json.clone())?
+        .expiration_ttl(ENCODE_CACHE_TTL)
+        .execute()
+        .await?;
+    json_ok(body_json)
 }
 
 async fn create_plan(mut req: Request, env: &Env) -> Result<Response> {

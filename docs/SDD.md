@@ -464,6 +464,20 @@ would go to R2 (free egress, immutable content-hashed caching) if the
 offline mode ever ships. At student-scale traffic the whole
 arrangement stays inside the plan's included quotas.
 
+The encode endpoint carries its own abuse and cost guards, because
+one malicious caller would otherwise spend model time for everyone.
+Encoding is deterministic per (model, text), so vectors cache in KV:
+a repeated goal, including a naive flood, costs a KV read and never
+reaches the metered model. Only a cache miss counts against a per-IP
+per-minute limit, so spending model time requires inventing unique
+strings from one address, and the limiter caps that. The app already
+degrades to no goal steering when encoding fails, so a throttled
+caller loses nothing else. No account gates the endpoint: accounts
+without email are free to mass-create, so they add friction without
+adding protection; if abuse appears anyway, the escalation is
+Cloudflare Turnstile on the goal input, and the recorded exit remains
+self-hosting the open weights.
+
 Distribution is a build step, not a runtime fetch. On merge (via
 repository_dispatch) and on a daily cron, the app's build pulls the
 data repository, re-runs validation, compiles the YAML into one JSON
