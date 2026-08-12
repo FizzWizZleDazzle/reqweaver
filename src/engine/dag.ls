@@ -298,6 +298,15 @@ buildModel = (school, profile, levels, exams, colleges) ->
   for id in Array.from(done0)
     for tag in (courses[id]?.tags or [])
       done0Tags.add tag
+  # placement-restricted groups (ESOL/EML tiers): their courses cover
+  # the same requirements but only join plans for students in the
+  # program, inferred from the student's own course history or set
+  # explicitly in the profile. A pin still overrides.
+  placementGroups = new Set(school.placement_groups or [])
+  placements = new Set(profile.placements or [])
+  for id in Array.from(done0)
+    for tag in (courses[id]?.tags or []) when placementGroups.has tag
+      placements.add tag
   pairs = derivePairs courses
   contentEquiv = contentEquivalents courses
   apTwins = linkExamEquivalents courses, contentEquiv
@@ -320,6 +329,8 @@ buildModel = (school, profile, levels, exams, colleges) ->
     # disliked topics still cover their requirements, but with the
     # lightest sufficient variant, never as filler
     dislikes: new Set(profile.dislikes or [])
+    placementGroups: placementGroups
+    placements: placements
     unlocks: computeUnlocks courses
     critPath: computeCritPath courses
     chainDepth: computeChainDepth courses

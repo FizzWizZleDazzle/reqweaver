@@ -33,6 +33,27 @@ check 'content-group requirement predicates accept any variant tier', ->
   tookHonors = 'GEOHA' in ids and 'GEOHB' in ids
   assert (tookRegular or tookHonors), 'no geometry variant satisfied the content requirement'
 
+check 'placement-restricted tiers stay out unless the student is placed', ->
+  seq = cloneSchool!
+  seq.placement_groups = ['special']
+  for course in seq.courses when course.id in ['GEOHA', 'GEOHB']
+    course.tags = course.tags ++ ['special']
+  profile = freshProfile!
+  profile.rigor = 1
+  profile.maxCoursesPerTerm = 2
+  ids = planCourseIds (search (buildModel seq, profile, levels, exams), {}).plans[0]
+  assert 'GEOA' in ids, 'unplaced student did not get the regular tier'
+  assert 'GEOHA' not in ids, 'placement-restricted course scheduled without placement'
+  placed = freshProfile!
+  placed.rigor = 1
+  placed.maxCoursesPerTerm = 2
+  placed.placements = ['special']
+  ids2 = planCourseIds (search (buildModel seq, placed, levels, exams), {}).plans[0]
+  assert 'GEOHA' in ids2, 'placed student did not get the restricted tier'
+  # placement is also inferred from the student record
+  inferred = buildModel seq, ({} <<< freshProfile! <<< { completed: ['GEOHA'] }), levels, exams
+  assert (inferred.placements.has 'special'), 'placement not inferred from history'
+
 check 'grad_tags override subject tags for requirement matching', ->
   req = { id: 'health', credits: 1.0, satisfied_by: { tag: 'health' } }
   college = { id: 'X', tags: ['elective', 'health'], grad_tags: ['elective'] }
