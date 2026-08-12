@@ -681,6 +681,10 @@ src/ui/plans.ls         # term grid, requirement checklist, warnings, diffs
 src/ui/why.ls           # necessity markers and reason wording
 src/ui/pairs.ls         # A/B halves, derived from the catalog
 src/ui/drag.ls          # what is being dragged, for the drop targets
+src/ui/schools.ls       # school search, typeahead, and the root chooser
+src/ui/api.ls           # API client: encode, save, read, update, delete
+src/ui/share.ls         # saving a plan and the links it produces
+src/ui/shared.ls        # the read-only page behind a /s/<code> link
 src/ui/solver.ls        # worker client
 src/ui/index.html       # page shell
 src/ui/styles.css       # the whole stylesheet
@@ -701,7 +705,25 @@ and scoring modules are the same files the command line planner uses.
 
 Two designed modules do not exist yet: the account client and the
 client-side schema validation of an imported specsheet, both of which
-wait on the storage service (section 9).
+wait on accounts (section 9).
+
+The path names what the page shows. `/` is the school chooser,
+`/<school id>` is the planner for that school (the id is the one in
+`data/index.json`, so `/us/md/mcps/wchs` is Winston Churchill), and
+`/s/<code>` is a saved plan, read only. Choosing a school pushes its
+path, so back and forward move between schools and a link goes
+straight to one; the deploy serves the page for unknown paths, and the
+page carries `<base href="/">` so data files resolve from the root
+whatever the path is. A path with no school behind it falls back to
+the chooser and says which address was missing. The chooser and the
+topbar share one search over the index: a lowercase substring over the
+name, the id and the kind, in one pass, cut off at a screenful, so it
+stays quick with an index far longer than a page can list.
+
+`siteconfig.yaml` carries `api_base`, the origin of the API. Empty
+means the API is on the same origin as the page, which is how the site
+ships (one Worker serves both), and every request is then a
+root-relative path: `/encode` for a goal, `/api/plans` for a save.
 
 The solver runs in a Web Worker; messages carry plain
 structured-clone objects. The worker loads the specsheet, the
@@ -801,6 +823,20 @@ DELETE /api/plans/:id      -> delete   (Bearer writeToken)
 POST   /api/events         -> anonymous preference event  (phase 1, flagged)
 ```
 
+The four plan routes and `/encode` are the ones that exist; the
+account routes wait on D1. The app uses the four as the whole of its
+saving story. A save posts the payload of 9.3 and keeps the returned
+`{ planId, writeToken }` in localStorage, as a list with a name and a
+timestamp per plan. The plan id is the share link, `{origin}/s/<id>`,
+offered with a copy button and the plain warning that anyone holding
+it can read the plan, course history included. The write token never
+leaves that browser: it is what "Update to this plan" sends as a
+bearer token to replace the stored plan with the one on screen, and
+what deleting sends to remove it. Losing the browser's storage
+therefore loses the ability to change a saved plan, and the plan
+itself stays readable at its link until someone with the token deletes
+it. There is nothing else to lose, because there is no account.
+
 Signup takes a username and a password and nothing else. Passwords
 are hashed with PBKDF2 via the Workers WebCrypto API; a session is a
 random bearer token stored hashed in D1 with an expiry. When a
@@ -823,37 +859,47 @@ Key `plan:{planId}`:
 ```json
 {
   "v": 1,
-  "createdAt": "2026-08-11T00:00:00Z",
-  "updatedAt": "2026-08-11T00:00:00Z",
+  "createdAt": 1786492800000,
+  "updatedAt": 1786492800000,
   "writeTokenHash": "sha256:...",
   "payload": {
+    "v": 1,
+    "name": "My four years",
+    "savedAt": "2026-08-11T00:00:00Z",
     "specsheetPins": [
-      { "id": "us/tx/austin/westlake-hs", "catalogYear": 2026, "rev": "git-sha" }
+      { "id": "us/md/mcps/wchs", "catalogYear": 2026, "path": "data/schools/us/md/mcps/wchs.yaml" }
     ],
     "profile": {
-      "startYear": 2026,
-      "completed": ["ALG1", "GEOM", "SPAN1", "SPAN2", "SPAN3"],
-      "inProgress": ["ALG2"],
-      "pinned": [{ "term": "2027-fall", "courses": ["AP-CS-A"] }],
-      "optionalTerms": ["2027-summer"],
+      "completed": ["MAT2000A", "MAT2000B"],
+      "inProgress": ["ENG2001A"],
+      "pinned": [{ "grade": 10, "term": "fall", "courses": ["SCI2004A"] }],
+      "optionalTerms": ["10:summer"],
+      "avoid": [],
       "waivers": [],
       "rigor": 0.8,
-      "apScores": {},
-      "limits": {}
+      "now": { "grade": 9, "term": "spring" }
     },
     "objective": "max_credits",
     "assignments": [
-      { "term": "2026-fall", "courses": ["ALG2", "AP-CS-A"] }
+      { "grade": 9, "term": "fall", "courses": ["MAT2000A", "ENG2001A"] }
     ],
+    "coverage": { "english": 2.0, "math": 1.5 },
+    "banked": 12,
+    "gradRemaining": 0,
     "scores": { "symbolic": 34.0, "soft": 0.71 }
   }
 }
 ```
 
-`specsheetPins` let a shared plan render exactly as it was built. On
-load, the app re-validates the plan against current specsheets and
-shows drift warnings ("this course is no longer offered in spring")
-instead of silently re-solving.
+`specsheetPins` let a shared plan render exactly as it was built: the
+read-only page resolves the school from the index and shows course
+names and the requirement checklist, and when the build does not carry
+that school it renders the assignments as catalog ids and says so.
+Coverage, banked credit and the assignments are stored rather than
+recomputed, so a shared link never re-solves and never disagrees with
+what the author saw. Re-validating a shared plan against current
+specsheets, and the drift warnings that go with it ("this course is no
+longer offered in spring"), are designed and not built.
 
 ### 9.4 Accounts without email; capability URLs for sharing
 

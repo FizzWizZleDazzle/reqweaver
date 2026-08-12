@@ -19,6 +19,16 @@ send = (response, code, type, body) !->
   response.writeHead code, { 'content-type': type }
   response.end body
 
+sendFile = (response, target, fallback) !->
+  fs.readFile target, (error, body) !->
+    if error?
+      return fallback!
+    type = TYPES[path.extname target] or 'application/octet-stream'
+    send response, 200, type, body
+
+# Client routes (/us/md/mcps/wchs, /s/<code>) are paths the app reads,
+# not files, so anything without a file behind it gets the page. This
+# matches what the deployed Worker does.
 handle = (request, response) !->
   requested = decodeURIComponent (request.url.split '?')[0]
   requested = '/index.html' if requested is '/'
@@ -26,11 +36,11 @@ handle = (request, response) !->
   # Never serve outside public/.
   unless target.indexOf(ROOT) is 0
     return send response, 403, 'text/plain', 'forbidden'
-  fs.readFile target, (error, body) !->
-    if error?
+  sendFile response, target, !->
+    if path.extname requested
       return send response, 404, 'text/plain', "not found: #{requested}"
-    type = TYPES[path.extname target] or 'application/octet-stream'
-    send response, 200, type, body
+    sendFile response, (path.join ROOT, 'index.html'), !->
+      send response, 404, 'text/plain', 'not found: index.html; run npm run build:web'
 
 port = parseInt(process.argv[2] or '8080', 10)
 http.createServer(handle).listen port, !->

@@ -5,6 +5,7 @@
 yaml = require 'js-yaml'
 
 KEY = 'reqweaver.v1'
+SAVES = 'reqweaver.saves.v1'
 
 LIST_FIELDS = <[ completed preHsCompleted inProgress waivers optionalTerms interests avoid ]>
 
@@ -35,14 +36,15 @@ listeners = []
 # --- persistence -----------------------------------------------------------
 
 load = !->
+  loadSaves!
   try
     raw = window.localStorage?.getItem KEY
     return unless raw
-    saved = JSON.parse raw
-    return unless saved?
-    state.schoolId = saved.schoolId if saved.schoolId?
-    state.profile = normalize saved.profile
-    state.ui = {} <<< state.ui <<< (saved.ui or {})
+    stored = JSON.parse raw
+    return unless stored?
+    state.schoolId = stored.schoolId if stored.schoolId?
+    state.profile = normalize stored.profile
+    state.ui = {} <<< state.ui <<< (stored.ui or {})
   catch e
     console.warn 'could not restore saved profile:', e
 
@@ -79,6 +81,47 @@ normalize = (given) ->
   if given.now? and given.now.grade? and given.now.term?
     p.now = { grade: Number(given.now.grade), term: String(given.now.term) }
   p
+
+# --- saved plans -----------------------------------------------------------
+
+# What the app keeps about a plan saved to the API: the id anyone with
+# the link can read, and the write token that lets this browser update
+# or delete it. The token is the only proof of ownership there is, so
+# losing this list means losing the ability to change those plans.
+savedPlans = []
+
+loadSaves = !->
+  try
+    raw = window.localStorage?.getItem SAVES
+    return unless raw
+    parsed = JSON.parse raw
+    savedPlans := if Array.isArray parsed then parsed else []
+  catch e
+    console.warn 'could not restore saved plans:', e
+
+storeSaves = !->
+  try
+    window.localStorage?.setItem SAVES, JSON.stringify savedPlans
+  catch e
+    console.warn 'could not store saved plans:', e
+  for fn in listeners
+    fn!
+
+saves = -> savedPlans
+
+rememberSave = (record) !->
+  savedPlans.push record
+  storeSaves!
+
+touchSave = (planId, fields) !->
+  for record in savedPlans when record.planId is planId
+    for key, value of fields
+      record[key] = value
+  storeSaves!
+
+forgetSave = (planId) !->
+  savedPlans := [record for record in savedPlans when record.planId isnt planId]
+  storeSaves!
 
 # --- change notification ---------------------------------------------------
 
@@ -268,5 +311,6 @@ module.exports = {
   load, save, subscribe, changed, profile, schoolId, ui, setSchool, setUi,
   setField, has, add, remove, toggle, setStanding, standingOf, STANDING,
   pinKey, pinsFor, addPin, setPin, removePin, pinnedTerm, pinPlan, avoidCourses,
-  allowCourses, now, setNow, reset, toYaml, fromYaml, emptyProfile
+  allowCourses, now, setNow, reset, toYaml, fromYaml, emptyProfile,
+  saves, rememberSave, touchSave, forgetSave
 }

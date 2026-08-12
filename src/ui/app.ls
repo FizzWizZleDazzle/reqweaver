@@ -1,25 +1,35 @@
-# Entry point: load the school index and one specsheet, wire the profile
-# editor to the worker, and render what comes back. All planning happens in
-# the worker; this thread only builds DOM.
+# Entry point and router. The path names what the page shows: / is the
+# school chooser, /<school id> is the planner for that school, and
+# /s/<code> is a saved plan, read only. Everything the planner does
+# happens in the worker; this thread only builds DOM.
 
 { el, fill } = require './dom'
 data = require './data'
 state = require './state'
 catalog = require './catalog'
 pairs = require './pairs'
+api = require './api'
+schoolsUi = require './schools'
 chipUi = require './chip'
 courseUi = require './course'
 profileUi = require './profile'
 plansUi = require './plans'
+shareUi = require './share'
+sharedUi = require './shared'
 solverUi = require './solver'
 
 TOP_PLANS = 3
 
-# One subscription for the life of the page; switching schools swaps what
-# it calls rather than adding another listener.
-active = { refresh: null }
+# One subscription for the life of the page; navigating swaps what it
+# calls rather than adding another listener.
+active = { refresh: null, leave: null }
 
-schoolOption = (item) -> el 'option', { value: item.id, text: item.name }
+# The site is one Worker: the page, the data files, and the API sit on
+# one origin, and a school's path is the page's path, so every fetch is
+# root-relative (index.html carries <base href="/">).
+segmentsOf = (path) -> [part for part in String(path or '/').split '/' when part.length]
+
+pathFor = (id) -> "/#{id}"
 
 fail = (root, message) !->
   fill root, [
@@ -30,8 +40,14 @@ fail = (root, message) !->
     ]
   ]
 
-# One school at a time: switching schools rebuilds the whole page against
-# the new specsheet.
+brand = (tagline) ->
+  el 'div', { class: 'brand' }, [
+    el 'a', { class: 'wordmark', href: '/', text: 'reqweaver' }
+    el 'span', { class: 'tagline', text: tagline }
+  ]
+
+# One school at a time: navigating to another rebuilds the whole page
+# against the new specsheet.
 build = (root, index, config, entry, school, levels) !->
   courses = catalog.index school
   openCourse = null
@@ -40,6 +56,8 @@ build = (root, index, config, entry, school, levels) !->
   # the callbacks the ones before them could not have.
   ctx = {
     school: school
+    entry: entry
+    config: config
     catalog: courses
     pairs: pairs.index school
     levels: levels
@@ -59,11 +77,13 @@ build = (root, index, config, entry, school, levels) !->
   status = el 'span', { class: 'run-status muted small' }
 
   plans = plansUi.create ctx
-  # what the plan on screen says about the student, for the course
-  # dialog and for the profile export
+  # what the plan on screen says, for the course dialog, the profile
+  # export, and the save payload
   ctx.whyFor = plans.whyFor
   ctx.gridTerms = plans.terms
+  ctx.snapshot = plans.snapshot
   panel = profileUi.create ctx
+  share = shareUi.create ctx
 
   setRunning = (on_, text) !->
     runButton.disabled = on_
@@ -93,8 +113,8 @@ build = (root, index, config, entry, school, levels) !->
     solver.run {
       schoolPath: entry.path
       embeddingsPath: entry.embeddings or null
-      # the goal-encoding service, when siteconfig.yaml names one
-      encodeApi: config.encode_api or null
+      # the goal encoder, on this origin unless siteconfig names another
+      encodeApi: api.encodeUrl config
       profile: state.profile!
       standingPlan: shown
       beam: state.ui!.beam
@@ -104,20 +124,16 @@ build = (root, index, config, entry, school, levels) !->
 
   runButton.addEventListener 'click', run
 
-  schoolSelect = el 'select', { class: 'select', 'aria-label': 'School' },
-    [schoolOption item for item in index.schools]
-  schoolSelect.value = entry.id
-  schoolSelect.addEventListener 'change', !->
-    state.setSchool schoolSelect.value
-    solver.cancel!
-    start root
+  picker = schoolsUi.typeahead index.schools, {
+    current: -> entry.name or entry.id
+    onPick: (chosen) !->
+      return if chosen.id is entry.id
+      go pathFor chosen.id
+  }
 
   header = el 'header', { class: 'topbar' }, [
-    el 'div', { class: 'brand' }, [
-      el 'span', { class: 'wordmark', text: 'reqweaver' }
-      el 'span', { class: 'tagline', text: 'plan high school around the college credit you want to bank' }
-    ]
-    el 'div', { class: 'topbar-controls' }, [schoolSelect, runButton, status]
+    brand 'plan high school around the college credit you want to bank'
+    el 'div', { class: 'topbar-controls' }, [picker.el, runButton, status]
   ]
 
   footer = el 'footer', { class: 'footer' }, [
@@ -132,7 +148,7 @@ build = (root, index, config, entry, school, levels) !->
     header
     el 'main', { class: 'layout' }, [
       el 'div', { class: 'col-profile' }, [panel.el]
-      el 'div', { class: 'col-results' }, [plans.el]
+      el 'div', { class: 'col-results' }, [plans.el, share.el]
     ]
     footer
     sheet.el
@@ -141,33 +157,77 @@ build = (root, index, config, entry, school, levels) !->
   active.refresh = !->
     panel.refresh!
     plans.markStale!
+    share.refresh!
+  active.leave = !-> solver.cancel!
 
-start = (root) !->
+chooser = (root, index, notice) !->
+  recent = null
+  for item in index.schools when item.id is state.schoolId!
+    recent := item
+  fill root, [
+    el 'header', { class: 'topbar' }, [brand 'plan high school around the college credit you want to bank']
+    el 'main', { class: 'layout single' }, [
+      schoolsUi.chooser index.schools, {
+        notice: notice
+        recent: recent
+        onPick: (chosen) !-> go pathFor chosen.id
+      }
+    ]
+  ]
+
+# --- routing ---------------------------------------------------------------
+
+# The index, the deployment settings, and the registries are the same
+# for every route, so they are fetched once for the life of the page.
+ready = null
+
+load = ->
+  ready := Promise.all([data.loadIndex!, data.loadSiteConfig!, data.loadLevels!]) unless ready?
+  ready
+
+go = (path) !->
+  if window.history?.pushState?
+    window.history.pushState {}, '', path
+  route!
+
+route = !->
+  root = document.getElementById 'app'
+  return unless root?
+  active.leave?!
   active.refresh = null
-  loading = data.loadIndex!.then (index) ->
+  active.leave = null
+  parts = segmentsOf window.location?.pathname
+  loading = load!.then (loaded) ->
+    [index, config, levels] = loaded
     unless index.schools?.length
       throw new Error 'the data index lists no schools'
-    wanted = state.schoolId!
+    if parts[0] is 's' and parts[1]?
+      view = sharedUi.create { loadSchool: data.loadSchool }
+      return view.open root, parts[1], config, index
+    unless parts.length
+      return chooser root, index, null
+    wanted = parts.join '/'
     entry = null
     for item in index.schools when item.id is wanted
       entry := item
-    entry := index.schools[0] unless entry?
-    state.setSchool entry.id unless entry.id is wanted
-    Promise.all([data.loadSchool(entry), data.loadLevels!, data.loadSiteConfig!]).then (parts) !->
-      build root, index, (parts[2] or {}), entry, parts[0], parts[1]
+    unless entry?
+      return chooser root, index, "No school in this build has the address /#{wanted}."
+    state.setSchool entry.id unless entry.id is state.schoolId!
+    data.loadSchool(entry).then (school) ->
+      build root, index, config, entry, school, levels
   loading.catch (error) !->
     fail root, String(error?.message or error)
 
 main = !->
-  root = document.getElementById 'app'
-  return unless root?
+  return unless document.getElementById 'app'
   state.load!
   state.subscribe !-> active.refresh?!
-  start root
+  window.addEventListener 'popstate', !-> route!
+  route!
 
 if document.readyState is 'loading'
   document.addEventListener 'DOMContentLoaded', main
 else
   main!
 
-module.exports = { main }
+module.exports = { main, segmentsOf }

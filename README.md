@@ -34,11 +34,14 @@ npm run embed          # per-course description vectors (compile time)
 npm run export-model   # encoder weights for the offline fallback
 ```
 
-A goal typed in the browser is encoded by the service in
-`workers/encode`. Put its deployed URL in `siteconfig.yaml` as
-`encode_api`; the web build stages that file, and the app reads it at
-startup. Without it, goals a school precompiled still steer plans and
-any other wording is reported as not applied.
+A goal typed in the browser is encoded by the API in `workers/api`,
+which also stores saved plans. The site deploys as one Worker serving
+the page and the API together, so `api_base` in `siteconfig.yaml` is
+empty and the app calls `/encode` and `/api/plans` on its own origin;
+set it only when the API lives somewhere else. Served without that API
+(`npm run serve`, for instance) the planner works as always: goals a
+school precompiled still steer plans, any other wording is reported as
+not applied, and saving says the API is not reachable.
 
 ## What it does
 
@@ -61,8 +64,10 @@ any other wording is reported as not applied.
 
 ## The app
 
-The browser app is the planner with a face on it. You pick your school,
-say what you have completed (including credit earned before grade 9),
+The browser app is the planner with a face on it. Your school is the
+address: search for it on the front page and you land on
+`/us/md/mcps/wchs`, a link you can keep. There you say what you have
+completed (including credit earned before grade 9),
 what you are taking now, what you have already committed to, and what
 you want; it plans in the background and shows the best plans as a
 grade-by-term grid you can read at a glance. Every course on screen
@@ -88,12 +93,21 @@ behind that point become your record: they grey out, and the planner
 works on what is left. Your profile stays in your browser, and exports
 as the same YAML the command line planner reads.
 
+Saving a plan puts it on the reqweaver API and hands you a link like
+`/s/aB3kf...`. There is no account and no password: the link is the
+plan, and anyone holding it can read it, course history included, so
+share it with the people you mean to. Your browser keeps a write token
+alongside the link, and that token is what lets you update the plan to
+whatever is on screen now, or delete it. The link opens a read-only
+page: the grid, the graduation checklist, the banked-credit estimate,
+and the catalog it was built against.
+
 ## Limitations
 
 - Banked credit is an estimate until major specsheets exist;
   articulation to a specific college major is not wired up yet.
 - The fastest-college-finish objective is designed but not built.
-- The app plans, and nothing else: saving, sharing, and accounts need
-  the storage service, which is designed but not built.
+- Sharing is by link only. Accounts, and a shared plan re-checked
+  against a newer catalog, are designed but not built.
 
 Design details are in docs/SDD.md.
