@@ -258,6 +258,22 @@ apStillReachable = (model, state, term, twinId) ->
     return true if t.index - term.index >= depth
   false
 
+# A requirement whose school path is still reachable does not hand its
+# bonus to a paid college stand-in: the college course is the fallback
+# here exactly as it is for AP twins (and early_grad pays for speed,
+# so it is exempt at the call site).
+schoolPathReachable = (model, state, term, req) ->
+  for id, course of model.courses
+    continue if course.college?
+    continue unless reqMatches req, course
+    continue if state.done.has id or model.avoid.has id
+    depth = unmetDepth model, id, state.done
+    for t in model.terms when t.index >= term.index
+      continue unless t.grade in (course.grade_levels or [])
+      continue unless offeredIn course, t
+      return true if t.index - term.index >= depth
+  false
+
 # Availability (offering, grade window, avoid list) is the same for
 # every state expanding a term; compute the pool once per term.
 eligibleFor = (model, term) ->
@@ -367,7 +383,7 @@ bySlotScore = (scored) ->
 # twice: a base pass orders candidates, then each unmet requirement
 # grants its bonus to the best matchers up to 1.5x its remaining need,
 # and the final pass sorts with the bonuses placed.
-rankCandidates = (model, candidates, unmet, prevTerm, remaining, doneTags, coverage) ->
+rankCandidates = (model, candidates, unmet, prevTerm, remaining, doneTags, coverage, state, term) ->
   base = bySlotScore [{ c: c, p: priorityFor model, c, unmet, prevTerm, remaining, doneTags, false } for c in candidates]
   marked = new Set!
   for req in unmet
@@ -375,7 +391,11 @@ rankCandidates = (model, candidates, unmet, prevTerm, remaining, doneTags, cover
     continue unless need > 0
     budget = need * 1.5 + 0.01
     got = 0
+    schoolPath = null
     for entry in base when got < budget and reqMatches req, entry.c
+      if entry.c.college? and model.objective isnt 'early_grad' and state? and term?
+        schoolPath ?= schoolPathReachable model, state, term, req
+        continue if schoolPath
       marked.add entry.c.id
       got += if entry.c.grad_credits? then entry.c.grad_credits else (entry.c.credits or 0)
   scored = bySlotScore [{ c: e.c, p: priorityFor model, e.c, unmet, prevTerm, remaining, doneTags, (marked.has e.c.id) } for e in base]
@@ -691,7 +711,7 @@ expandState = (model, state, term, pinnedIds, caps, params, warnings) ->
   for id in Array.from(state.done)
     for tag in (model.courses[id]?.tags or [])
       doneTags.add tag
-  candidates = rankCandidates model, candidates, unmet, previousTermCourses(state), remaining, doneTags, state.coverage
+  candidates = rankCandidates model, candidates, unmet, previousTermCourses(state), remaining, doneTags, state.coverage, state, term
   ranked = [c for c in candidates.slice(0, params.topK) when c.id not in pinnedIds]
   injectUnmetReqs ranked, candidates, unmet, pinnedIds
   effCaps = caps
