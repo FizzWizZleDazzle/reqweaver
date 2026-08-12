@@ -94,6 +94,22 @@ usefulBanked = (model, id, remaining) ->
   model.bankedMemo[key] = value
   value
 
+# State-independent per-course values, computed once per model: the
+# goal cosine alone is a 384-dimension dot product, and ranking calls
+# these for every candidate in every state in every term.
+staticScores = (model, course) ->
+  model.staticScore ?= {}
+  hit = model.staticScore[course.id]
+  return hit if hit?
+  preIds = prereqIds course
+  model.staticScore[course.id] = {
+    goal: goalAffinity model, course
+    banked: estBanked course, model.levels, model.exams
+    rigorAff: rigorAffinity model, course
+    preIds: preIds
+    root: preIds.length is 0 and (model.unlocks[course.id] or 0) >= 2
+  }
+
 # A sequence root is a course with no prerequisites that opens a chain.
 # Starting a second sequence in a tag family the student is already
 # partway through (Chinese 1 alongside Spanish, or with Spanish 1-3
@@ -108,8 +124,9 @@ priorityFor = (model, course, unmet, prevTerm, remaining, doneTags) ->
   reqBonus = 0
   for req in unmet when reqMatches req, course
     reqBonus := w.requirement
+  fixed = staticScores model, course
   continuation = 0
-  for id in (prereqIds course) when prevTerm.has id
+  for id in fixed.preIds when prevTerm.has id
     continuation := w.continuation
   interestBonus = 0
   for tag in (course.tags or []) when model.interests.has tag
@@ -118,7 +135,7 @@ priorityFor = (model, course, unmet, prevTerm, remaining, doneTags) ->
   # too: on a real catalog a language chain unlocks more than any flat
   # penalty, so the penalty alone cannot hold the line.
   rootPenalty = 0
-  if isSequenceRoot model, course
+  if fixed.root
     for tag in (course.tags or []) when doneTags.has tag
       rootPenalty := w.newSequence + w.unlocks * (model.unlocks[course.id] or 0)
   # under early_grad, banked credit is only the objective's tie-break;
@@ -127,11 +144,11 @@ priorityFor = (model, course, unmet, prevTerm, remaining, doneTags) ->
   # prefixes), which hides the earliest covering plans
   bankedScale = if model.objective is 'early_grad' then 0 else 1
   reqBonus + continuation + interestBonus - rootPenalty +
-    w.goal * (goalAffinity model, course) +
+    w.goal * fixed.goal +
     bankedScale * w.usefulBanked * (usefulBanked model, course.id, remaining) +
     w.unlocks * (model.unlocks[course.id] or 0) +
-    bankedScale * w.banked * (estBanked course, model.levels, model.exams) +
-    w.rigor * (rigorAffinity model, course)
+    bankedScale * w.banked * fixed.banked +
+    w.rigor * fixed.rigorAff
 
 # --- per-term candidate handling -------------------------------------------
 
@@ -150,20 +167,33 @@ duplicatesContent = (course, state) ->
 # Every course that is legal in this term for this state. Hard rules,
 # with one opening for real-world exceptions: a waiver stands in for a
 # course's prerequisites.
+# Availability (offering, grade window, avoid list) is the same for
+# every state expanding a term; compute the pool once per term.
+eligibleFor = (model, term) ->
+  model.termEligible ?= {}
+  pool = model.termEligible[term.index]
+  return pool if pool?
+  pool = []
+  for id, course of model.courses
+    continue if model.avoid.has id   # dragged out; pins still override
+    continue unless offeredIn course, term
+    continue unless term.grade in (course.grade_levels or [])
+    pool.push course
+  model.termEligible[term.index] = pool
+  pool
+
 candidatesFor = (model, state, term) ->
   out = []
   reachable = new Set(state.done)
+  pool = eligibleFor model, term
   admit = (doneSet) ->
     grew = false
-    for id, course of model.courses
-      continue if reachable.has id
-      continue if model.avoid.has id   # dragged out; pins still override
+    for course in pool
+      continue if reachable.has course.id
       continue if duplicatesContent course, state
-      continue unless offeredIn course, term
-      continue unless term.grade in (course.grade_levels or [])
-      continue unless model.waivers.has(id) or prereqsMet course, doneSet, model.contentEquiv
+      continue unless model.waivers.has(course.id) or prereqsMet course, doneSet, model.contentEquiv
       out.push course
-      reachable.add id
+      reachable.add course.id
       grew := true
     grew
   admit state.done
@@ -180,45 +210,62 @@ candidatesFor = (model, state, term) ->
 # pair), keep only the variant closest to the student's rigor target.
 # Without this, a longer variant chain (2YR Algebra 2) outranks the
 # intense one via critical-path urgency, which inverts the preference.
-filterVariants = (model, candidates) ->
-  keep = []
-  for c in candidates
-    dominated = false
-    for other in candidates
-      continue if other.id is c.id
-      conflict = (c.content? and other.content is c.content) or
-                 (other.id in (c.excludes or [])) or
-                 (c.id in (other.excludes or []))
-      continue unless conflict
-      # an exam-bearing course always beats its college counterpart in
-      # the same slot: the AP course is free, and its exam credit
-      # transfers more broadly than one college's articulation
-      myLevel = model.levels[c.level or 'regular'] or {}
-      theirLevel = model.levels[other.level or 'regular'] or {}
-      if myLevel.college_credit and theirLevel.exam_bearing
-        dominated := true
-        break
-      if myLevel.exam_bearing and theirLevel.college_credit
-        continue
-      mine = rigorAffinity model, c
-      theirs = rigorAffinity model, other
-      # ties break toward the variant banking more credit (BC over AB),
-      # then by id for determinism
-      myBank = estBanked c, model.levels, model.exams
-      theirBank = estBanked other, model.levels, model.exams
-      if theirs > mine or
-         (theirs is mine and theirBank > myBank) or
-         (theirs is mine and theirBank is myBank and other.id < c.id)
-        dominated := true
-        break
-    keep.push c unless dominated
-  keep
+# Near-linear: content groups collapse through a best-per-group pass
+# and excludes pairs look up only their named ids; the all-pairs scan
+# this replaces was quadratic and dominated merged-catalog solves.
 
+# True when a wins the shared slot: an exam-bearing course beats its
+# college counterpart (the AP course is free and its exam credit
+# transfers more broadly), then rigor affinity, then banked credit
+# (BC over AB), then id for determinism. Total order, so a group's
+# best is well defined.
+beatsInSlot = (model, a, b) ->
+  aLevel = model.levels[a.level or 'regular'] or {}
+  bLevel = model.levels[b.level or 'regular'] or {}
+  return true if aLevel.exam_bearing and bLevel.college_credit
+  return false if aLevel.college_credit and bLevel.exam_bearing
+  sa = staticScores model, a
+  sb = staticScores model, b
+  return true if sa.rigorAff > sb.rigorAff
+  return false if sa.rigorAff < sb.rigorAff
+  return true if sa.banked > sb.banked
+  return false if sa.banked < sb.banked
+  a.id < b.id
+
+filterVariants = (model, candidates) ->
+  byId = {}
+  for c in candidates
+    byId[c.id] = c
+  dominated = new Set!
+  groups = {}
+  for c in candidates when c.content?
+    (groups[c.content] ?= []).push c
+  for group, members of groups
+    continue unless members.length > 1
+    best = members[0]
+    for m in members.slice 1
+      best := m if beatsInSlot model, m, best
+    for m in members when m.id isnt best.id
+      dominated.add m.id
+  for c in candidates
+    for otherId in (c.excludes or [])
+      other = byId[otherId]
+      continue unless other?
+      if beatsInSlot model, other, c
+        dominated.add c.id
+      else
+        dominated.add other.id
+  [c for c in candidates when not dominated.has c.id]
+
+# Score once per candidate, then sort by the cached score: scoring
+# inside the comparator re-evaluates the priority O(n log n) times per
+# state, which is what made merged-catalog solves crawl.
 rankCandidates = (model, candidates, unmet, prevTerm, remaining, doneTags) ->
-  candidates.sort (a, b) ->
-    diff = (priorityFor model, b, unmet, prevTerm, remaining, doneTags) - (priorityFor model, a, unmet, prevTerm, remaining, doneTags)
-    if diff isnt 0 then diff else (if a.id < b.id then -1 else 1)
-  candidates
+  scored = [{ c: c, p: priorityFor model, c, unmet, prevTerm, remaining, doneTags } for c in candidates]
+  scored.sort (a, b) ->
+    diff = b.p - a.p
+    if diff isnt 0 then diff else (if a.c.id < b.c.id then -1 else 1)
+  [entry.c for entry in scored]
 
 # Pins are overrides: the student knows about exceptions the engine
 # cannot. A pinned course is always scheduled; a school rule it breaks
@@ -411,7 +458,8 @@ eagerness = (model, state) ->
     for id in entry.courses
       course = model.courses[id]
       continue unless course?
-      affinity = rigorAffinity model, course
+      fixed = staticScores model, course
+      affinity = fixed.rigorAff
       # continuity in the tie-break too: a sequence root opened in a
       # family already underway, in an earlier term or earlier in this
       # one, takes the penalty and loses its unlock reward, and so does
@@ -422,12 +470,12 @@ eagerness = (model, state) ->
       # second language still continues.
       contrib = 1 + (model.unlocks[id] or 0) + affinityWeight * affinity
       fromDamped = false
-      for pid in (prereqIds course) when damped.has pid
+      for pid in fixed.preIds when damped.has pid
         fromDamped := true
       if fromDamped
         damped.add id
         contrib := 1 + affinityWeight * affinity
-      else if isSequenceRoot model, course
+      else if fixed.root
         for tag in (course.tags or []) when tagsSoFar.has(tag) or termTags.has(tag)
           contrib := 1 + affinityWeight * affinity - rootWeight
           damped.add id
@@ -529,7 +577,7 @@ expandState = (model, state, term, pinnedIds, caps, params, warnings) ->
   for id in Array.from(state.done)
     for tag in (model.courses[id]?.tags or [])
       doneTags.add tag
-  rankCandidates model, candidates, unmet, previousTermCourses(state), remaining, doneTags
+  candidates = rankCandidates model, candidates, unmet, previousTermCourses(state), remaining, doneTags
   ranked = [c for c in candidates.slice(0, params.topK) when c.id not in pinnedIds]
   injectUnmetReqs ranked, candidates, unmet, pinnedIds
   effCaps = caps
