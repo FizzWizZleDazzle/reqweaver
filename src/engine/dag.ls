@@ -158,6 +158,11 @@ buildModel = (school, profile, levels, exams) ->
   courses = {}
   for course in (school.courses or [])
     courses[course.id] = course
+  done0 = initialDone profile
+  done0Tags = new Set!
+  for id in Array.from(done0)
+    for tag in (courses[id]?.tags or [])
+      done0Tags.add tag
   {
     school: school
     profile: profile
@@ -165,7 +170,8 @@ buildModel = (school, profile, levels, exams) ->
     exams: exams or {}
     courses: courses
     terms: unrollTerms school, profile
-    done0: initialDone profile
+    done0: done0
+    done0Tags: done0Tags
     waivers: new Set(profile.waivers or [])
     avoid: new Set(profile.avoid or [])
     interests: new Set(profile.interests or [])
