@@ -160,14 +160,19 @@ create = (ctx) ->
     ctx.rerun!
 
   # Where a course dropped into a term cell belongs: the half that was
-  # dropped lands where it was dropped, its partner in the term the
-  # catalog offers it in, same grade.
+  # dropped lands where it was dropped, its partner in a term the
+  # catalog offers it in, on its own side of the pair and in the same
+  # grade.
   slotFor = (id, dropped, grade, term) ->
     return { grade: grade, term: term } if id is dropped
-    course = ctx.catalog.byId[id]
     columns = catalog.termIds ctx.school
-    for candidate in (course?.offered_terms or []) when candidate in columns and candidate isnt term
-      return { grade: grade, term: candidate }
+    here = columns.indexOf term
+    after = ctx.pairs.halfOf[id] is 'b'
+    offered = [t for t in ((ctx.catalog.byId[id]?.offered_terms) or []) when t in columns and t isnt term]
+    for candidate in offered
+      at = columns.indexOf candidate
+      return { grade: grade, term: candidate } if (at > here) is after
+    return { grade: grade, term: offered[0] } if offered.length
     { grade: grade, term: term }
 
   place = (id, grade, term) !->

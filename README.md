@@ -71,10 +71,22 @@ prerequisites behind any placement, and mark it completed, pin it, or
 waive its prerequisites from there. You can also say in a sentence what
 you want to study, and courses whose catalog descriptions match it rank
 higher; the plan says when a goal steered it. Alongside each plan sit
-the graduation checklist, the banked-credit estimate, and the warnings
-the engine raised for a counselor to confirm. Your profile stays in
-your browser, and exports as the same YAML the command line planner
-reads.
+the graduation checklist, the banked-credit estimate, the warnings the
+engine raised for a counselor to confirm, and hints worth considering,
+such as what a summer term would be worth to you.
+
+Each course in the grid says why it is there: the requirement it
+covers, the later course it unlocks, the credit it banks, or nothing at
+all, which marks it as yours to swap. Swapping is direct. Drag a course
+off the grid and the planner never schedules it again; drag one from
+the course list onto a term and it is pinned there; both re-plan
+immediately. "Rebuild around this plan" freezes everything where it
+sits, so the next change moves one course and leaves the rest alone.
+Courses a catalog splits into A and B halves stay linked across the two
+terms and move as one. Tell the app where you are now, and the terms
+behind that point become your record: they grey out, and the planner
+works on what is left. Your profile stays in your browser, and exports
+as the same YAML the command line planner reads.
 
 ## Limitations
 
