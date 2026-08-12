@@ -1,0 +1,40 @@
+name: release
+# Tag-driven releases: pushing a v* tag runs the full test suite, builds
+# the site, deploys the production Worker environment, and publishes a
+# GitHub Release with generated notes. Pushes to main keep deploying the
+# default (staging) Worker via the deploy workflow; a release is the
+# deliberate promotion step.
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+concurrency: release
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - run: npm ci
+      - run: npm test
+      - run: npm run build:web
+      - name: Deploy production
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "no CLOUDFLARE_API_TOKEN secret; skipping production deploy"
+          else
+            npx wrangler deploy -c workers/api/wrangler.toml --env production
+          fi
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" --generate-notes --verify-tag
