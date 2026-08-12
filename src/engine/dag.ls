@@ -185,15 +185,16 @@ derivePairs = (courses) ->
   pairA = {}   # B id -> its A half
   pairB = {}   # A id -> its B half
   for id, course of courses
-    ids = prereqIds course
-    continue unless ids.length is 1
-    a = ids[0]
+    continue unless id.length > 1 and id.slice(-1) is 'B'
+    a = id.slice(0, id.length - 1) + 'A'
     continue unless courses[a]?
-    continue unless id.length is a.length and id.length > 1
-    stemMatch = id.slice(0, id.length - 1) is a.slice(0, a.length - 1)
-    if stemMatch and a.slice(-1) is 'A' and id.slice(-1) is 'B'
-      pairA[id] = a
-      pairB[a] = id
+    # the A half appears among B's prerequisites; B usually also
+    # carries the course's own entry prerequisites (Honors Algebra 2 B
+    # lists Algebra 1 B and Geometry beside its A half), so demanding
+    # A be the only one broke most real pairs
+    continue unless a in (prereqIds course)
+    pairA[id] = a
+    pairB[a] = id
   { pairA, pairB }
 
 # Course slots a set of ids occupies where both halves of an A/B pair

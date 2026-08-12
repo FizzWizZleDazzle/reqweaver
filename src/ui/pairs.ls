@@ -18,9 +18,11 @@ index = (school) ->
   for id, second of byId when id.slice(-1) is 'B' and id.length > 1
     first = byId[id.slice(0, -1) + 'A']
     continue unless first?
+    # the A half appears among B's prerequisites; B usually also
+    # carries the course's own entry prerequisites, so demanding A be
+    # the only one broke most real pairs
     p = second.prereqs or {}
-    only = (p.all_of or []).length is 1 and (p.any_of or []).length is 0
-    continue unless only and (p.all_of or [])[0] is first.id
+    continue unless first.id in (p.all_of or [])
     partnerOf[first.id] = second.id
     partnerOf[second.id] = first.id
     halfOf[first.id] = 'a'
