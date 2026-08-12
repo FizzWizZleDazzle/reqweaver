@@ -217,7 +217,7 @@ create = (ctx) ->
   # --- avoid ---------------------------------------------------------------
 
   panel.appendChild block 'Courses to keep out',
-    'Courses the planner may never schedule. Dragging a course off the grid puts it here; a pin still overrides it.',
+    'Courses the auto-planner may never schedule. Placing one on the grid by hand takes it back off this list; a pin also overrides it.',
     (body) ->
       list = el 'div', { class: 'chips' }
       picker = chips.picker {

@@ -28,7 +28,7 @@ emptyProfile = ->
   }
 
 defaults = ->
-  { version: 1, schoolId: null, profile: emptyProfile!, ui: { beam: 100 } }
+  { version: 1, schoolId: null, profile: emptyProfile!, ui: { beam: 100 }, grids: {} }
 
 state = defaults!
 listeners = []
@@ -45,6 +45,11 @@ load = !->
     state.schoolId = stored.schoolId if stored.schoolId?
     state.profile = normalize stored.profile
     state.ui = {} <<< state.ui <<< (stored.ui or {})
+    if stored.grids? and typeof stored.grids is 'object'
+      grids = {}
+      for id, entries of stored.grids
+        grids[id] = cleanGrid entries
+      state.grids = grids
   catch e
     console.warn 'could not restore saved profile:', e
 
@@ -81,6 +86,27 @@ normalize = (given) ->
   if given.now? and given.now.grade? and given.now.term?
     p.now = { grade: Number(given.now.grade), term: String(given.now.term) }
   p
+
+# --- the hand-built grid ---------------------------------------------------
+
+# The manual planner's term grid, one per school, persisted with the
+# profile so choosing a school lands back on the grid the student left.
+cleanGrid = (given) ->
+  out = []
+  for entry in (if Array.isArray given then given else []) when (entry? and entry.grade? and entry.term?)
+    out.push {
+      grade: Number entry.grade
+      term: String entry.term
+      courses: [String c for c in (entry.courses or [])]
+    }
+  out
+
+grid = (schoolId) -> ((state.grids or {})[schoolId]) or []
+
+setGrid = (schoolId, terms) !->
+  state.grids = {} unless state.grids?
+  state.grids[schoolId] = cleanGrid terms
+  changed!
 
 # --- saved plans -----------------------------------------------------------
 
@@ -312,5 +338,5 @@ module.exports = {
   setField, has, add, remove, toggle, setStanding, standingOf, STANDING,
   pinKey, pinsFor, addPin, setPin, removePin, pinnedTerm, pinPlan, avoidCourses,
   allowCourses, now, setNow, reset, toYaml, fromYaml, emptyProfile,
-  saves, rememberSave, touchSave, forgetSave
+  saves, rememberSave, touchSave, forgetSave, grid, setGrid
 }

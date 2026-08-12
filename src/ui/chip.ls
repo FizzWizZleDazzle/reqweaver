@@ -43,6 +43,13 @@ create = (ctx) ->
       el 'span', { class: "badge level-#{level}", text: level }
     ]
     main.push marker opts.why if opts.why?
+    # a rule the placement breaks: marked, never blocked, so the detail
+    # rides on the marker's tooltip
+    if opts.issue?
+      main.push el 'span', { class: 'issue-mark', title: opts.issue.title }, [
+        el 'span', { class: 'issue-dot' }
+        el 'span', { class: 'issue-label', text: 'check' }
+      ]
     parts = [
       el 'button', {
         class: 'chip-main'
@@ -61,6 +68,7 @@ create = (ctx) ->
     classes = ['chip']
     classes.push opts.flag if opts.flag
     classes.push "why-#{opts.why.kind}" if opts.why?
+    classes.push 'has-issue' if opts.issue?
     classes.push "half half-#{opts.half}" if opts.half?
     node = el 'span', { class: classes.join ' ' }, parts
     draggable node, opts.drag if opts.drag?

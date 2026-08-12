@@ -122,6 +122,32 @@ create = (ctx) ->
         open id
     }
 
+  # The click-only path to what dragging a course into the grid does:
+  # place it (and its A/B partner) in a term, or take it off.
+  gridControls = (id) ->
+    placed = ctx.placedIn? id
+    if placed?
+      return el 'div', { class: 'choices' }, [
+        el 'span', { class: 'pill', text: "on your grid in grade #{placed.grade} #{placed.term}" }
+        el 'button', {
+          class: 'ghost'
+          text: 'Take off the grid'
+          onclick: !->
+            ctx.removeFromGrid? id
+            open id
+        }
+      ]
+    options = [el 'option', { value: '', text: 'Place in a term...' }]
+    for slot in catalog.termSlots ctx.school
+      options.push el 'option', { value: slot.key, text: slot.label }
+    select = el 'select', { class: 'select' }, options
+    select.addEventListener 'change', !->
+      return unless select.value
+      parts = select.value.split ':'
+      ctx.place? id, (Number parts[0]), parts[1]
+      open id
+    select
+
   # What the engine says this course earned its slot for, in the plan on
   # screen. Absent for a course no plan schedules.
   reasonList = (id) ->
@@ -195,6 +221,9 @@ create = (ctx) ->
         parts.push el 'p', { class: 'muted small', text: "and #{dependents.length - 24} more" }
     else
       parts.push el 'p', { class: 'muted', text: 'No course in this catalog requires it.' }
+
+    parts.push el 'h3', { text: 'Your plan' }
+    parts.push gridControls id
 
     parts.push el 'h3', { text: 'Your profile' }
     parts.push standingControls id

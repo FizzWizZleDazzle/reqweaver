@@ -1,13 +1,16 @@
 # Web Worker entry: the whole planner runs here so a solve never blocks the
 # page. The worker fetches the specsheet, the registries, the weights, and
 # (when the student states a goal) the school's course vectors, builds the
-# model, searches, scores, and posts plain objects back.
+# model, searches, scores, and posts plain objects back. It also answers
+# 'validate' messages: the rule check behind the manual grid, which runs
+# on every placement and must return quickly.
 
 yaml = require 'js-yaml'
 { buildModel } = require './engine/dag'
 { search, estBanked } = require './engine/search'
 { explain } = require './engine/explain'
 { hints } = require './engine/hints'
+{ validate } = require './engine/validate'
 { rank } = require './scoring/scorer'
 standing = require './standing'
 
@@ -207,7 +210,33 @@ solve = (job) !->
   run.catch (error) !->
     post { type: 'error', id: job.id, message: String(error?.message or error) }
 
+# The manual grid's rule check: build the model the solve path builds,
+# run validate over the grid, and answer. No search and no goal
+# encoding on this path; it is quick enough to run on every grid change.
+check = (job) !->
+  files = [
+    fetchYaml job.schoolPath
+    fetchYaml LEVELS
+    fetchYaml EXAMS
+  ]
+  run = Promise.all(files).then (parts) ->
+    [school, levels, exams] = parts
+    model = buildModel school, (job.profile or {}), levels, exams
+    report = validate model, (job.plan or [])
+    post {
+      type: 'validated'
+      id: job.id
+      issues: report.issues
+      requirements: report.requirements
+      remaining: report.remaining
+      coverage: report.coverage
+      banked: bankedIn model, (job.plan or [])
+    }
+  run.catch (error) !->
+    post { type: 'error', id: job.id, message: String(error?.message or error) }
+
 self.addEventListener 'message', (event) !->
   job = event.data
-  return unless job? and job.type is 'solve'
-  solve job
+  return unless job?
+  solve job if job.type is 'solve'
+  check job if job.type is 'validate'
