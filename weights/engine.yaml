@@ -22,4 +22,7 @@ priority:
   rigor: 3              # closeness to the student's rigor target
   eagerRigor: 2         # rigor affinity inside the eagerness tie-break
   newSequence: 6        # penalty for starting a second sequence in a
-                        # tag family already underway (continuity first)
+                        # tag family already underway (continuity first);
+                        # such a root also loses its unlocks reward
+  pairGap: 3            # per-term penalty for separating the halves of
+                        # an A/B year course

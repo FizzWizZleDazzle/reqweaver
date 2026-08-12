@@ -146,6 +146,24 @@ computeCritPath = (courses) ->
     depths[id] = depth id, new Set!
   depths
 
+# A/B halves of a year course: B's only prerequisite is A and the ids
+# differ only in the trailing letter. Derived from the catalog, like the
+# UI's pair linking, never stored in specsheets.
+derivePairs = (courses) ->
+  pairA = {}   # B id -> its A half
+  pairB = {}   # A id -> its B half
+  for id, course of courses
+    ids = prereqIds course
+    continue unless ids.length is 1
+    a = ids[0]
+    continue unless courses[a]?
+    continue unless id.length is a.length and id.length > 1
+    stemMatch = id.slice(0, id.length - 1) is a.slice(0, a.length - 1)
+    if stemMatch and a.slice(-1) is 'A' and id.slice(-1) is 'B'
+      pairA[id] = a
+      pairB[a] = id
+  { pairA, pairB }
+
 # Courses the student holds before planning starts. preHsCompleted always
 # satisfies prerequisites; whether it also earns graduation credit is the
 # school's pre_hs_credit policy, applied in gradreqs.
@@ -169,7 +187,10 @@ buildModel = (school, profile, levels, exams) ->
   for id in Array.from(done0)
     for tag in (courses[id]?.tags or [])
       done0Tags.add tag
+  pairs = derivePairs courses
   {
+    pairA: pairs.pairA
+    pairB: pairs.pairB
     school: school
     profile: profile
     levels: levels
@@ -192,4 +213,4 @@ buildModel = (school, profile, levels, exams) ->
     goalVec: null
   }
 
-module.exports = { buildModel, prereqsMet, prereqIds, unrollTerms, forwardEdges, contentEquivalents, offeredIn }
+module.exports = { buildModel, prereqsMet, prereqIds, unrollTerms, forwardEdges, contentEquivalents, offeredIn, derivePairs }

@@ -581,6 +581,17 @@ Expanding one state:
    require ranks ahead of an equal-credit leaf, so the most-required
    courses clear as early as possible and each term keeps the most
    options open for the terms after it.
+   Continuity tempers the gateway rule: a sequence root (a course
+   with no prerequisites opening a chain) in a tag family the student
+   already started is penalized and loses its unlock value, in the
+   ranking and in the tie-break, and in the tie-break the whole chain
+   under such a root scores like plain filler rather than a gateway.
+   Without the chain-wide damping a deep second chain recoups a
+   one-time root penalty through its continuations' unlock rewards,
+   which is how Spanish 1 and Chinese 1 both end up in one plan. The
+   tie-break also charges a per-term penalty for separating the two
+   halves of an A/B year course, so pairs land in consecutive terms
+   unless nothing legal can fill the slot otherwise.
 3. Enumerate feasible subsets of those K under the credit and
    dual-enrollment caps by depth-first search with pruning, treating
    coreq super-nodes as atomic. Cap subsets per state at M (default

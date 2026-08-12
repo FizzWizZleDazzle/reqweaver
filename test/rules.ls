@@ -5,7 +5,7 @@
 assert = require 'assert'
 { school, levels, exams, loadYaml, check, freshProfile, cloneSchool, planCourseIds } = require './helpers'
 { buildModel, prereqsMet } = require '../engine/dag'
-{ search } = require '../engine/search'
+{ search, eagerness, mergeTuning } = require '../engine/search'
 
 check 'course-list requirement predicates pull the sequence, not tag filler', ->
   seq = cloneSchool!
@@ -80,3 +80,24 @@ check 'continuity beats breadth: one language sequence, not two roots', ->
   assert not startedBoth, 'started two language sequences instead of continuing one'
   finished = ('SPA2B' in ids) or ('CHI2B' in ids)
   assert finished, 'did not carry the started sequence through level 2'
+
+check 'two roots in one term score below one root plus filler', ->
+  twoLangs = loadYaml ['test', 'fixtures', 'two-langs.yaml']
+  model = buildModel twoLangs, freshProfile!, levels, exams
+  model.tuning = mergeTuning {}
+  at = (courses) -> [{ grade: 9, term: 'fall', courses: courses }]
+  bothRoots = eagerness model, { plan: at ['CHI1A', 'SPA1A'] }
+  oneRoot = eagerness model, { plan: at ['ELEC1', 'SPA1A'] }
+  assert oneRoot > bothRoots, "same-term roots not damped: #{oneRoot} <= #{bothRoots}"
+
+check 'a split A/B pair scores below other filler at the same slot', ->
+  model = buildModel school, freshProfile!, levels, exams
+  model.tuning = mergeTuning {}
+  planWith = (last) ->
+    [{ grade: 9, term: 'fall', courses: ['ART1A'] },
+     { grade: 9, term: 'spring', courses: [] },
+     { grade: 10, term: 'fall', courses: [] },
+     { grade: 10, term: 'spring', courses: [last] }]
+  split = eagerness model, { plan: planWith 'ART1B' }
+  filler = eagerness model, { plan: planWith 'ELEC1' }
+  assert filler > split, "pair gap not penalized: #{filler} <= #{split}"

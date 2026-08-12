@@ -9,14 +9,31 @@ terms_per_year:
   - { id: fall,   sequence: 1 }
   - { id: spring, sequence: 2 }
 grade_levels: [9, 10]
-max_courses_per_term: 1
+max_courses_per_term: 2
 grad_requirements: []
+# Chains run four levels so a root's unlock count (7) exceeds the flat
+# newSequence penalty; the electives are the alternative a continuous
+# plan should prefer over opening a second language.
 courses:
   - { id: SPA1A, name: Spanish 1 A, description: Spanish 1 A, credits: 0.5, tags: [language], level: regular, offered_terms: [fall],   grade_levels: [9, 10], prereqs: { all_of: [],      any_of: [] } }
   - { id: SPA1B, name: Spanish 1 B, description: Spanish 1 B, credits: 0.5, tags: [language], level: regular, offered_terms: [spring], grade_levels: [9, 10], prereqs: { all_of: [SPA1A], any_of: [] } }
   - { id: SPA2A, name: Spanish 2 A, description: Spanish 2 A, credits: 0.5, tags: [language], level: regular, offered_terms: [fall],   grade_levels: [9, 10], prereqs: { all_of: [SPA1B], any_of: [] } }
   - { id: SPA2B, name: Spanish 2 B, description: Spanish 2 B, credits: 0.5, tags: [language], level: regular, offered_terms: [spring], grade_levels: [9, 10], prereqs: { all_of: [SPA2A], any_of: [] } }
+  - { id: SPA3A, name: Spanish 3 A, description: Spanish 3 A, credits: 0.5, tags: [language], level: regular, offered_terms: [fall],   grade_levels: [9, 10], prereqs: { all_of: [SPA2B], any_of: [] } }
+  - { id: SPA3B, name: Spanish 3 B, description: Spanish 3 B, credits: 0.5, tags: [language], level: regular, offered_terms: [spring], grade_levels: [9, 10], prereqs: { all_of: [SPA3A], any_of: [] } }
+  - { id: SPA4A, name: Spanish 4 A, description: Spanish 4 A, credits: 0.5, tags: [language], level: regular, offered_terms: [fall],   grade_levels: [9, 10], prereqs: { all_of: [SPA3B], any_of: [] } }
+  - { id: SPA4B, name: Spanish 4 B, description: Spanish 4 B, credits: 0.5, tags: [language], level: regular, offered_terms: [spring], grade_levels: [9, 10], prereqs: { all_of: [SPA4A], any_of: [] } }
   - { id: CHI1A, name: Chinese 1 A, description: Chinese 1 A, credits: 0.5, tags: [language], level: regular, offered_terms: [fall],   grade_levels: [9, 10], prereqs: { all_of: [],      any_of: [] } }
   - { id: CHI1B, name: Chinese 1 B, description: Chinese 1 B, credits: 0.5, tags: [language], level: regular, offered_terms: [spring], grade_levels: [9, 10], prereqs: { all_of: [CHI1A], any_of: [] } }
   - { id: CHI2A, name: Chinese 2 A, description: Chinese 2 A, credits: 0.5, tags: [language], level: regular, offered_terms: [fall],   grade_levels: [9, 10], prereqs: { all_of: [CHI1B], any_of: [] } }
   - { id: CHI2B, name: Chinese 2 B, description: Chinese 2 B, credits: 0.5, tags: [language], level: regular, offered_terms: [spring], grade_levels: [9, 10], prereqs: { all_of: [CHI2A], any_of: [] } }
+  - { id: CHI3A, name: Chinese 3 A, description: Chinese 3 A, credits: 0.5, tags: [language], level: regular, offered_terms: [fall],   grade_levels: [9, 10], prereqs: { all_of: [CHI2B], any_of: [] } }
+  - { id: CHI3B, name: Chinese 3 B, description: Chinese 3 B, credits: 0.5, tags: [language], level: regular, offered_terms: [spring], grade_levels: [9, 10], prereqs: { all_of: [CHI3A], any_of: [] } }
+  - { id: CHI4A, name: Chinese 4 A, description: Chinese 4 A, credits: 0.5, tags: [language], level: regular, offered_terms: [fall],   grade_levels: [9, 10], prereqs: { all_of: [CHI3B], any_of: [] } }
+  - { id: CHI4B, name: Chinese 4 B, description: Chinese 4 B, credits: 0.5, tags: [language], level: regular, offered_terms: [spring], grade_levels: [9, 10], prereqs: { all_of: [CHI4A], any_of: [] } }
+  - { id: ELEC1, name: Elective One,   description: Elective One,   credits: 0.5, tags: [], level: regular, offered_terms: [fall, spring], grade_levels: [9, 10], prereqs: { all_of: [], any_of: [] } }
+  - { id: ELEC2, name: Elective Two,   description: Elective Two,   credits: 0.5, tags: [], level: regular, offered_terms: [fall, spring], grade_levels: [9, 10], prereqs: { all_of: [], any_of: [] } }
+  - { id: ELEC3, name: Elective Three, description: Elective Three, credits: 0.5, tags: [], level: regular, offered_terms: [fall, spring], grade_levels: [9, 10], prereqs: { all_of: [], any_of: [] } }
+  - { id: ELEC4, name: Elective Four,  description: Elective Four,  credits: 0.5, tags: [], level: regular, offered_terms: [fall, spring], grade_levels: [9, 10], prereqs: { all_of: [], any_of: [] } }
+  - { id: ELEC5, name: Elective Five,  description: Elective Five,  credits: 0.5, tags: [], level: regular, offered_terms: [fall, spring], grade_levels: [9, 10], prereqs: { all_of: [], any_of: [] } }
+  - { id: ELEC6, name: Elective Six,   description: Elective Six,   credits: 0.5, tags: [], level: regular, offered_terms: [fall, spring], grade_levels: [9, 10], prereqs: { all_of: [], any_of: [] } }
