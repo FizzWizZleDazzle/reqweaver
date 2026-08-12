@@ -167,6 +167,7 @@ buildModel = (school, profile, levels, exams) ->
     terms: unrollTerms school, profile
     done0: initialDone profile
     waivers: new Set(profile.waivers or [])
+    avoid: new Set(profile.avoid or [])
     interests: new Set(profile.interests or [])
     unlocks: computeUnlocks courses
     critPath: computeCritPath courses

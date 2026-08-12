@@ -8,6 +8,7 @@ path = require 'path'
 yaml = require 'js-yaml'
 { buildModel } = require './engine/dag'
 { search } = require './engine/search'
+{ explain } = require './engine/explain'
 { rank } = require './scoring/scorer'
 encoder = require './scoring/encoder'
 
@@ -40,6 +41,7 @@ loadEncoder = ->
 
 printPlan = (model, entry, index) ->
   state = entry.st
+  why = explain model, state
   console.log "\n== plan #{index}  banked-credit estimate: #{state.banked}  grad credits remaining: #{state.gradRemaining}  soft: #{entry.soft.toFixed 3}"
   for term in state.plan
     names = []
@@ -47,6 +49,12 @@ printPlan = (model, entry, index) ->
       course = model.courses[id]
       names.push (if course? then "#{id} #{course.name}" else id)
     console.log "  grade #{term.grade} #{term.term}: #{if names.length then names.join ' | ' else '(open)'}"
+  swappable = []
+  for id, info of why when info.necessity < 0.2
+    course = model.courses[id]
+    swappable.push (if course? then "#{id} #{course.name}" else id)
+  if swappable.length
+    console.log "  swappable filler (drag out for a TA period or anything you prefer): #{swappable.join ' | '}"
 
 main = ->
   args = parseArgs process.argv.slice 2

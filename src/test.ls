@@ -174,6 +174,31 @@ check 'content-group requirement predicates accept any variant tier', ->
   tookHonors = 'GEOHA' in ids and 'GEOHB' in ids
   assert (tookRegular or tookHonors), 'no geometry variant satisfied the content requirement'
 
+check 'avoided courses never appear in plans', ->
+  profile = freshProfile!
+  profile.avoid = ['ELEC1', 'ELEC2']
+  model = buildModel school, profile, levels, exams
+  result = search model, {}
+  for state in result.plans
+    ids = planCourseIds state
+    assert 'ELEC1' not in ids, 'avoided course scheduled'
+    assert 'ELEC2' not in ids, 'avoided course scheduled'
+
+check 'explanations mark requirements, prereqs, banked, and filler', ->
+  { explain } = require './engine/explain'
+  model = buildModel school, freshProfile!, levels, exams
+  result = search model, {}
+  best = result.plans[0]
+  why = explain model, best
+  ids = planCourseIds best
+  kinds = (id) -> [r.kind for r in why[id].reasons]
+  assert 'requirement' in kinds('ART1A'), 'art requirement course not marked required'
+  geoA = if 'GEOHA' in ids then 'GEOHA' else 'GEOA'
+  assert 'prerequisite' in kinds(geoA), 'geometry not marked as a prerequisite'
+  assert 'banked' in kinds('APCALCA'), 'AP course not marked as banking credit'
+  for id in ids when id.slice(0, 4) is 'ELEC'
+    assert why[id].necessity < 0.2, "elective #{id} not marked swappable"
+
 check 'nested requires trees evaluate a or (c and (b or d))', ->
   course = { id: 'X', requires: { any: ['A', { all: ['C', { any: ['B', 'D'] }] }] } }
   met = (ids) -> prereqsMet course, new Set(ids)
