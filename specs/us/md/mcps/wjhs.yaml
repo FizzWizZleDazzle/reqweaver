@@ -5784,8 +5784,9 @@ dual_enrollment:
       min_grade_level: 11
       # the district pays for two per term; more is allowed out of pocket
       funded_per_term: 2
-      # one college course takes about 1.4 of the seven class periods:
-      # five college courses are a full day with no room for school
-      # courses
-      period_weight: 1.4
+      # the two funded college courses fit the schedule like class
+      # periods; each course beyond them squeezes the day harder, so a
+      # full college load of five leaves no room for school courses
+      period_weight: 1.0
+      period_weight_extra: 1.67
       eligible_courses: all

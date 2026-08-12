@@ -6,6 +6,7 @@
 
 { prereqsMet, offeredIn, pairSlots } = require './dag'
 { addCourseCredits, initialCoverage, creditsRemaining } = require './gradreqs'
+{ mixedPeriods } = require './search'
 
 minDefined = (a, b) ->
   return Math.min a, b if a? and b?
@@ -77,10 +78,16 @@ validate = (model, plan) ->
   hardBy = {}
   fundedBy = {}
   collegeName = {}
+  collegeCfg = {}
   for partner in ((model.school.dual_enrollment or {}).partners or [])
     hardBy[partner.college] = partner.max_courses_per_term if partner.max_courses_per_term?
     fundedBy[partner.college] = partner.funded_per_term if partner.funded_per_term?
     collegeName[partner.college] = (model.colleges[partner.college] or {}).name or partner.college
+    collegeCfg[partner.college] = {
+      funded: partner.funded_per_term
+      weight: partner.period_weight
+      weightExtra: partner.period_weight_extra
+    }
   entries = (plan or []).slice!
   entries.sort (a, b) ->
     ta = termsByKey["#{a.grade}:#{a.term}"]
@@ -117,11 +124,10 @@ validate = (model, plan) ->
     # credits. The partner's own per-term course cap binds separately.
     schoolChosen = [c for c in chosen when not c.college?]
     counted = if term? and term.sequential then schoolChosen else chosen
-    periods = 0
     credits = 0
     for course in counted
-      periods += course.periods or 1
       credits += if course.grad_credits? then course.grad_credits else (course.credits or 0)
+    periods = mixedPeriods chosen, collegeCfg
     if term? and term.sequential
       periods = pairSlots [c.id for c in schoolChosen], model.pairA
     capHere = capCourses

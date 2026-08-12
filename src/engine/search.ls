@@ -447,6 +447,27 @@ subsetPeriods = (chosen) ->
     total += course.periods or 1
   total
 
+# Period charge for a term's mix. School courses cost their own
+# periods. College courses cost partner.period_weight each (about one
+# period) up to the funded allowance, then period_weight_extra beyond
+# it: two college classes fit beside five school periods, but a full
+# college load of five fills the day with no room for school courses.
+mixedPeriods = (courses, cfgByCollege) ->
+  total = 0
+  counts = {}
+  for c in courses
+    if c.college?
+      counts[c.college] = (counts[c.college] or 0) + 1
+    else
+      total += c.periods or 1
+  for college, n of counts
+    cfg = (cfgByCollege or {})[college] or {}
+    w1 = if cfg.weight? then cfg.weight else 1
+    w2 = if cfg.weightExtra? then cfg.weightExtra else 5 / 3
+    inside = if cfg.funded? then Math.min(n, cfg.funded) else n
+    total += inside * w1 + (n - inside) * w2
+  total
+
 # seq is set for sequential terms: { done, waivers, equiv, pairA }. In
 # those the course cap counts slots where an A/B pair fills one, and
 # both the slot and credit caps are the school's summer-school policy,
@@ -460,7 +481,7 @@ fitsCaps = (chosen, course, caps, seq) ->
         ids = [c.id for c in chosen when not c.college?] ++ [course.id]
         return false if (pairSlots ids, seq.pairA) > caps.courses
     else
-      return false if subsetPeriods(chosen) + (course.periods or 1) > caps.courses
+      return false if (mixedPeriods (chosen ++ [course]), caps.collegeCfg) > caps.courses
   if caps.college? and course.college?
     n = 1
     for c in chosen when c.college?
@@ -691,13 +712,19 @@ previousTermCourses = (state) ->
 # slice is crowded with other requirement-bearing candidates, the best
 # candidate for each unrepresented unmet requirement is injected anyway
 # (health is offered in one grade; missing the window fails graduation).
-injectUnmetReqs = (ranked, candidates, unmet, pinnedIds) ->
+injectUnmetReqs = (model, ranked, candidates, unmet, pinnedIds, state, term) ->
   for req in unmet
     represented = false
     for c in ranked when reqMatches req, c
       represented := true
     continue if represented
     for c in candidates when (reqMatches req, c) and c.id not in pinnedIds
+      # the injection guarantee must not smuggle a paid college
+      # stand-in past the school-path rule: when the school still owns
+      # a reachable path to this requirement, only a school course may
+      # represent it here
+      if c.college? and model.objective isnt 'early_grad' and schoolPathReachable model, state, term, req
+        continue
       ranked.push c unless c in ranked
       break
   ranked
@@ -713,13 +740,14 @@ expandState = (model, state, term, pinnedIds, caps, params, warnings) ->
       doneTags.add tag
   candidates = rankCandidates model, candidates, unmet, previousTermCourses(state), remaining, doneTags, state.coverage, state, term
   ranked = [c for c in candidates.slice(0, params.topK) when c.id not in pinnedIds]
-  injectUnmetReqs ranked, candidates, unmet, pinnedIds
+  injectUnmetReqs model, ranked, candidates, unmet, pinnedIds, state, term
   effCaps = caps
   if term.maxCourses? or term.maxCredits?
     effCaps = {
       courses: minDefined caps.courses, term.maxCourses
       credits: minDefined caps.credits, term.maxCredits
       college: caps.college
+      collegeCfg: caps.collegeCfg
     }
   seq = null
   if term.sequential
@@ -776,8 +804,14 @@ minDefined = (a, b) ->
 loadCaps = (model) ->
   college = null
   partners = (model.school.dual_enrollment or {}).partners or []
+  collegeCfg = {}
   for partner in partners
     college = minDefined college, partner.max_courses_per_term
+    collegeCfg[partner.college] = {
+      funded: partner.funded_per_term
+      weight: partner.period_weight
+      weightExtra: partner.period_weight_extra
+    }
   # college courses are a heavier load than their period count shows;
   # how many one term can carry follows the rigor appetite
   if partners.length
@@ -788,6 +822,7 @@ loadCaps = (model) ->
     courses: minDefined model.school.max_courses_per_term, model.profile.maxCoursesPerTerm
     credits: model.school.max_credits_per_term
     college: college
+    collegeCfg: collegeCfg
   }
 
 # Pins grouped per term; several pin entries for one term merge.
@@ -827,4 +862,4 @@ search = (model, options) ->
   plans = collectPlans model, beam, params.keepPlans, warnings
   { plans: plans, warnings: Array.from(warnings), objective: objective }
 
-module.exports = { search, estBanked, courseIntensity, targetIntensity, rigorAffinity, cosine, goalAffinity, goalStrongBar, eagerness, mergeTuning }
+module.exports = { search, estBanked, courseIntensity, targetIntensity, rigorAffinity, cosine, goalAffinity, goalStrongBar, eagerness, mergeTuning, mixedPeriods }
