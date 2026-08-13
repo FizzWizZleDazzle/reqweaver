@@ -26,8 +26,17 @@ NO_ENCODER = 'This build names no goal encoding endpoint, and this school precom
 # memory for the next.
 cache = {}
 
+# The worker boots from a blob URL (the build inlines it into the page
+# script), so relative paths have no base of their own: every job
+# carries the page's base URL and fetches resolve against it.
+pageBase = ''
+
+absolute = (url) ->
+  return url if /^[a-z]+:/.test String(url)
+  if pageBase then new URL(String(url), pageBase).href else url
+
 fetchBody = (url) ->
-  fetch(url).then (response) ->
+  fetch(absolute url).then (response) ->
     unless response.ok
       throw new Error "could not load #{url} (#{response.status})"
     response
@@ -276,6 +285,7 @@ check = (job) !->
 
 self.addEventListener 'message', (event) !->
   job = event.data
+  pageBase := job.base if job?.base
   return unless job?
   solve job if job.type is 'solve'
   check job if job.type is 'validate'

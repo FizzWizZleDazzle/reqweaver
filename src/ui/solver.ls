@@ -60,7 +60,7 @@ create = (handlers) ->
     worker := spawn! unless worker?
     counter += 1
     current := counter
-    worker.postMessage ({ type: 'solve', id: counter } <<< job)
+    worker.postMessage ({ type: 'solve', id: counter, base: document.baseURI } <<< job)
 
   cancel = !->
     return unless current?
@@ -94,7 +94,7 @@ validator = (handlers) ->
   run = (job) !->
     worker := spawn! unless worker?
     counter += 1
-    worker.postMessage ({ type: 'validate', id: counter } <<< job)
+    worker.postMessage ({ type: 'validate', id: counter, base: document.baseURI } <<< job)
 
   stop = !->
     worker?.terminate!

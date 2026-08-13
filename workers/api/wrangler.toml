@@ -1,7 +1,6 @@
-# The whole site in one deploy: static assets (the built app in public/)
-# served free and unmetered, plus the Rust API worker, which only runs
-# for the routes named in run_worker_first - everything else never
-# touches the worker or the bill.
+# The API worker alone: goal encoding and plan storage. The site is a
+# Cloudflare Pages project (reqweaver-site); the worker serves no
+# assets.
 #
 # One-time setup:
 #   npx wrangler kv namespace create PLANS   # put the id below
@@ -28,11 +27,6 @@ cpu_ms = 50
 [vars]
 AI_DAILY_LIMIT = "5000"
 
-[assets]
-directory = "../../public"
-not_found_handling = "single-page-application"
-run_worker_first = ["/api/*", "/encode"]
-
 [ai]
 binding = "AI"
 
@@ -56,11 +50,6 @@ workers_dev = true
 routes = [
   { pattern = "reqweaver.com/api/*", zone_name = "reqweaver.com" }
 ]
-
-[env.production.assets]
-directory = "../../public"
-not_found_handling = "single-page-application"
-run_worker_first = ["/api/*", "/encode"]
 
 [env.production.ai]
 binding = "AI"
