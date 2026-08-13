@@ -43,13 +43,9 @@ name = "reqweaver-prod"
 # the workers.dev hostname stays on: the Pages site names it as
 # api_base until the apex route exists, and it costs nothing
 workers_dev = true
-# The apex serves the API same-origin next to the Pages site: Workers
-# routes run in front of Pages on the same zone, so /api/* invokes the
-# worker exactly once and every other path is Pages static, which
-# invokes nothing.
-routes = [
-  { pattern = "reqweaver.com/api/*", zone_name = "reqweaver.com" }
-]
+# The apex /api route is attached in the dashboard if same-origin is
+# ever wanted; declaring it here needs a token with zone Workers
+# Routes permission, which CI's token does not carry.
 
 [env.production.ai]
 binding = "AI"
