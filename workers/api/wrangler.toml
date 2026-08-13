@@ -15,7 +15,9 @@ compatibility_date = "2026-08-01"
 account_id = "1df5493dcedcbaa0980b3aa7687ee599"
 
 [build]
-command = "cargo install -q worker-build && worker-build --release"
+# install only when absent: a cache-restored binary makes cargo
+# install fail with "binary already exists in destination"
+command = "command -v worker-build >/dev/null || cargo install -q worker-build; worker-build --release"
 
 # Cost ceilings. cpu_ms bounds one request's compute; AI_DAILY_LIMIT is
 # the global model-call budget per day (cache hits are free and exempt),
