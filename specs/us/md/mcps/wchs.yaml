@@ -346,6 +346,7 @@ courses:
         - [MAT2003B, MAT2004B]
 
   - id: MAT2044A
+    content: statistics_a
     name: Statistics and Math Modeling A
     description: >-
       Statistics and Mathematical Modeling (SAMM) semester A topics are chosen from cryptography and coding, game and graph theory, architecture, trigonometry, fairness and apportionment, careers, investment and finance, and college placement test review. topics include data analysis, probability, simulations, inferential statistics, normal and binomial distributions, techniques of sampling, confidence intervals, and hypothesis testing. Semester B topics include data analysis, probability, simulations, inferential statistics, normal and binomial distributions, techniques of sampling, confidence intervals, and hypotheses testing.
@@ -359,6 +360,7 @@ courses:
       any_of:
         - [MAT2016B, MAT2011B]
   - id: MAT2044B
+    content: statistics_b
     name: Statistics and Math Modeling B
     description: >-
       Statistics and Mathematical Modeling (SAMM) semester A topics are chosen from cryptography and coding, game and graph theory, architecture, trigonometry, fairness and apportionment, careers, investment and finance, and college placement test review. topics include data analysis, probability, simulations, inferential statistics, normal and binomial distributions, techniques of sampling, confidence intervals, and hypothesis testing. Semester B topics include data analysis, probability, simulations, inferential statistics, normal and binomial distributions, techniques of sampling, confidence intervals, and hypotheses testing.
@@ -373,6 +375,7 @@ courses:
         - [MAT2016B, MAT2011B]
 
   - id: MAT2046A
+    content: statistics_a
     name: Honors Statistics A
     description: >-
       Honors Statistics A/B is a two-semester course that provides preparation to maximize the potential for success in an AP Statistics or a college statistics course. Topics include data analysis, probability, simulations, inferential statistics, normal and binomial distribution, techniques of sampling, confidence intervals, and hypothesis testing. Students use exploratory methods to identify patterns and make decisions. Emphasis is placed on applications and the use of statistics to solve real-life problems.
@@ -386,6 +389,7 @@ courses:
       any_of:
         - [MAT2011B, MAT2012B]
   - id: MAT2046B
+    content: statistics_b
     name: Honors Statistics B
     description: >-
       Honors Statistics A/B is a two-semester course that provides preparation to maximize the potential for success in an AP Statistics or a college statistics course. Topics include data analysis, probability, simulations, inferential statistics, normal and binomial distribution, techniques of sampling, confidence intervals, and hypothesis testing. Students use exploratory methods to identify patterns and make decisions. Emphasis is placed on applications and the use of statistics to solve real-life problems.

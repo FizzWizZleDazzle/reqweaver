@@ -178,7 +178,7 @@ priorityFor = (model, course, unmet, prevTerm, remaining, doneTags, hasBonus, do
   for id in fixed.preIds
     if prevTerm.has id
       continuation := Math.max continuation, w.continuation
-    else if done? and done.has id
+    else if done? and doneOrEquivalent model, id, done
       continuation := Math.max continuation, w.familyContinuation
   interestBonus = 0
   for tag in (course.tags or []) when model.interests.has tag
@@ -294,6 +294,15 @@ hasDislikedTag = (model, course) ->
     return true
   false
 
+# A prerequisite counts as behind the student when they hold it or any
+# content-equivalent of it: AP Calculus BC stands in for the college
+# MATH182, so Multivariable Calculus continues that chain.
+doneOrEquivalent = (model, id, done) ->
+  return true if done.has id
+  for alt in ((model.contentEquiv or {})[id] or []) when done.has alt
+    return true
+  false
+
 # The dedication a course earns when taken: it advances a chain the
 # student already stands on (a prerequisite is behind them), in a
 # subject they have not disliked, scaled by how well it aligns with
@@ -306,7 +315,7 @@ dedicationValue = (model, course, done) ->
   # and nothing beyond the requirement does
   return -(schedCredits course) if hasDislikedTag model, course
   onChain = false
-  for id in fixed.preIds when done.has id
+  for id in fixed.preIds when doneOrEquivalent model, id, done
     onChain := true
   return 0 unless onChain
   # alignment boosts a chain toward the goal but never starves one:
@@ -648,12 +657,18 @@ successorState = (model, state, term, subset) ->
   banked = state.banked
   ids = []
   bankedAligned = state.bankedAligned or 0
+  # half a year course is worth nothing until completed: an open A
+  # half's dedication and aligned credit sit in escrow (pairPending)
+  # and release when its B half lands, so plans finish what they start
+  # or skip it
+  pairPending = {} <<< (state.pairPending or {})
   for course in subset
     done.add course.id
     contentTaken.add course.content if course.content?
     for e in (course.excludes or [])
       excluded.add e
     addCourseCredits coverage, course, (model.school.grad_requirements or [])
+    share = 0
     # a disliked subject banks nothing: the student will not sit an
     # exam in it, so its credit must not buy the course a slot
     unless hasDislikedTag model, course
@@ -666,7 +681,15 @@ successorState = (model, state, term, subset) ->
       if model.goalVec?
         goalBank = model.tuning?.priority?.goalBank or 6
         scale = Math.max 0.25, 1 + goalBank * (staticScores model, course).goal
-      bankedAligned += earned * scale
+      share = earned * scale
+      bankedAligned += share
+    if model.pairB[course.id]?
+      # only positive value goes to escrow: a disliked half's charge
+      # must stand, not cancel itself while the pair dangles
+      pairPending[course.id] = Math.max 0, share + model.tuning.objective.dedication * (dedicationValue model, course, state.done)
+    aHalf = model.pairA[course.id]
+    if aHalf? and pairPending[aHalf]?
+      delete pairPending[aHalf]
     ids.push course.id
   ids.sort!
   dedication = state.dedication or 0
@@ -683,6 +706,7 @@ successorState = (model, state, term, subset) ->
     banked: banked
     bankedAligned: bankedAligned
     dedication: dedication
+    pairPending: pairPending
     coveredAt: coveredAt
     plan: state.plan ++ [{ grade: term.grade, term: term.term, courses: ids }]
   }
@@ -757,8 +781,12 @@ objectiveScore = (model, state, objective) ->
   # the default objective is dedication plus alignment-scaled credit:
   # raw credit maximization filled slots with wrong-area classes
   # (Fundamentals of Nursing for a software engineer), so credit
-  # counts in proportion to where the student is going
-  base = (state.bankedAligned or state.banked) + model.tuning.objective.dedication * (state.dedication or 0)
+  # counts in proportion to where the student is going. Open A halves
+  # hold their value in escrow until their B half lands.
+  pending = 0
+  for id, v of (state.pairPending or {})
+    pending += v
+  base = (state.bankedAligned or state.banked) + model.tuning.objective.dedication * (state.dedication or 0) - pending
   if objective is 'early_grad'
     # every term of earlier coverage outweighs anything banked credit
     # can add; banked breaks ties among equally short paths
