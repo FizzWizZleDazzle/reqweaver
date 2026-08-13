@@ -282,6 +282,25 @@ linkExamEquivalents = (courses, equiv) ->
         (equiv[id] ?= []).push schoolId
   apTwins
 
+# An exclusion reaches the excluded course's content-equivalents:
+# BC Calculus excludes AP Calculus AB, and Calculus with Applications
+# is the same slot as AB, so finishing BC must also rule it out;
+# without this, plans descend a completed ladder for banked credit.
+expandExcludes = (courses, equiv) ->
+  for id, course of courses
+    continue unless course.excludes?
+    extra = []
+    for e in course.excludes
+      for alt in (equiv[e] or []) when alt isnt id and alt not in course.excludes and alt not in extra
+        extra.push alt
+    continue unless extra.length
+    course.excludes = course.excludes ++ extra
+    for alt in extra
+      other = courses[alt]
+      continue unless other?
+      continue if other.excludes? and id in other.excludes
+      courses[alt] = {} <<< other <<< { excludes: (other.excludes or []) ++ [id] }
+
 # The model: everything the search needs, computed once per profile.
 # waivers lists courses whose prerequisites the school has excused for
 # this student (placement test, teacher recommendation, ...). exams is
@@ -309,6 +328,10 @@ buildModel = (school, profile, levels, exams, colleges) ->
       placements.add tag
   pairs = derivePairs courses
   contentEquiv = contentEquivalents courses
+  # excludes propagate over pure content groups only; this must run
+  # before the exam-twin links join the equivalence map, or an
+  # exclusion walks A -> its college twin -> back to A's own B half
+  expandExcludes courses, contentEquiv
   apTwins = linkExamEquivalents courses, contentEquiv
   {
     apTwins: apTwins
