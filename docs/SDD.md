@@ -600,22 +600,36 @@ Once per student profile:
 
 All objectives are exact symbolic scores over a complete plan:
 
-- Maximize banked credits: sum of dual-enrollment credits plus exam
-  articulation credits, plus dedication. Exam credit counts only when
-  the major sheet articulates the exam; without a chosen major, a
-  conservative global default table applies and the result is labeled
-  an estimate. Dedication is the owner-set priority above raw credit:
-  each course that advances a chain the student already stands on
-  earns its credits weighted by how high it sits on its ladder and
-  boosted (never starved) by goal alignment, so three middle-school
-  years of Spanish pull Spanish 4 and 5 into the plan past
-  interchangeable AP electives, and a started AP science sequence
-  runs to its top. Multi-year commitment reads better on an
-  application than farmed credit. A disliked subject charges instead
+- Maximize banked credits: goal-scaled banked credit plus dedication.
+  Exam credit counts only when the major sheet articulates the exam;
+  without a chosen major, a conservative global default table applies
+  and the result is labeled an estimate. With a stated goal, banked
+  credit counts in proportion to its alignment, so credit in the
+  student's field outranks raw quantity. Dedication is the owner-set
+  priority above raw credit: a course earns it by advancing a ladder
+  of the student's own, at or above the height they have already
+  climbed. A ladder of the student's own means a subject family they
+  arrived with, stated as an interest, or one strongly aligned with
+  their goal; anything else the plan starts is the engine's
+  invention, not commitment. Height is measured in year-course units
+  from the tallest completed prerequisite (an equivalent carries its
+  height, so BC Calculus lifts the college Multivariable above the
+  college-only route), sibling branches from one base do not raise
+  the bar over each other, and a course below the student's frontier
+  in its family earns nothing, whatever its prerequisites say.
+  Dedication reads at the student's chosen intensity: a light
+  terminal course is not the ladder a high-rigor student is
+  climbing. Within one term a subject holds at most two courses of
+  value, the second at the student's level; further same-subject
+  courses contribute nothing. A disliked subject charges instead
   of earning: the profile's dislikes list keeps a subject to the
   lightest course that still covers its requirement, banks nothing
   there (the student will not sit that exam), and never fills with
-  it.
+  it. Dual enrollment follows the same logic: a college course that
+  neither serves a requirement nor earns dedication is paid filler
+  and ranks below a free school elective, and each college course
+  past the partner's funded allowance in one term charges the
+  objective for the family's money.
 - Maximize major progress: credit-weighted count of named requirement
   slots satisfied, under the consumption rule of section 4.2.
 - Fastest college finish: compute residual major requirements after
@@ -660,13 +674,19 @@ Expanding one state:
    objective yield, requirement coverage (courses carrying a tag with
    an unmet graduation requirement outrank electives), continuation
    (a course whose prerequisite was taken in the immediately
-   preceding term ranks up, so semester halves stay consecutive), and
-   closeness to the student's rigor target; keep the top K
-   (default 14). The requirement bonus is budgeted: each unmet
-   requirement grants it to just enough top matchers to cover 1.5x
-   its remaining need, and further matchers rank as ordinary courses,
-   because a bonus for every matcher stacked four same-requirement
-   courses into one term. Unlock
+   preceding term ranks up, so semester halves stay consecutive, and
+   continuation of a completed prerequisite ranks by the dedication
+   it would earn, so the top of a five-year chain outranks a
+   two-course branch), and closeness to the student's rigor target;
+   keep the top K (default 14). The banked credit reachable through
+   a course counts only chains that stay in its subject and that the
+   student could not already reach without it: a prep course must
+   not resell the credit of an AP that was takeable anyway. The
+   requirement bonus is budgeted: each unmet requirement grants it
+   to just enough top matchers to cover its remaining need (a marked
+   A half counts its whole year), and further matchers rank as
+   ordinary courses, because a bonus for every matcher stacked four
+   same-requirement courses into one term. Unlock
    value is the gateway rule: a course that many later courses
    require ranks ahead of an equal-credit leaf, so the most-required
    courses clear as early as possible and each term keeps the most
@@ -683,25 +703,37 @@ Expanding one state:
    halves of an A/B year course, so pairs land in consecutive terms
    unless nothing legal can fill the slot otherwise.
 3. Enumerate feasible subsets of those K under the credit and
-   dual-enrollment caps by depth-first search with pruning, treating
-   coreq super-nodes as atomic. Cap subsets per state at M (default
-   40), preferring maximal subsets for the credit and progress
-   objectives and requirement-critical subsets for the time
-   objectives.
-4. Score each successor as g + h: the exact objective so far plus an
-   optimistic admissible remainder (attainable credits still in
-   window, or negative remaining critical path). The soft score
+   dual-enrollment caps, capped at M per state (default 40). Three
+   families share the budget: for every candidate a greedy subset
+   built around it and one built without it, then include-first DFS
+   tail variations. Pure include-first DFS locked the highest-ranked
+   prefix into every subset, and a banked-credit heavyweight in that
+   prefix could never lose its seat to a lower-ranked course worth
+   more to the whole plan.
+4. Score each successor: the exact objective so far, minus missing
+   graduation credit weighted by scarcity. A requirement the
+   calendar can still absorb many times over costs almost nothing to
+   defer, one whose window is closing costs its full weight; a flat
+   penalty made the beam stuff grade 9 with zero-value requirement
+   variants and prune the plans that spent those slots on a language
+   ladder whose value compounds for four years. The soft score
    (section 7) is a secondary sort key applied only among states whose
-   g + h values fall within an epsilon band, so it breaks ties without
+   scores fall within an epsilon band, so it breaks ties without
    steering the search away from the objective.
-5. Keep the top W successors under that lexicographic order, plus the
-   best state of every unmet-requirement signature the cut would
-   drop: a scarce requirement (one source, two terms) has few
-   pursuers, and pure score ordering crowds them out with
-   higher-coverage states that provably cannot cover earlier. The
-   guard is coarse (it keys on which requirements are owed, not on
-   which resources remain), so adversarially tight catalogs still
-   reward a wider beam; W stays the user-facing effort knob.
+5. Prune. A state holding an open A half whose B-half window has
+   closed is dead: the pair can never complete, and a counselor
+   never leaves half a year course on a transcript (a B half is only
+   admissible at the first term that can hold it after its A half).
+   States holding the same courses face the same future, whatever
+   order the terms took them in, so one representative per
+   equivalence class survives; without this the beam fills with
+   layout permutations of the same electives. Then keep the top W
+   successors, plus the best state of every unmet-requirement
+   signature the cut would drop: a scarce requirement (one source,
+   two terms) has few pursuers, and pure score ordering crowds them
+   out with higher-coverage states that provably cannot cover
+   earlier. The guard is coarse, so adversarially tight catalogs
+   still reward a wider beam; W stays the user-facing effort knob.
 
 After the final term, deduplicate complete feasible plans by
 assignment signature, take the top N (default 20) by objective value,

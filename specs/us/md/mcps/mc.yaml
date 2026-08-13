@@ -43,6 +43,19 @@ notes:
   - >-
     MUSC141 is offered fall semester only and MUSC142 spring semester only; the catalog states
     no term restriction for any other course.
+  - >-
+    excludes records the catalog's credit exclusions: descriptions stating credit may be earned
+    in only one of two courses (MATH170/MATH181, GDES214/PHOT214, GDES230/PHOT230), and courses
+    cross-listed under two departments as one class (MATH207/CMSC207, MUSC188/THET188). CMSC269
+    states an exclusion against CMAP269, which this sheet does not list. MATH170/171 is the
+    life-sciences calculus track beside MATH181/182: the catalog excludes credit for 170/181
+    and states MATH171 is not a substitute for MATH182, so 171/182 carry the same exclusion; a
+    student holding Calculus II has no credit path back through the lighter track.
+  - >-
+    content groups mark same-slot variants, as in the school sheets: MATH264 and MATH284 teach
+    linear algebra at two tracks (applications and theory), PHYS203/PHYS204 is the
+    algebra-based general physics track beside the calculus-based PHYS161/PHYS262, so a plan
+    takes one track or the other per slot.
 
 credit_by_exam:
   - { exam: AP_ART_HISTORY, min_score: 3, credits: 3, courses: [ARTT127] }
@@ -4103,6 +4116,7 @@ courses:
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
     prereqs: { all_of: [MATH182], any_of: [[ENGL101]] }
+    excludes: [MATH207]
     approved: true
     hs_credit: { category: "Math", synergy: "ITC5104, CE Adv Computer Science" }
     grad_tags: [math]
@@ -7156,6 +7170,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    excludes: [PHOT214]
     approved: true
     hs_credit: { category: "General Elective", synergy: "AMC5113, CE Adv Graphic Design" }
     grad_tags: [elective]
@@ -7292,6 +7307,7 @@ courses:
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
     prereqs: { all_of: [], any_of: [[GDES214, PHOT214]] }
+    excludes: [PHOT230]
     approved: false
   - id: GDES234
     name: "Illustration III"
@@ -11230,6 +11246,7 @@ courses:
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
     prereqs: { all_of: [], any_of: [[MATH165]] }
+    excludes: [MATH181]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
@@ -11252,6 +11269,7 @@ courses:
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
     prereqs: { all_of: [], any_of: [[MATH170, MATH181]] }
+    excludes: [MATH182]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
@@ -11270,6 +11288,7 @@ courses:
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
     prereqs: { all_of: [], any_of: [[MATH165]] }
+    excludes: [MATH170]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
@@ -11288,6 +11307,7 @@ courses:
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
     prereqs: { all_of: [], any_of: [[MATH181]] }
+    excludes: [MATH171]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
@@ -11306,6 +11326,7 @@ courses:
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
     prereqs: { all_of: [MATH182], any_of: [[ENGL101]] }
+    excludes: [CMSC207]
     approved: true
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
@@ -11330,6 +11351,7 @@ courses:
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
   - id: MATH264
+    content: linear_algebra
     name: "Applications in Linear Algebra"
     description: >-
       For students who wish to focus on the practical applications of Linear Algebra. A wide
@@ -11383,6 +11405,7 @@ courses:
     hs_credit: { category: "Math", synergy: "MAT5119, CE Adv Mathematics" }
     grad_tags: [math]
   - id: MATH284
+    content: linear_algebra
     name: "Linear Algebra"
     description: >-
       Basic concepts of linear algebra including vector spaces, linear equations and matrices,
@@ -11940,6 +11963,7 @@ courses:
     tags: [fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    excludes: [THET188]
     approved: false
   - id: MUSC190
     name: "Music Theory I"
@@ -13825,6 +13849,7 @@ courses:
     tags: [elective, fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    excludes: [GDES214]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -13845,6 +13870,7 @@ courses:
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
     prereqs: { all_of: [], any_of: [[GDES214, PHOT214]] }
+    excludes: [GDES230]
     approved: true
     hs_credit: { category: "General Elective", synergy: "NSS5112, CE Adv General Course" }
     grad_tags: [elective]
@@ -14278,6 +14304,7 @@ courses:
     hs_credit: { category: "General Elective", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [elective]
   - id: PHYS161
+    content: college_physics1
     name: "General Physics I: Mechanics and Heat"
     description: >-
       (NSND, GEEL) Fundamental laws of motion, force and energy, particle collisions, rotational
@@ -14298,6 +14325,7 @@ courses:
     grad_tags: [science]
     exam_equivalent: [AP_PHYSICS_C_MECH]
   - id: PHYS203
+    content: college_physics1
     name: "General Physics I (Non-Engineering)"
     description: >-
       (NSLD, GEEL) The first of two related courses (with PHYS 204) designed for
@@ -14318,6 +14346,7 @@ courses:
     grad_tags: [science]
     exam_equivalent: [AP_PHYSICS_1, AP_PHYSICS_C_MECH]
   - id: PHYS204
+    content: college_physics2
     name: "General Physics II (Non-Engineering)"
     description: >-
       (NSLD, GEEL) The second of two related courses (with PHYS 203) designed for
@@ -14374,6 +14403,7 @@ courses:
     hs_credit: { category: "NGSS Physical Science", synergy: "BHP5123, CE Adv Science" }
     grad_tags: [science]
   - id: PHYS262
+    content: college_physics2
     name: "General Physics II: Electricity and Magnetism"
     description: >-
       (NSLD, GEEL) Topics incude Coulomb's law, electric fields, Gauss' law, direct-current and
@@ -16687,6 +16717,7 @@ courses:
     tags: [fine_arts]
     grade_levels: [11, 12]
     offered_terms: [fall, spring]
+    excludes: [MUSC188]
     approved: false
   - id: THET201
     name: "Intermediate Acting"

@@ -13,13 +13,17 @@ objective:
   gradWeight: 20        # per missing graduation credit; must exceed the
                         # richest course's banked value per half credit
   eagernessScale: 0.0001
-  dedication: 2         # per continuation credit, weighted by how high
+  dedication: 4         # per continuation credit, weighted by how high
                         # the course stands on its ladder and boosted by
                         # goal alignment (never starved by it); disliked
                         # subjects charge instead of earning. Deep
                         # continuation outweighs what the slot banks as
                         # an interchangeable elective, because multi-year
                         # commitment reads better than farmed credit
+  outOfPocket: 12       # cost per college course past the partner's
+                        # funded allowance in one term; the family pays
+                        # for those, so one must out-earn this charge
+                        # rather than fill a slot
 priority:
   requirement: 40       # unmet-graduation-requirement bonus; must beat
                         # any other candidate's full priority
@@ -43,10 +47,14 @@ priority:
                         # such a root also loses its unlocks reward
   pairGap: 3            # per-term penalty for separating the halves of
                         # an A/B year course
-  collegeFiller: 15     # penalty for a dual-enrollment course below the
-                        # catalog's mean goal affinity that serves no
-                        # requirement; paid filler should not displace
-                        # what the student asked for
+  collegeFiller: 15     # penalty for a dual-enrollment course that
+                        # neither serves a requirement nor continues a
+                        # chain the student stands on; paid filler
+                        # should not displace what the student asked for
+  ladder: 2             # continuation ranked by ladder height: the top
+                        # of a five-year chain outranks a two-course
+                        # branch (same value the objective's dedication
+                        # term rewards, applied at candidate ranking)
   goalBank: 6           # with a goal, banked credit scales with
                         # alignment (x1.9 at strong alignment, x0.4
                         # when misaligned), so credit in the student's
