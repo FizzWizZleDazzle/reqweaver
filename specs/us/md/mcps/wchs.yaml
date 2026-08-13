@@ -608,8 +608,9 @@ courses:
       all_of: []
       any_of:
         - [MAT2040B, MAT2041B]
+    excludes: [CMSC207, MATH207]
     notes: >-
-      Only available semester 2. The stated prerequisite is "AP Calculus", read here as either AP AB Calculus or AP BC Calculus.
+      Only available semester 2. The stated prerequisite is "AP Calculus", read here as either AP AB Calculus or AP BC Calculus. Covers the same material as Montgomery College's Introduction to Discrete Structures (CMSC207/MATH207), so a plan takes one venue or the other.
 
   - id: MAT2068A
     name: AP Statistics A

@@ -104,18 +104,26 @@ prereqIds = (course) -> requiresIds (requirementTree course)
 
 # prereq -> dependents adjacency. Unlock edges are always derived from
 # prereqs, never stored in specsheets (storing both invites contradiction).
-forwardEdges = (courses) ->
+# With an equivalence map, a course also unlocks everything its
+# equivalents unlock: AP Physics C E/M stands in for the college
+# PHYS262, so the college PHYS263 counts among E/M's dependents. This
+# is what separates a chain-continuing AP course from a dead-end one
+# when both bank the same exam credit.
+forwardEdges = (courses, equiv) ->
   edges = {}
   for id, course of courses
     for dep in prereqIds course when courses[dep]?
       (edges[dep] ?= []).push id
+      for alt in ((equiv or {})[dep] or []) when courses[alt]?
+        edges[alt] ?= []
+        edges[alt].push id unless id in edges[alt]
   edges
 
 # Reachable-descendant count per course: how much a course unlocks.
 # This is the gateway value the search uses to clear required-by-many
 # courses early.
-computeUnlocks = (courses) ->
-  edges = forwardEdges courses
+computeUnlocks = (courses, equiv) ->
+  edges = forwardEdges courses, equiv
   memo = {}
   reachable = (id, visiting) ->
     return memo[id] if memo[id]?
@@ -134,23 +142,48 @@ computeUnlocks = (courses) ->
     counts[id] = reachable(id, new Set!).size
   counts
 
-# Length of the prerequisite chain BEHIND a course: Spanish 4A stands
-# seven half-course levels up its ladder, an elective stands at one.
-# Deep continuation is what dedication rewards.
+# Height of the prerequisite ladder a course tops, in year-course
+# units: each link counts its scheduling footprint (an A or B half is
+# half a year, a college course a full one), so a school ladder of
+# halves and a college ladder of whole courses measure alike. The
+# height follows the requirement tree: required parts take the
+# tallest, but an any-of group counts its shortest member, or a
+# lower-track alternative prerequisite would let a terminal elective
+# measure as tall as the honors ladder beside it. Equivalents stay
+# out of the measure: a course's own catalog position is its height,
+# and the taller road a particular student arrived by is credited
+# dynamically where dedication is computed.
 computeChainDepth = (courses) ->
   memo = {}
+  footprint = (course) ->
+    if course.grad_credits? then course.grad_credits else (course.credits or 1)
   depth = (id, visiting) ->
     return memo[id] if memo[id]?
-    return 1 if visiting.has id
     course = courses[id]
     return 1 unless course?
+    return footprint course if visiting.has id
     visiting.add id
-    best = 0
-    for pid in prereqIds course when courses[pid]?
-      d = depth pid, visiting
-      best := d if d > best
+    # a prerequisite the sheet does not list is unknown, not zero: it
+    # drops out of the tree rather than making its any-of group free
+    node = (n) ->
+      if typeof n is 'string'
+        return if courses[n]? then depth n, visiting else null
+      if n.all?
+        most = null
+        for child in n.all
+          d = node child
+          most := d if d? and (not most? or d > most)
+        return most
+      if n.any?
+        least = null
+        for child in n.any
+          d = node child
+          least := d if d? and (not least? or d < least)
+        return least
+      null
+    base = node (requirementTree course)
     visiting.delete id
-    memo[id] = 1 + best
+    memo[id] = (footprint course) + (base or 0)
     memo[id]
   depths = {}
   for id of courses
@@ -265,7 +298,12 @@ mergeColleges = (school, profile, courses, colleges) ->
 # excludes, which also lets the variant filter prefer the AP course),
 # and either satisfies a prerequisite naming the other, with a warning
 # downstream because the school may not honor the swap.
-linkExamEquivalents = (courses, equiv) ->
+# The equivalence that satisfies a prerequisite runs from completed
+# material only: the B half (or a single-id course) stands in for the
+# college course, but an A half alone is half the material and stands
+# in for nothing, or a student mid-way through AP Physics C E/M
+# would already satisfy a college course requiring all of PHYS262.
+linkExamEquivalents = (courses, equiv, pairB) ->
   byExam = {}
   apTwins = {}
   for id, course of courses when course.exam? and not course.college?
@@ -279,8 +317,62 @@ linkExamEquivalents = (courses, equiv) ->
         sc = courses[schoolId]
         courses[schoolId] = {} <<< sc <<< { excludes: (sc.excludes or []) ++ [id] }
         (equiv[schoolId] ?= []).push id
-        (equiv[id] ?= []).push schoolId
+        (equiv[id] ?= []).push schoolId unless (pairB or {})[schoolId]?
   apTwins
+
+# True when a sits anywhere behind b on the prerequisite graph (or
+# the reverse): such a pair is a sequence, not a duplicate.
+prereqConnected = (courses, a, b) ->
+  reaches = (from, to) ->
+    seen = new Set!
+    walk = (id) ->
+      return false if seen.has id
+      seen.add id
+      course = courses[id]
+      return false unless course?
+      for pid in prereqIds course
+        return true if pid is to
+        return true if walk pid
+      false
+    walk from
+  (reaches a, b) or (reaches b, a)
+
+# Two school courses awarded the same college course by the exam
+# equivalency table bank overlapping credit: AP Physics 2 and AP
+# Physics C E/M both earn PHYS204, so a student sits one exam or the
+# other, not both. Courses connected by a prerequisite path stay
+# untouched (AP Calculus AB before BC is a sequence the catalog
+# allows, and a B half always follows its A half).
+expandSharedTwinExcludes = (courses, apTwins) ->
+  for collegeId, twins of apTwins
+    for s1, i in twins
+      for s2 in twins.slice i + 1
+        continue if s1 is s2
+        c1 = courses[s1]
+        c2 = courses[s2]
+        continue unless c1? and c2?
+        continue if c1.excludes? and s2 in c1.excludes
+        continue if prereqConnected courses, s1, s2
+        courses[s1] = {} <<< c1 <<< { excludes: (c1.excludes or []) ++ [s2] }
+        courses[s2] = {} <<< c2 <<< { excludes: (c2.excludes or []) ++ [s1] }
+
+# A college catalog's own credit exclusions ("credit may not be earned
+# in both MATH 170 and MATH 181") reach the excluded course's AP
+# twins: a student holding BC Calculus holds MATH 181's material, so
+# MATH 170 is spent for them too. Runs after the twin links, over the
+# twin relation only; content groups had their pass earlier.
+expandTwinExcludes = (courses, apTwins) ->
+  additions = []
+  for id, course of courses when course.college? and course.excludes?
+    for e in course.excludes when courses[e]?.college?
+      for twinId in (apTwins[e] or []) when twinId not in course.excludes
+        additions.push [id, twinId]
+  for [id, twinId] in additions
+    course = courses[id]
+    course.excludes = course.excludes ++ [twinId] unless twinId in course.excludes
+    sc = courses[twinId]
+    unless sc.excludes? and id in sc.excludes
+      courses[twinId] = {} <<< sc <<< { excludes: (sc.excludes or []) ++ [id] }
 
 # An exclusion reaches the excluded course's content-equivalents:
 # BC Calculus excludes AP Calculus AB, and Calculus with Applications
@@ -332,7 +424,9 @@ buildModel = (school, profile, levels, exams, colleges) ->
   # before the exam-twin links join the equivalence map, or an
   # exclusion walks A -> its college twin -> back to A's own B half
   expandExcludes courses, contentEquiv
-  apTwins = linkExamEquivalents courses, contentEquiv
+  apTwins = linkExamEquivalents courses, contentEquiv, pairs.pairB
+  expandTwinExcludes courses, apTwins
+  expandSharedTwinExcludes courses, apTwins
   {
     apTwins: apTwins
     pairA: pairs.pairA
@@ -354,10 +448,14 @@ buildModel = (school, profile, levels, exams, colleges) ->
     dislikes: new Set(profile.dislikes or [])
     placementGroups: placementGroups
     placements: placements
+    # unlocks counts catalog edges only: the equivalence-bridged graph
+    # (kept for the marginal banked chain) inflates a prep course's
+    # descendant count with everything its equivalents' dependents
+    # transitively reach
     unlocks: computeUnlocks courses
     critPath: computeCritPath courses
     chainDepth: computeChainDepth courses
-    forward: forwardEdges courses
+    forward: forwardEdges courses, contentEquiv
     contentEquiv: contentEquiv
     bankedMemo: {}
     # semantic layer, attached by the caller when precomputed

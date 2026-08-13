@@ -113,6 +113,13 @@ main = ->
     path.join (path.dirname args.school), 'embeddings.' + path.basename(args.school).replace(/\.ya?ml$/, '') + '.json'
   if fs.existsSync embPath
     model.embeddings = JSON.parse fs.readFileSync(embPath, 'utf8')
+    # partner course vectors merge in, school vectors winning a
+    # collision, exactly as the app's worker merges them; without
+    # this every merged college course scores neutral goal affinity
+    for _, extra of partnerData.vectors
+      continue unless extra?.dim is model.embeddings.dim and extra.courses?
+      merged = {} <<< extra.courses <<< (model.embeddings.courses or {})
+      model.embeddings = model.embeddings <<< { courses: merged }
     if profile.goal?
       enc = loadEncoder!
       model.goalVec =
