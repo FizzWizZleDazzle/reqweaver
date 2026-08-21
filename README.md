@@ -66,9 +66,12 @@ not applied, and saving says the API is not reachable.
 
 The browser app is a schedule you build by hand, with the planner one
 button away. Your school is the address: search for it on the front
-page and you land on `/us/md/mcps/wchs`, a link you can keep. There
-you get the school's full catalog on one side and your grade-by-term
-grid on the other. Drag courses onto terms and every placement is
+page and you land on `/us/md/mcps/wchs`, a link you can keep. On your
+first visit a short questionnaire walks you through the answers that
+steer every plan, one at a time: the courses you have taken, what you
+want to study, how hard you want the road to be. Answer it (or skip
+it) and you get the school's full catalog on one side and your
+grade-by-term grid on the other. Drag courses onto terms and every placement is
 checked as it lands: an unmet prerequisite, a course outside its
 offered term or grade window, two variants of the same content, or a
 term over its period cap gets a marker saying what is wrong. Nothing

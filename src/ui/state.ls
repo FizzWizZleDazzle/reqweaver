@@ -303,6 +303,8 @@ setNow = (grade, term) !->
 
 reset = !->
   state.profile = emptyProfile!
+  # a cleared profile has no goal again, so the intake form returns
+  state.ui.intakeDone = false
   changed!
 
 # The engine reads plain lists; dump them in the same order the example
