@@ -396,4 +396,6 @@ create = (ctx) ->
   refresh!
   { el: panel, refresh: refresh }
 
-module.exports = { create }
+# The intake form asks the same questions with the same wording; one
+# list keeps them from drifting apart.
+module.exports = { create, OBJECTIVES, rigorText }

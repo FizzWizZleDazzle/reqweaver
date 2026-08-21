@@ -446,6 +446,13 @@ button { font: inherit; cursor: pointer; }
   line-clamp: none;
 }
 
+/* --- intake form -------------------------------------------------------- */
+
+.intake .hidden { display: none; }
+.intake-slot { margin: 12px 0; min-height: 120px; }
+.intake-nav { margin-top: 16px; }
+.intake-nav .ghost:disabled { opacity: 0.4; cursor: default; }
+
 /* --- catalog panel ------------------------------------------------------ */
 
 .paneswitch { margin-bottom: 10px; }
