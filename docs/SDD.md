@@ -851,6 +851,7 @@ src/ui/dom.ls           # element helpers
 src/ui/chip.ls          # course chips, searchable course picker
 src/ui/course.ls        # course detail dialog with profile actions
 src/ui/profile.ls       # profile editor sections
+src/ui/intake.ls        # the form shown before the planner on a first visit
 src/ui/plans.ls         # term grid, requirement checklist, warnings, diffs
 src/ui/why.ls           # necessity markers and reason wording
 src/ui/pairs.ls         # A/B halves, derived from the catalog
@@ -894,6 +895,18 @@ the chooser and says which address was missing. The chooser and the
 topbar share one search over the index: a lowercase substring over the
 name, the id and the kind, in one pass, cut off at a screenful, so it
 stays quick with an index far longer than a page can list.
+
+A planner path opened with an empty goal asks a short questionnaire
+first, one question per screen: completed courses, pre-grade-9
+credit, courses in progress, goal sentence, objective, rigor,
+interests, and dislikes, the answers students otherwise never find in
+the profile tab. Every answer writes to the same profile state the
+editor reads, so the form and the tab cannot disagree, and each
+question's DOM survives back-and-forward so a picker keeps its filter
+text. Finishing or skipping enters the planner and sets a flag so the
+form does not return on every navigation; resetting the profile
+clears the flag. A returning student whose goal is already set never
+sees the form.
 
 `siteconfig.yaml` carries `api_base`, the origin of the API. Empty
 means the API is on the same origin as the page, which is how the site

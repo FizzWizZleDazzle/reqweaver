@@ -18,6 +18,7 @@ browseUi = require './browse'
 shareUi = require './share'
 sharedUi = require './shared'
 solverUi = require './solver'
+intakeUi = require './intake'
 
 TOP_PLANS = 3
 
@@ -285,7 +286,16 @@ route = !->
       return chooser root, index, "No school in this build has the address /#{wanted}."
     state.setSchool entry.id unless entry.id is state.schoolId!
     data.loadSchool(entry).then (school) ->
-      build root, index, config, entry, school, levels
+      # A first visit with no goal answers a short form before the
+      # planner; the answers land in the same profile the editor shows.
+      if intakeUi.needed!
+        form = intakeUi.create school, !-> build root, index, config, entry, school, levels
+        fill root, [
+          el 'header', { class: 'topbar' }, [brand 'plan high school around the college credit you want to bank']
+          el 'main', { class: 'layout single' }, [form.el]
+        ]
+      else
+        build root, index, config, entry, school, levels
   loading.catch (error) !->
     fail root, String(error?.message or error)
 
