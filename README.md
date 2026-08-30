@@ -35,13 +35,13 @@ npm run export-model   # encoder weights for the offline fallback
 ```
 
 A goal typed in the browser is encoded by the API in `workers/api`,
-which also stores saved plans. The site deploys as one Worker serving
-the page and the API together, so `api_base` in `siteconfig.yaml` is
-empty and the app calls `/encode` and `/api/plans` on its own origin;
-set it only when the API lives somewhere else. Served without that API
-(`npm run serve`, for instance) the planner works as always: goals a
-school precompiled still steer plans, any other wording is reported as
-not applied, and saving says the API is not reachable.
+which also stores saved plans. The page ships as a Pages project and
+the API as its own Worker, so `api_base` in `siteconfig.yaml` names
+that Worker and every build, local ones included, encodes goals against
+it; `SITE_API_BASE` overrides it per build. Point `api_base` nowhere and
+the planner still works: goals a school precompiled steer plans, any
+other wording is reported as not applied, and saving says the API is not
+reachable.
 
 ## What it does
 

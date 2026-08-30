@@ -3,9 +3,13 @@
 # startup.
 
 # Base URL of the reqweaver API worker (workers/api, one Rust worker):
-#   POST {api_base}/encode        free-text goal -> vector
-#   POST {api_base}/api/plans     save a plan (returns id + write token)
-#   GET  {api_base}/api/plans/:id read a plan (the /s/<code> share source)
-# Leave empty until deployed: goals a school precompiled still steer
-# plans, saving and sharing stay hidden, and nothing fails.
-api_base: ''
+#   POST {api_base}/api/encode     free-text goal -> vector
+#   POST {api_base}/api/plans      save a plan (returns id + write token)
+#   GET  {api_base}/api/plans/:id  read a plan (the /s/<code> share source)
+# The page is a Pages project and the API is a separate Worker, so the
+# two are not on one origin and this names the Worker outright. The
+# SITE_API_BASE environment variable overrides it per build. Empty means
+# the API shares the page's origin; a build that points nowhere still
+# plans, but only goals a school precompiled steer it and saving is
+# hidden.
+api_base: 'https://reqweaver-prod.arturmisiurev.workers.dev'

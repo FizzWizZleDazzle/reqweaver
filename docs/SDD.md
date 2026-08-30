@@ -908,10 +908,12 @@ form does not return on every navigation; resetting the profile
 clears the flag. A returning student whose goal is already set never
 sees the form.
 
-`siteconfig.yaml` carries `api_base`, the origin of the API. Empty
-means the API is on the same origin as the page, which is how the site
-ships (one Worker serves both), and every request is then a
-root-relative path: `/encode` for a goal, `/api/plans` for a save.
+`siteconfig.yaml` carries `api_base`, the origin of the API. The page
+ships as a Pages project and the API as its own Worker, so `api_base`
+names that Worker and the same value serves local builds; the
+`SITE_API_BASE` environment variable overrides it per build. Empty means
+the API is on the page's own origin and every request is then a
+root-relative path: `/api/encode` for a goal, `/api/plans` for a save.
 
 The solver runs in a Web Worker; messages carry plain
 structured-clone objects. The worker loads the specsheet, the

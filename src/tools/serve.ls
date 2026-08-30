@@ -28,11 +28,13 @@ TYPES =
 
 RELOAD_TAG = '<script>new EventSource("/__reload").onmessage=function(){location.reload()}</script>'
 
-# Local stand-in for the deployed Worker's POST /encode: the pure
+# Local stand-in for the deployed Worker's POST /api/encode: the pure
 # LiveScript encoder over the data/encoder export (npm run
-# export-model), so a typed goal steers plans on localhost too. Lazy;
-# absent export answers 503 and the app degrades the same way it does
-# offline.
+# export-model), so a typed goal steers plans with no network at all.
+# It answers only builds whose api_base is empty; the shipped api_base
+# names the deployed Worker, so this serves offline and air-gapped work.
+# Lazy; absent export answers 503 and the app says the goal was not
+# applied.
 encoderState = null
 loadEncoder = ->
   return encoderState if encoderState?
