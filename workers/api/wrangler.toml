@@ -7,7 +7,8 @@
 # Deploy (after npm run build:web), from this directory so the crate
 # build runs where Cargo.toml lives:
 #   cd workers/api && npx wrangler deploy
-# The app and API share an origin, so siteconfig api_base stays empty.
+# The page is a separate Pages project, so siteconfig api_base names
+# this worker's hostname rather than staying empty.
 name = "reqweaver"
 main = "build/worker/shim.mjs"
 compatibility_date = "2026-08-01"
